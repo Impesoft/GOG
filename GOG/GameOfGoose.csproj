@@ -6,4 +6,12 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Images\GanzenBord.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\GanzenBord.png" />
+  </ItemGroup>
+
 </Project>
