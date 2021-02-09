@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using GameOfGoose;
 
 namespace GameOfGooseTest
 {
@@ -10,9 +11,9 @@ namespace GameOfGooseTest
         }
 
         [Test]
-        public void Test1()
+        public void CanInstatiateGogGame()
         {
-            Assert.Pass();
+            GogGame gogGame = new GogGame();
         }
     }
 }
