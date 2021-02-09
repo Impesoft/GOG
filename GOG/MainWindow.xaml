@@ -5,8 +5,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GOG"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-
-    </Grid>
+        Title="MainWindow"
+        Height="1000"
+        Width="1200"
+        Background="White">
+    <DockPanel VerticalAlignment="Stretch"
+               HorizontalAlignment="Stretch">
+        <StackPanel DockPanel.Dock="Top"
+                    Orientation="Horizontal"
+                    Background="Black"
+                    HorizontalAlignment="Stretch">
+            <Label Content="Ganzenspel"
+                   FontSize="32"
+                   Foreground="White" />
+        </StackPanel>
+        <Grid HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch">
+            <Grid.Background>
+                <ImageBrush ImageSource="/Images/Ganzenbord.png"
+                            Stretch="Fill" />
+            </Grid.Background>
+        </Grid>
+    </DockPanel>
 </Window>
