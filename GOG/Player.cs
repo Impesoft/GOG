@@ -6,6 +6,7 @@ namespace GameOfGoose
     public class Player
     {
         public int Position { get; set; }
+        public string Name { get; set; }
 
         public Player()
         {
