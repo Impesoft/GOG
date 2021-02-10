@@ -1,34 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace GameOfGoose
 {
     public class Player
     {
-        public List<int> Geese = new List<int> { 5, 9, 12, 14, 18, 23, 27, 32, 36, 41, 45, 50, 54, 59 };
-
-        public String Name { get; set; }
+        private GameBoard _gameBoard;
         public int Position { get; set; }
-        public string PlayerImage { get; set; }
-        private int _skipCounter = 0;
 
-        public Player(string name, string playerImg)
+        public Player()
         {
-            PlayerImage = playerImg;
-            Name = name;
-            Position = 0;
-            _skipCounter = 0;
+            _gameBoard = new GameBoard();
         }
 
-        public int Move(int[] dice, int position) //moves de users position
+        public void Move(int[] dice)
         {
-            position += dice[0] + dice[1];
-            if (GogGame.Geese.Contains(position))
+            Position += dice[0] + dice[1];
+
+            if (_gameBoard.Geese.Contains(Position))
             {
-                Move(dice, position);
+                Move(dice);
             }
-            return position;
         }
     }
 }
