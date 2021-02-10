@@ -1,6 +1,5 @@
 ﻿using GameOfGoose;
 using NUnit.Framework;
-using System.Collections.Generic;
 
 namespace GameOfGooseTest
 {
@@ -17,11 +16,9 @@ namespace GameOfGooseTest
         }
 
         [Test]
-        public void CanInstantiateGameClass()
+        public void CanInstantiateGameBoardClass()
         {
-            GameBoard gameBoard = new GameBoard();
-
-            Assert.IsNotNull(gameBoard);
+            Assert.IsNotNull(_gameBoard);
         }
 
         [Test]
@@ -29,11 +26,10 @@ namespace GameOfGooseTest
         {
             // Arrange
             _player.Position = 9;
-            bool expectedResult = true;
             // Act
             bool result = _gameBoard.Geese.Contains(_player.Position);
             // Assert
-            Assert.AreEqual(expectedResult, result);
+            Assert.AreEqual(true, result);
         }
     }
 }

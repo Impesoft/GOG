@@ -1,10 +1,9 @@
 using GameOfGoose;
 using NUnit.Framework;
-using System.Collections.Generic;
 
 namespace GameOfGooseTest
 {
-    public class Tests
+    internal class PlayerTests
     {
         private Player _player;
         private Dice _dice;
