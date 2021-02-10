@@ -1,10 +1,9 @@
 using GameOfGoose;
 using NUnit.Framework;
-using System.Collections.Generic;
 
 namespace GameOfGooseTest
 {
-    public class Tests
+    internal class PlayerTests
     {
         private Player _player;
         private Dice _dice;
@@ -34,11 +33,6 @@ namespace GameOfGooseTest
 
             // Act
             _player.Move(dice);
-
-            if (_gameBoard.Geese.Contains(_player.Position))
-            {
-                _player.Move(dice);
-            }
 
             //Assert
             Assert.AreEqual(expectedResult, _player.Position);
