@@ -46,7 +46,6 @@ namespace GameOfGoose
 
         private void PlayerTurn(int playerId)
         {
-            int _round = _settings.Turn / Players.Count;
             int[] diceRoll = _dice.Roll();
             do
             {
