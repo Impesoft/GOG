@@ -23,8 +23,8 @@ namespace GameOfGooseTest
             int _position = 0;
             int[] _throw = { 4, 1 };
             //Act
-            User user = new User("Ward", "/pathtowardimg.jpg");
-            int result = user.moveto(_throw, _position);
+            Player user = new Player("Ward", "/pathtowardimg.jpg");
+            int result = user.Move(_throw, _position);
             //Assert
             Assert.AreEqual(10, result);
         }
