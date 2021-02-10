@@ -1,4 +1,6 @@
-﻿namespace GameOfGoose
+﻿using System.Collections.Generic;
+
+namespace GameOfGoose
 {
     public class GogGame
     {

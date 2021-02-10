@@ -1,0 +1,37 @@
+Note: Ask Michiel how to run tests on methods that call themselves
+
+
+Exceptions
+• If you throw 5+4 on the first throw, you go to space 26
+• If you throw 6+3 on the first throw, you go to space 53
+
+basic logic op eerste zicht:
+throw = new Random().Next(2,12);
+public const array[13] GoosePositions = new array {5,9,12,14,18,23,27,32,36,41,45,50,54,59}
+moveto(position,throw);
+
+public int moveto (position, throw)
+	{
+	position +=throw
+	if ( GoosePositions.contains(position)) { 
+											moveto(position,throw);
+											}
+	return position;
+	}
+	
+	
+	
+	
+	
+	enum SpecialPositions { 
+								NotASpecialPosition=0,
+								Bridge=6,
+								Inn=19,
+								Well=31,
+								Maze=42,
+								Prison=52,
+								Death=58,
+								End=63
+							}
+							
+Class Users 
