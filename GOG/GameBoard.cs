@@ -18,7 +18,7 @@ namespace GameOfGoose
             _player = new Player();
 
             Players = _settings.GetPlayers();
-            // Game();
+            //Game();
         }
 
         public GameBoard(List<Player> players)
@@ -41,17 +41,27 @@ namespace GameOfGoose
             {
                 PlayerTurn(_settings.Turn % Players.Count);
                 _settings.Turn++;
-            } while (true);
+            } while (_player.Position != 63);
         }
 
         private void PlayerTurn(int playerId)
         {
-            int _round = _settings.Turn / Players.Count;
             int[] diceRoll = _dice.Roll();
             do
             {
                 _player.Move(diceRoll);
             } while (IsPlayerOnGoose(Players[playerId]));
+        }
+
+        private bool IsFirstRound()
+        {
+            int _round = _settings.Turn / Players.Count;
+
+            if (_round == 0)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
