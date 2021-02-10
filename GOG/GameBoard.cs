@@ -18,7 +18,7 @@ namespace GameOfGoose
             _player = new Player();
 
             Players = _settings.GetPlayers();
-            Game();
+            // Game();
         }
 
         public GameBoard(List<Player> players)
@@ -39,16 +39,14 @@ namespace GameOfGoose
         {
             do
             {
-                for (int i = 0; i < Players.Count; i++)
-                {
-                    PlayerTurn(i);
-                }
+                PlayerTurn(_settings.Turn % Players.Count);
                 _settings.Turn++;
             } while (true);
         }
 
         private void PlayerTurn(int playerId)
         {
+            int _round = _settings.Turn / Players.Count;
             int[] diceRoll = _dice.Roll();
             do
             {

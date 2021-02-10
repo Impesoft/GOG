@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using System.Collections.Generic;
 
-namespace GameOfGooseTests
+namespace GameOfGooseTest
 {
     internal class GameBoardTests
     {
