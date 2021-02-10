@@ -18,7 +18,7 @@ namespace GameOfGoose
             _player = new Player();
 
             Players = _settings.GetPlayers();
-            Game();
+            //Game();
         }
 
         public GameBoard(List<Player> players)

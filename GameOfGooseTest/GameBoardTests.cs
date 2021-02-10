@@ -1,8 +1,7 @@
 ﻿using GameOfGoose;
 using NUnit.Framework;
-using System.Collections.Generic;
 
-namespace GameOfGooseTests
+namespace GameOfGooseTest
 {
     internal class GameBoardTests
     {
@@ -17,7 +16,7 @@ namespace GameOfGooseTests
         }
 
         [Test]
-        public void CanInstantiateGameClass()
+        public void CanInstantiateGameBoardClass()
         {
             GameBoard gameBoard = new GameBoard();
 
@@ -29,11 +28,10 @@ namespace GameOfGooseTests
         {
             // Arrange
             _player.Position = 9;
-            bool expectedResult = true;
             // Act
             bool result = _gameBoard.Geese.Contains(_player.Position);
             // Assert
-            Assert.AreEqual(expectedResult, result);
+            Assert.AreEqual(true, result);
         }
     }
 }

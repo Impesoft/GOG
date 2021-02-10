@@ -1,7 +1,5 @@
-﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using GameOfGoose;
+using NUnit.Framework;
 
 namespace GameOfGooseTest
 {

@@ -1,6 +1,5 @@
 ﻿using GameOfGoose;
 using NUnit.Framework;
-using System.Collections.Generic;
 
 namespace GameOfGooseTest
 {
