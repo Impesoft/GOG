@@ -18,9 +18,7 @@ namespace GameOfGooseTest
         [Test]
         public void CanInstantiateGameBoardClass()
         {
-            GameBoard gameBoard = new GameBoard();
-
-            Assert.IsNotNull(gameBoard);
+            Assert.IsNotNull(_gameBoard);
         }
 
         [Test]
