@@ -6,36 +6,42 @@ namespace GameOfGooseTest
 {
     public class Tests
     {
+        private Player _player;
+        private Dice _dice;
+        private GameBoard _gameBoard;
+
         [SetUp]
         public void Setup()
         {
+            _player = new Player();
+            _dice = new Dice();
+            _gameBoard = new GameBoard();
         }
 
         [Test]
         public void CanInstantiatePlayerClass()
         {
-            Player player = new Player();
-
-            Assert.IsNotNull(player);
+            Assert.IsNotNull(_player);
         }
 
         [Test]
         public void MovePlayer_WhenCalledWithNumber_CalculatePositionIsCorrect()
         {
             // Arrange
-            Player player = new Player();
-            int amountOfEyes = 5;
-            player.Position = 7;
+            int[] dice = { 5, 3 };
+            _player.Position = 7;
+            int expectedResult = _player.Position + dice[0] + dice[1];
 
-            List<int> geese = player.Geese;
             // Act
-            player.Move(amountOfEyes);
+            _player.Move(dice);
 
-            if (true)
+            if (_gameBoard.Geese.Contains(_player.Position))
             {
+                _player.Move(dice);
             }
+
             //Assert
-            Assert.AreEqual(12, player.Position);
+            Assert.AreEqual(expectedResult, _player.Position);
         }
     }
 }

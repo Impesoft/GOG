@@ -5,12 +5,22 @@ namespace GameOfGoose
 {
     public class Player
     {
+        private GameBoard _gameBoard;
         public int Position { get; set; }
-        public List<int> Geese = new List<int> { 5, 9, 12, 14, 18, 23, 27, 32, 36, 41, 45, 50, 54, 59 };
 
-        public void Move(int amountOfEyes)
+        public Player()
         {
-            Position += amountOfEyes;
+            _gameBoard = new GameBoard();
+        }
+
+        public void Move(int[] dice)
+        {
+            Position += dice[0] + dice[1];
+
+            if (_gameBoard.Geese.Contains(Position))
+            {
+                Move(dice);
+            }
         }
     }
 }
