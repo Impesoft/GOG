@@ -35,11 +35,6 @@ namespace GameOfGooseTest
             // Act
             _player.Move(dice);
 
-            if (_gameBoard.Geese.Contains(_player.Position))
-            {
-                _player.Move(dice);
-            }
-
             //Assert
             Assert.AreEqual(expectedResult, _player.Position);
         }
