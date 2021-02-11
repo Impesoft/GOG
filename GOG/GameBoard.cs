@@ -11,7 +11,7 @@ namespace GameOfGoose
         public List<int> Geese = new List<int> { 5, 9, 12, 14, 18, 23, 27, 32, 36, 41, 45, 50, 54, 59 };
         private Settings _settings;
         private Dice _dice;
-        private Player WellPlayer;
+        private Player _wellPlayer;
 
         public GameBoard()
         {
@@ -124,6 +124,7 @@ namespace GameOfGoose
                 default:
                     break;
             }
+            // if (Players[playerId].Position > 36)
         }
 
         private void OnBridge(int playerId)
@@ -155,15 +156,15 @@ namespace GameOfGoose
 
         private void InWell(int playerId)
         {
-            if (WellPlayer == null)
+            if (_wellPlayer == null)
             {
-                WellPlayer = Players[playerId];
+                _wellPlayer = Players[playerId];
             }
             else
             {
-                if (WellPlayer != Players[playerId])
+                if (_wellPlayer != Players[playerId])
                 {
-                    WellPlayer = Players[playerId];
+                    _wellPlayer = Players[playerId];
                 }
             }
         }
