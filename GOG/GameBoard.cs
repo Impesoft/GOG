@@ -9,7 +9,7 @@ namespace GameOfGoose
         public List<Player> Players;
         public List<int> Geese = new List<int> { 5, 9, 12, 14, 18, 23, 27, 32, 36, 41, 45, 50, 54, 59 };
         private Settings _settings;
-        private Dice _dice;
+        private readonly Dice _dice;
         private Player _wellPlayer;
 
         public GameBoard()
@@ -69,7 +69,8 @@ namespace GameOfGoose
                 case SpecialPositions.Inn://to do
                     return false;
 
-                case SpecialPositions.Well://to do
+                case SpecialPositions.Well:
+
                     return false;
 
                 case SpecialPositions.Prison://to do
