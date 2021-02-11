@@ -16,5 +16,7 @@ namespace GameOfGoose
         {
             Position += dice[0] + dice[1];
         }
+
+        public int ToSkipTurns { get; set; }
     }
 }

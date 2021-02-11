@@ -11,6 +11,7 @@ namespace GameOfGoose
         public List<int> Geese = new List<int> { 5, 9, 12, 14, 18, 23, 27, 32, 36, 41, 45, 50, 54, 59 };
         private Settings _settings;
         private Dice _dice;
+        private Player WellPlayer;
 
         public GameBoard()
         {
@@ -59,21 +60,125 @@ namespace GameOfGoose
                 {
                     if (FirsThrowExceptionCheck(playerId, diceRoll)) { return; };
                 }
-                MoveAsLongAsOnGoose(playerId, diceRoll);
+                Move(playerId, diceRoll);
             }
         }
 
         private bool CanPlay(int playerId)
         {
-            return true; // To Do need to check for SpecialPostions and skip count
+            int position = Players[playerId].Position;
+            SpecialPositions currentPosition = (SpecialPositions)position;
+            switch (currentPosition)
+            {   
+                case SpecialPositions.NotSpecialPosition:
+                    return true;
+                case SpecialPositions.Inn://to do
+                    return false;
+                case SpecialPositions.Well://to do
+                    return false;
+                case SpecialPositions.Prison://to do
+                    return false;
+                default:MessageBox.Show("fatal exception");
+                    return false;
+            }
         }
 
-        private void MoveAsLongAsOnGoose(int playerId, int[] diceRoll)
+        private void Move(int playerId, int[] diceRoll)
         {
-            do
+            Players[playerId].Move(diceRoll);
+            OnGoose(playerId, diceRoll);
+            int position = Players[playerId].Position;
+            SpecialPositions currentPosition = (SpecialPositions)position;
+            switch (currentPosition)
+            {   
+                case SpecialPositions.NotSpecialPosition:
+                    break;
+                case SpecialPositions.Bridge:
+                    onBridge(playerId);
+                    break;
+                case SpecialPositions.Inn:
+                    inInn(playerId);
+                    break;
+                case SpecialPositions.Well:
+                    inWell(playerId);
+                    break;
+                case SpecialPositions.Maze:
+                    isMaze(playerId);
+                    break;
+                case SpecialPositions.Prison:
+                    inPrison(playerId);
+                    break;
+                case SpecialPositions.Death:
+                    isDead(playerId);
+                    break;
+                case SpecialPositions.End:
+                    //Winner
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void onBridge(int playerId)
+        {
+            Players[playerId].Position = 12;
+        }
+
+        private void isMaze(int playerId)
+        {
+            Players[playerId].Position = 39;
+        }
+
+        private void isDead(int playerId)
+        {
+            Players[playerId].Position = 0;
+        }
+
+        private void inPrison(int playerId)
+        {
+            if (Players[playerId].ToSkipTurns != 0)
+            {
+                Players[playerId].ToSkipTurns = 3;
+            }
+            else
+            {
+                Players[playerId].ToSkipTurns--;
+            }
+        }
+
+        private void inWell(int playerId)
+        {
+            if (WellPlayer == null)
+            {
+                WellPlayer = Players[playerId];
+            }
+            else
+            {
+                if (WellPlayer != Players[playerId])
+                {
+                    WellPlayer = Players[playerId];
+                }
+            }
+        }
+
+        private void inInn(int playerId)
+        {
+            if (Players[playerId].ToSkipTurns != 0)
+            {
+                Players[playerId].ToSkipTurns = 1;
+            }
+            else
+            {
+                Players[playerId].ToSkipTurns--;
+            }
+        }
+
+        private void OnGoose(int playerId, int[] diceRoll)
+        {
+            while (IsPlayerOnGoose(Players[playerId]))
             {
                 Players[playerId].Move(diceRoll);
-            } while (IsPlayerOnGoose(Players[playerId]));
+            } 
         }
 
         private bool FirsThrowExceptionCheck(int playerId, int[] diceRoll)
