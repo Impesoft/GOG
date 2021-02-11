@@ -48,5 +48,19 @@ namespace GameOfGooseTest
             // Assert
             Assert.IsNotNull(winner);
         }
+
+        [Test]
+        public void Check_IsFirstThrow_ReturnTrue()
+        {
+            // Arrange
+            var turn = _settings.Turn;
+            var playerCount = _players.Count;
+
+            // Act
+            int round = turn / playerCount;
+            bool result = round == 0;
+            // Assert
+            //Assert.AreEqual();
+        }
     }
 }

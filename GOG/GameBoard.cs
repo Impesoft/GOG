@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using GameOfGoose.Squares;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 
@@ -7,6 +8,7 @@ namespace GameOfGoose
     public class GameBoard
     {
         public List<Player> Players;
+        public List<Square> SquarePathList { get; private set; } = new List<Square>();
         public List<int> Geese = new List<int> { 5, 9, 12, 14, 18, 23, 27, 32, 36, 41, 45, 50, 54, 59 };
         private Settings _settings;
         private readonly Dice _dice;
@@ -22,9 +24,58 @@ namespace GameOfGoose
             // GameStep();            // GameStep will be triggered by front end buttons
         }
 
-        public GameBoard(List<Player> players)
+        public void GetSquares()
         {
-            Players = players;
+            for (int i = 0; i <= 63; i++)
+            {
+                if (Geese.Contains(i))
+                {
+                    SquarePathList.Add(new Goose());
+                }
+                else if (((SpecialPositions)i == 0))
+                {
+                    SquarePathList.Add(new Square());
+                }
+                else
+                {
+                    SpecialPositions currentPosition = (SpecialPositions)i;
+                    switch (currentPosition)
+                    {
+                        case SpecialPositions.Bridge:
+
+                            SquarePathList.Add(new Bridge());
+                            break;
+
+                        case SpecialPositions.Inn:
+                            SquarePathList.Add(new Inn());
+                            break;
+
+                        case SpecialPositions.Well:
+                            SquarePathList.Add(new Well());
+                            break;
+
+                        case SpecialPositions.Maze:
+                            SquarePathList.Add(new Maze());
+                            break;
+
+                        case SpecialPositions.Prison:
+                            SquarePathList.Add(new Prison());
+                            break;
+
+                        case SpecialPositions.Death:
+                            SquarePathList.Add(new Death());
+                            break;
+
+                        case SpecialPositions.End:
+                            SquarePathList.Add(new End());
+                            break;
+
+                        default:
+                            SquarePathList.Add(new Square());
+                            break;
+                    }
+                }
+            }
         }
 
         private bool IsPlayerOnGoose(Player player)
@@ -87,9 +138,20 @@ namespace GameOfGoose
         {
             _direction = 1;
             Players[playerId].Move(diceRoll, _direction);
-            OnGoose(playerId, diceRoll);
+
+            if (IsPlayerOnGoose(Players[playerId]))
+            {
+                Move(playerId, diceRoll);
+            }
+
+            //OnGoose(playerId, diceRoll);
             SpecialPositionsMoves(playerId);
 
+            CheckIfReversed(playerId, diceRoll);
+        }
+
+        private void CheckIfReversed(int playerId, int[] diceRoll)
+        {
             if (Players[playerId].Position > 63)
             {
                 Players[playerId].Position = 63 - (Players[playerId].Position % 63);

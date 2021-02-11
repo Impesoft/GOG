@@ -23,6 +23,8 @@ namespace GameOfGoose
         public MainWindow()
         {
             InitializeComponent();
+            GameBoard gameboard = new GameBoard();
+            gameboard.GetSquares();
         }
     }
 }
