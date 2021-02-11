@@ -6,8 +6,9 @@
         xmlns:local="clr-namespace:GameOfGoose"
         mc:Ignorable="d"
         Title="MainWindow"
-        Height="1000"
-        Width="1200"
+        Height="750"
+        Width="900"
+        ResizeMode="NoResize"
         Background="White">
     <DockPanel VerticalAlignment="Stretch"
                HorizontalAlignment="Stretch">
@@ -16,8 +17,20 @@
                     Background="Black"
                     HorizontalAlignment="Stretch">
             <Label Content="Ganzenspel"
+                   HorizontalAlignment="Left"
                    FontSize="32"
                    Foreground="White" />
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                <Button Content="User1"
+                        HorizontalAlignment="Right" />
+                <Button Content="User2"
+                        HorizontalAlignment="Right" />
+                <Button Content="User2"
+                        HorizontalAlignment="Right" />
+                <Button Content="User2"
+                        HorizontalAlignment="Right" />
+            </StackPanel>
         </StackPanel>
         <Grid HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">
@@ -25,6 +38,9 @@
                 <ImageBrush ImageSource="/Images/Ganzenbord.png"
                             Stretch="Fill" />
             </Grid.Background>
+            <Path Stroke="White"
+                  Fill="Transparent"
+                  Data="M 10,600 C 800,600 900,600 790,150 C 750,0 500,10 200,50  C -0,200 50,200 100,400 C 150,450 200,550 550,500" />
         </Grid>
     </DockPanel>
 </Window>

@@ -11,16 +11,14 @@ namespace GameOfGoose
         public List<int> Geese = new List<int> { 5, 9, 12, 14, 18, 23, 27, 32, 36, 41, 45, 50, 54, 59 };
         private Settings _settings;
         private Dice _dice;
-        private Player _player;
 
         public GameBoard()
         {
             _settings = new Settings();
             _dice = new Dice();
-            _player = new Player();
 
             Players = _settings.GetPlayers();
-            //Game();
+            // GameStep();            // GameStep will be triggered by front end buttons
         }
 
         public GameBoard(List<Player> players)
@@ -39,31 +37,42 @@ namespace GameOfGoose
 
         private void Game()
         {
-            bool doWeHaveAWinner = WeHaveAWinner();
-            do
+            //bool doWeHaveAWinner = WeHaveAWinner();
+            //do
+            //{
+            PlayerTurn(_settings.Turn % Players.Count);
+            _settings.Turn++;
+            //} while (!doWeHaveAWinner);
+            if (WeHaveAWinner())
             {
-                PlayerTurn(_settings.Turn % Players.Count);
-                _settings.Turn++;
-            } while (!doWeHaveAWinner);
-            MessageBox.Show($"Congratulations ({ Players.SingleOrDefault(player => player.Position == 63).Name})\nYou Won!");
-            Application.Current.Shutdown();
+                MessageBox.Show($"Congratulations ({ Players.SingleOrDefault(player => player.Position == 63).Name})\nYou Won!");
+                Application.Current.Shutdown(); // or whatever we do to stop the game
+            }
         }
 
         private void PlayerTurn(int playerId)
         {
-            int[] diceRoll = _dice.Roll();
-            if (IsFirstThrow())
+            while (CanPlay(playerId))
             {
-                if (FirsThrowExceptionCheck(playerId, diceRoll)) { return; };
+                int[] diceRoll = _dice.Roll();
+                if (IsFirstThrow())
+                {
+                    if (FirsThrowExceptionCheck(playerId, diceRoll)) { return; };
+                }
+                MoveAsLongAsOnGoose(playerId, diceRoll);
             }
-            MoveAsLongAsOnGoose(playerId, diceRoll);
+        }
+
+        private bool CanPlay(int playerId)
+        {
+            return true; // To Do need to check for SpecialPostions and skip count
         }
 
         private void MoveAsLongAsOnGoose(int playerId, int[] diceRoll)
         {
             do
             {
-                _player.Move(diceRoll);
+                Players[playerId].Move(diceRoll);
             } while (IsPlayerOnGoose(Players[playerId]));
         }
 
