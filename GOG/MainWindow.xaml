@@ -1,13 +1,14 @@
-﻿<Window x:Class="GOG.MainWindow"
+﻿<Window x:Class="GameOfGoose.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:GOG"
+        xmlns:local="clr-namespace:GameOfGoose"
         mc:Ignorable="d"
         Title="MainWindow"
-        Height="1000"
-        Width="1200"
+        Height="750"
+        Width="900"
+        ResizeMode="NoResize"
         Background="White">
     <DockPanel VerticalAlignment="Stretch"
                HorizontalAlignment="Stretch">
@@ -16,8 +17,20 @@
                     Background="Black"
                     HorizontalAlignment="Stretch">
             <Label Content="Ganzenspel"
+                   HorizontalAlignment="Left"
                    FontSize="32"
                    Foreground="White" />
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                <Button Content="User1"
+                        HorizontalAlignment="Right" />
+                <Button Content="User2"
+                        HorizontalAlignment="Right" />
+                <Button Content="User2"
+                        HorizontalAlignment="Right" />
+                <Button Content="User2"
+                        HorizontalAlignment="Right" />
+            </StackPanel>
         </StackPanel>
         <Grid HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">
@@ -25,6 +38,9 @@
                 <ImageBrush ImageSource="/Images/Ganzenbord.png"
                             Stretch="Fill" />
             </Grid.Background>
+            <Path Stroke="Black"
+                  Fill="Transparent"
+                  Data="M 10,600 C 750,600 600,600 600,600 C 600,600 850,600 825,300 C 825,300 825,50 550,50  C 550,50 150,0 100,150 C 50,250 0,500 250,500 C 500,500 750,550 750,350 C 750,300 750,150 600,150 C 600,150 750,150 300,150 C 250,150 150,150 150,250 C 150,500 450,400 450,400 " />
         </Grid>
     </DockPanel>
 </Window>

@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace GOG
+namespace GameOfGoose
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
