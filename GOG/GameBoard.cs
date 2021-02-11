@@ -32,7 +32,7 @@ namespace GameOfGoose
             return Geese.Contains(player.Position);
         }
 
-        private void Game()
+        private void GameStep()
         {
             //bool doWeHaveAWinner = WeHaveAWinner();
             //do
