@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 
@@ -41,7 +40,7 @@ namespace GameOfGoose
             _settings.Turn++;
             //} while (!doWeHaveAWinner);
             if (!WeHaveAWinner()) return;
-            MessageBox.Show($"Congratulations ({ Players.SingleOrDefault(player => player.Position == 63).Name})\nYou Won!");
+            MessageBox.Show($"Congratulations ({ Players.SingleOrDefault(player => player.Position == 63)?.Name})\nYou Won!");
             Application.Current.Shutdown(); // or whatever we do to stop the game
         }
 
@@ -52,7 +51,7 @@ namespace GameOfGoose
                 int[] diceRoll = _dice.Roll();
                 if (IsFirstThrow())
                 {
-                    if (FirsThrowExceptionCheck(playerId, diceRoll)) { return; };
+                    if (FirsThrowExceptionCheck(playerId, diceRoll)) { return; }
                 }
                 Move(playerId, diceRoll);
             }
@@ -120,11 +119,9 @@ namespace GameOfGoose
                 case SpecialPositions.End:
                     //Winner
                     break;
-
-                default:
-                    break;
             }
-            // if (Players[playerId].Position > 36)
+
+            //if (Players[playerId].Position > 63)
         }
 
         private void OnBridge(int playerId)
@@ -156,17 +153,7 @@ namespace GameOfGoose
 
         private void InWell(int playerId)
         {
-            if (_wellPlayer == null)
-            {
-                _wellPlayer = Players[playerId];
-            }
-            else
-            {
-                if (_wellPlayer != Players[playerId])
-                {
-                    _wellPlayer = Players[playerId];
-                }
-            }
+            _wellPlayer = Players[playerId];
         }
 
         private void InInn(int playerId)
@@ -211,9 +198,9 @@ namespace GameOfGoose
 
         private bool WeHaveAWinner()
         {
-            var Winner = Players.SingleOrDefault(player => player.Position == 63);
+            var winner = Players.SingleOrDefault(player => player.Position == 63);
 
-            return Winner != null;
+            return winner != null;
         }
     }
 }
