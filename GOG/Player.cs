@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GameOfGoose
 {
-    public class Player
+    public class Player : IPlayer
     {
         public int Position { get; set; }
         public string Name { get; set; }
