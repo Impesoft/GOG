@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 
@@ -10,7 +9,7 @@ namespace GameOfGoose
         public List<Player> Players;
         public List<int> Geese = new List<int> { 5, 9, 12, 14, 18, 23, 27, 32, 36, 41, 45, 50, 54, 59 };
         private Settings _settings;
-        private Dice _dice;
+        private readonly Dice _dice;
         private Player _wellPlayer;
 
         public GameBoard()
@@ -41,7 +40,7 @@ namespace GameOfGoose
             _settings.Turn++;
             //} while (!doWeHaveAWinner);
             if (!WeHaveAWinner()) return;
-            MessageBox.Show($"Congratulations ({ Players.SingleOrDefault(player => player.Position == 63).Name})\nYou Won!");
+            MessageBox.Show($"Congratulations ({ Players.SingleOrDefault(player => player.Position == 63)?.Name})\nYou Won!");
             Application.Current.Shutdown(); // or whatever we do to stop the game
         }
 
@@ -70,7 +69,8 @@ namespace GameOfGoose
                 case SpecialPositions.Inn://to do
                     return false;
 
-                case SpecialPositions.Well://to do
+                case SpecialPositions.Well:
+
                     return false;
 
                 case SpecialPositions.Prison://to do
@@ -120,9 +120,6 @@ namespace GameOfGoose
                 case SpecialPositions.End:
                     //Winner
                     break;
-
-                default:
-                    break;
             }
             // if (Players[playerId].Position > 36)
         }
@@ -156,17 +153,7 @@ namespace GameOfGoose
 
         private void InWell(int playerId)
         {
-            if (_wellPlayer == null)
-            {
-                _wellPlayer = Players[playerId];
-            }
-            else
-            {
-                if (_wellPlayer != Players[playerId])
-                {
-                    _wellPlayer = Players[playerId];
-                }
-            }
+            _wellPlayer = Players[playerId];
         }
 
         private void InInn(int playerId)
@@ -211,9 +198,9 @@ namespace GameOfGoose
 
         private bool WeHaveAWinner()
         {
-            var Winner = Players.SingleOrDefault(player => player.Position == 63);
+            var winner = Players.SingleOrDefault(player => player.Position == 63);
 
-            return Winner != null;
+            return winner != null;
         }
     }
 }
