@@ -4,7 +4,7 @@ using System.Text;
 
 namespace GameOfGoose
 {
-    internal class Settings
+    public class Settings
     {
         public int Turn { get; set; } = 0;
         public int NumberOfPlayers { get; set; }
