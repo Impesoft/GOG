@@ -32,7 +32,7 @@ namespace GameOfGooseTest
             int expectedResult = _player.Position + dice[0] + dice[1];
 
             // Act
-            _player.Move(dice);
+            _player.Move(dice, 1);
 
             //Assert
             Assert.AreEqual(expectedResult, _player.Position);

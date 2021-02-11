@@ -34,12 +34,9 @@ namespace GameOfGoose
 
         private void GameStep()
         {
-            //bool doWeHaveAWinner = WeHaveAWinner();
-            //do
-            //{
             PlayerTurn(_settings.Turn % Players.Count);
             _settings.Turn++;
-            //} while (!doWeHaveAWinner);
+
             if (!WeHaveAWinner()) return;
             MessageBox.Show($"Congratulations ({ Players.SingleOrDefault(player => player.Position == 63)?.Name})\nYou Won!");
             Application.Current.Shutdown(); // or whatever we do to stop the game
@@ -52,7 +49,7 @@ namespace GameOfGoose
                 int[] diceRoll = _dice.Roll();
                 if (IsFirstThrow())
                 {
-                    if (FirsThrowExceptionCheck(playerId, diceRoll)) { return; };
+                    if (FirsThrowExceptionCheck(playerId, diceRoll)) { return; }
                 }
                 Move(playerId, diceRoll);
             }
