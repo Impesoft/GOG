@@ -11,7 +11,7 @@ namespace GameOfGoose
         public List<int> Geese = new List<int> { 5, 9, 12, 14, 18, 23, 27, 32, 36, 41, 45, 50, 54, 59 };
         private Settings _settings;
         private Dice _dice;
-        private Player WellPlayer;
+        private Player _wellPlayer;
 
         public GameBoard()
         {
@@ -29,11 +29,7 @@ namespace GameOfGoose
 
         private bool IsPlayerOnGoose(Player player)
         {
-            if (Geese.Contains(player.Position))
-            {
-                return true;
-            }
-            return false;
+            return Geese.Contains(player.Position);
         }
 
         private void Game()
@@ -44,11 +40,9 @@ namespace GameOfGoose
             PlayerTurn(_settings.Turn % Players.Count);
             _settings.Turn++;
             //} while (!doWeHaveAWinner);
-            if (WeHaveAWinner())
-            {
-                MessageBox.Show($"Congratulations ({ Players.SingleOrDefault(player => player.Position == 63).Name})\nYou Won!");
-                Application.Current.Shutdown(); // or whatever we do to stop the game
-            }
+            if (!WeHaveAWinner()) return;
+            MessageBox.Show($"Congratulations ({ Players.SingleOrDefault(player => player.Position == 63).Name})\nYou Won!");
+            Application.Current.Shutdown(); // or whatever we do to stop the game
         }
 
         private void PlayerTurn(int playerId)
@@ -69,16 +63,21 @@ namespace GameOfGoose
             int position = Players[playerId].Position;
             SpecialPositions currentPosition = (SpecialPositions)position;
             switch (currentPosition)
-            {   
+            {
                 case SpecialPositions.NotSpecialPosition:
                     return true;
+
                 case SpecialPositions.Inn://to do
                     return false;
+
                 case SpecialPositions.Well://to do
                     return false;
+
                 case SpecialPositions.Prison://to do
                     return false;
-                default:MessageBox.Show("fatal exception");
+
+                default:
+                    MessageBox.Show("fatal exception");
                     return false;
             }
         }
@@ -90,51 +89,60 @@ namespace GameOfGoose
             int position = Players[playerId].Position;
             SpecialPositions currentPosition = (SpecialPositions)position;
             switch (currentPosition)
-            {   
+            {
                 case SpecialPositions.NotSpecialPosition:
                     break;
+
                 case SpecialPositions.Bridge:
-                    onBridge(playerId);
+                    OnBridge(playerId);
                     break;
+
                 case SpecialPositions.Inn:
-                    inInn(playerId);
+                    InInn(playerId);
                     break;
+
                 case SpecialPositions.Well:
-                    inWell(playerId);
+                    InWell(playerId);
                     break;
+
                 case SpecialPositions.Maze:
-                    isMaze(playerId);
+                    IsMaze(playerId);
                     break;
+
                 case SpecialPositions.Prison:
-                    inPrison(playerId);
+                    InPrison(playerId);
                     break;
+
                 case SpecialPositions.Death:
-                    isDead(playerId);
+                    IsDead(playerId);
                     break;
+
                 case SpecialPositions.End:
                     //Winner
                     break;
+
                 default:
                     break;
             }
+            // if (Players[playerId].Position > 36)
         }
 
-        private void onBridge(int playerId)
+        private void OnBridge(int playerId)
         {
             Players[playerId].Position = 12;
         }
 
-        private void isMaze(int playerId)
+        private void IsMaze(int playerId)
         {
             Players[playerId].Position = 39;
         }
 
-        private void isDead(int playerId)
+        private void IsDead(int playerId)
         {
             Players[playerId].Position = 0;
         }
 
-        private void inPrison(int playerId)
+        private void InPrison(int playerId)
         {
             if (Players[playerId].ToSkipTurns != 0)
             {
@@ -146,22 +154,22 @@ namespace GameOfGoose
             }
         }
 
-        private void inWell(int playerId)
+        private void InWell(int playerId)
         {
-            if (WellPlayer == null)
+            if (_wellPlayer == null)
             {
-                WellPlayer = Players[playerId];
+                _wellPlayer = Players[playerId];
             }
             else
             {
-                if (WellPlayer != Players[playerId])
+                if (_wellPlayer != Players[playerId])
                 {
-                    WellPlayer = Players[playerId];
+                    _wellPlayer = Players[playerId];
                 }
             }
         }
 
-        private void inInn(int playerId)
+        private void InInn(int playerId)
         {
             if (Players[playerId].ToSkipTurns != 0)
             {
@@ -177,8 +185,8 @@ namespace GameOfGoose
         {
             while (IsPlayerOnGoose(Players[playerId]))
             {
-                Players[playerId].Move(diceRoll);
-            } 
+                OnGoose(playerId, diceRoll);
+            }
         }
 
         private bool FirsThrowExceptionCheck(int playerId, int[] diceRoll)
@@ -188,23 +196,17 @@ namespace GameOfGoose
                 Players[playerId].Position = 26;
                 return true;
             }
-            if (diceRoll.Contains(6) && diceRoll.Contains(3))
-            {
-                Players[playerId].Position = 53;
-                return true;
-            }
-            return false;
+
+            if (!diceRoll.Contains(6) || !diceRoll.Contains(3)) return false;
+            Players[playerId].Position = 53;
+            return true;
         }
 
         private bool IsFirstThrow()
         {
-            int _round = _settings.Turn / Players.Count;
+            int round = _settings.Turn / Players.Count;
 
-            if (_round == 0)
-            {
-                return true;
-            }
-            return false;
+            return round == 0;
         }
 
         private bool WeHaveAWinner()
