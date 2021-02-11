@@ -11,6 +11,7 @@ namespace GameOfGoose
         private Settings _settings;
         private readonly Dice _dice;
         private Player _wellPlayer;
+        private int _direction = 1;
 
         public GameBoard()
         {
@@ -66,14 +67,17 @@ namespace GameOfGoose
                 case SpecialPositions.NotSpecialPosition:
                     return true;
 
-                case SpecialPositions.Inn://to do
+                case SpecialPositions.Inn:
+                    if (Players[playerId].ToSkipTurns == 0) return true;
+                    Players[playerId].ToSkipTurns--;
                     return false;
 
                 case SpecialPositions.Well:
+                    return _wellPlayer != Players[playerId];
 
-                    return false;
-
-                case SpecialPositions.Prison://to do
+                case SpecialPositions.Prison:
+                    if (Players[playerId].ToSkipTurns == 0) return true;
+                    Players[playerId].ToSkipTurns--;
                     return false;
 
                 default:
@@ -84,8 +88,21 @@ namespace GameOfGoose
 
         private void Move(int playerId, int[] diceRoll)
         {
-            Players[playerId].Move(diceRoll);
+            _direction = 1;
+            Players[playerId].Move(diceRoll, _direction);
             OnGoose(playerId, diceRoll);
+            SpecialPositionsMoves(playerId);
+
+            if (Players[playerId].Position > 63)
+            {
+                Players[playerId].Position = 63 - (Players[playerId].Position % 63);
+                _direction = -1;
+                OnGoose(playerId, diceRoll);
+            }
+        }
+
+        private void SpecialPositionsMoves(int playerId)
+        {
             int position = Players[playerId].Position;
             SpecialPositions currentPosition = (SpecialPositions)position;
             switch (currentPosition)
@@ -118,10 +135,9 @@ namespace GameOfGoose
                     break;
 
                 case SpecialPositions.End:
-                    //Winner
+                    //Winner method when frontend exists
                     break;
             }
-            // if (Players[playerId].Position > 36)
         }
 
         private void OnBridge(int playerId)
@@ -141,14 +157,7 @@ namespace GameOfGoose
 
         private void InPrison(int playerId)
         {
-            if (Players[playerId].ToSkipTurns != 0)
-            {
-                Players[playerId].ToSkipTurns = 3;
-            }
-            else
-            {
-                Players[playerId].ToSkipTurns--;
-            }
+            Players[playerId].ToSkipTurns = 3;
         }
 
         private void InWell(int playerId)
@@ -158,21 +167,14 @@ namespace GameOfGoose
 
         private void InInn(int playerId)
         {
-            if (Players[playerId].ToSkipTurns != 0)
-            {
-                Players[playerId].ToSkipTurns = 1;
-            }
-            else
-            {
-                Players[playerId].ToSkipTurns--;
-            }
+            Players[playerId].ToSkipTurns = 1;
         }
 
         private void OnGoose(int playerId, int[] diceRoll)
         {
             while (IsPlayerOnGoose(Players[playerId]))
             {
-                Players[playerId].Move(diceRoll);
+                Players[playerId].Move(diceRoll, _direction);
             }
         }
 

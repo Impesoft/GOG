@@ -12,9 +12,9 @@ namespace GameOfGoose
         {
         }
 
-        public void Move(int[] dice)
+        public void Move(int[] dice, int direction)
         {
-            Position += dice[0] + dice[1];
+            Position += direction * (dice[0] + dice[1]);
         }
 
         public int ToSkipTurns { get; set; }
