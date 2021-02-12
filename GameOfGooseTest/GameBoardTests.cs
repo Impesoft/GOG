@@ -28,7 +28,19 @@ namespace GameOfGooseTest
         }
 
         [Test]
-        public void GivenPosition_WhenOnGoose_ReturnTrue()
+        public void Check_IfSquaresAreAddedToSquarePathList()
+        {
+            // Arrange
+            _gameBoard.GetSquares();
+            int expectedResult = 64;
+            // Act
+            int numberOfSquares = _gameBoard.SquarePathList.Count;
+            //Assert
+            Assert.AreEqual(expectedResult, numberOfSquares);
+        }
+
+        [Test]
+        public void GivenPosition_CheckIfOnGoose_ReturnTrue()
         {
             // Arrange
             _player.Position = 9;
@@ -36,17 +48,6 @@ namespace GameOfGooseTest
             bool result = _gameBoard.Geese.Contains(_player.Position);
             // Assert
             Assert.AreEqual(true, result);
-        }
-
-        [Test]
-        public void Check_WhenWinner_ReturnTrue()
-        {
-            // Arrange
-            _players[0].Position = 63;
-            // Act
-            var winner = _settings.Players.SingleOrDefault(player => player.Position == 63);
-            // Assert
-            Assert.IsNotNull(winner);
         }
 
         [Test]
@@ -60,7 +61,18 @@ namespace GameOfGooseTest
             int round = turn / playerCount;
             bool result = round == 0;
             // Assert
-            //Assert.AreEqual();
+            Assert.AreEqual(true, result);
+        }
+
+        [Test]
+        public void Check_WhenWinner_ReturnTrue()
+        {
+            // Arrange
+            _players[0].Position = 63;
+            // Act
+            var winner = _settings.Players.SingleOrDefault(player => player.Position == 63);
+            // Assert
+            Assert.IsNotNull(winner);
         }
     }
 }
