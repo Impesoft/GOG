@@ -20,11 +20,28 @@ namespace GameOfGoose
     /// </summary>
     public partial class MainWindow : Window
     {
+        public int IAmHere = 0;
+        public GameBoard GameBoard;
+
         public MainWindow()
         {
             InitializeComponent();
-            GameBoard gameboard = new GameBoard();
-            gameboard.GetSquares();
+            GameBoard = new GameBoard();
+            GameBoard.GetSquares();
+            double x = GameBoard.Locations[IAmHere].X - Player1.Width;
+            double y = GameBoard.Locations[IAmHere].Y - Player1.Height;
+            Canvas.SetLeft(Player1, x);
+            Canvas.SetTop(Player1, y);
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            IAmHere++;
+            IAmHere %= 63;
+            double x = GameBoard.Locations[IAmHere].X - Player1.Width / 2;
+            double y = GameBoard.Locations[IAmHere].Y - Player1.Height;
+            Canvas.SetLeft(Player1, x);
+            Canvas.SetTop(Player1, y);
         }
     }
 }

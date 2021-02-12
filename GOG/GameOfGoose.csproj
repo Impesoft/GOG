@@ -9,6 +9,10 @@
   <ItemGroup>
     <None Remove="Images\GanzenBord.png" />
     <None Remove="Images\Pawn1.png" />
+    <None Remove="Images\Pawn2.png" />
+    <None Remove="Images\Pawn3.png" />
+    <None Remove="Images\Pawn4.png" />
+    <None Remove="Images\pawn5.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -16,6 +20,10 @@
     <Resource Include="Images\Pawn1.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Images\Pawn2.png" />
+    <Resource Include="Images\Pawn3.png" />
+    <Resource Include="Images\Pawn4.png" />
+    <Resource Include="Images\pawn5.png" />
   </ItemGroup>
 
 </Project>

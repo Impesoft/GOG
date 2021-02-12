@@ -23,12 +23,13 @@
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Right">
                 <Button Content="User1"
-                        HorizontalAlignment="Right" />
+                        HorizontalAlignment="Right"
+                        Click="Button_Click" />
                 <Button Content="User2"
                         HorizontalAlignment="Right" />
-                <Button Content="User2"
+                <Button Content="User3"
                         HorizontalAlignment="Right" />
-                <Button Content="User2"
+                <Button Content="User4"
                         HorizontalAlignment="Right" />
             </StackPanel>
         </StackPanel>
@@ -39,11 +40,29 @@
                             Stretch="Fill" />
             </Canvas.Background>
             <Image Source="/Images/Pawn1.png"
-                   Name="Image"
+                   Name="Player1"
                    Height="43"
                    Width="50"
-                   Canvas.Left="100"
-                   Canvas.Top="575" />
+                   Canvas.Left="10"
+                   Canvas.Top="10" />
+            <Image Source="/Images/Pawn2.png"
+                   Name="Player2"
+                   Height="43"
+                   Width="50"
+                   Canvas.Left="20"
+                   Canvas.Top="10" />
+            <Image Source="/Images/Pawn3.png"
+                   Name="Player3"
+                   Height="43"
+                   Width="50"
+                   Canvas.Left="30"
+                   Canvas.Top="10" />
+            <Image Source="/Images/Pawn4.png"
+                   Name="Player4"
+                   Height="43"
+                   Width="50"
+                   Canvas.Left="40"
+                   Canvas.Top="10" />
         </Canvas>
     </DockPanel>
 </Window>
