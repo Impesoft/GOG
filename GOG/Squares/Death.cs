@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows;
 
 namespace GameOfGoose.Squares
 {
@@ -12,6 +13,7 @@ namespace GameOfGoose.Squares
         {
             //move to start
             player.Position = 0;
+            MessageBox.Show("dead");
         }
     }
 }

@@ -1,14 +1,30 @@
-﻿using GameOfGoose.Squares;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.SymbolStore;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using GameOfGoose.Squares;
 
 namespace GameOfGoose
 {
-    public class GameBoard
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class GameBoard : Window
     {
+        public int IAmHere = 0;
         public List<Player> Players;
+        private EnterPlayers _enterPlayers = new EnterPlayers();
         public List<Square> SquarePathList { get; private set; } = new List<Square>();
         public List<int> Geese = new List<int> { 5, 9, 12, 14, 18, 23, 27, 32, 36, 41, 45, 50, 54, 59 };
         private Settings _settings;
@@ -16,16 +32,64 @@ namespace GameOfGoose
         private int _direction = 1;
         public List<Location> Locations;
         private Well _well;
+        public int dice1, dice2;
+        public Image CurrentPlayer;
+
+        //  public GameBoard GameBoard;
 
         public GameBoard()
         {
+            InitializeComponent();
+
             _settings = new Settings();
             Locations = _settings.GetLocations();
+            _enterPlayers.ShowDialog();
             _dice = new Dice();
             _well = new Well();
-
+            GetSquares();
+            // MoveTo(Players[0], Locations[Players[0].Position].X, Locations[Players[0].Position].X);
+            var Player = Player1;
             Players = _settings.GetPlayers();
-            // GameStep();            // GameStep will be triggered by front end buttons
+            double x = Locations[0].X - Player1.Width;
+            double y = Locations[0].Y - Player1.Height;
+            Canvas.SetLeft(Player1, x);
+            Canvas.SetTop(Player1, y);
+
+            //double x = Locations[IAmHere].X - Player1.Width;
+            //double y = Locations[IAmHere].Y - Player1.Height;
+
+            //MoveTo(Player1, x, y);
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            GameStep();
+            //IAmHere++;
+            //IAmHere %= 64;
+            //double x = GameBoard.Locations[IAmHere].X - Player1.Width / 2;
+            //double y = GameBoard.Locations[IAmHere].Y - Player1.Height;
+            //Canvas.SetLeft(Player1, x);
+            //Canvas.SetTop(Player1, y);
+            //  MoveTo(Player1, x, y);
+        }
+
+        public static void MoveTo(Image target, double newX, double newY)
+        {
+            Canvas.SetLeft(target, newX - target.Width / 2);
+            Canvas.SetTop(target, newY - target.Height / 2);
+            //// Return the offset vector for the TextBlock object.
+            //Vector vector = VisualTreeHelper.GetOffset(target);
+
+            //// Convert the vector to a x y values.
+            //double x = vector.X;
+            //double y = vector.Y;
+
+            //TranslateTransform translation = new TranslateTransform();
+            //target.RenderTransform = translation;
+            //DoubleAnimation anim2 = new DoubleAnimation(450 - target.Width / 2, newX - target.Width / 2, TimeSpan.FromSeconds(1));
+            //DoubleAnimation anim1 = new DoubleAnimation(300, newY, TimeSpan.FromSeconds(1));
+            //translation.BeginAnimation(TranslateTransform.XProperty, anim2);
+            //translation.BeginAnimation(TranslateTransform.YProperty, anim1);
         }
 
         public void GetSquares()
@@ -87,9 +151,10 @@ namespace GameOfGoose
             return Geese.Contains(player.Position);
         }
 
-        private void GameStep()
+        public void GameStep()
         {
             PlayerTurn(_settings.Turn % Players.Count);
+
             _settings.Turn++;
 
             if (!WeHaveAWinner()) return;
@@ -99,12 +164,37 @@ namespace GameOfGoose
 
         private void PlayerTurn(int playerId)
         {
+            switch (playerId)
+            {
+                case 0:
+                    CurrentPlayer = Player1;
+                    break;
+
+                case 1:
+                    CurrentPlayer = Player2;
+                    break;
+
+                case 2:
+                    CurrentPlayer = Player3;
+                    break;
+
+                case 3:
+                    CurrentPlayer = Player4;
+                    break;
+            }
             if (!CanPlay(playerId)) return;
             int[] diceRoll = _dice.Roll();
+            dice1 = diceRoll[0];
+            dice2 = diceRoll[1];
+            // Dice1 Dice2
+            Throw.Text = $"{dice1},{dice2} ";
+
             if (IsFirstThrow())
             {
                 if (FirsThrowExceptionCheck(playerId, diceRoll)) return;
             }
+
+            _direction = 1;
             Move(playerId, diceRoll);
         }
 
@@ -114,9 +204,6 @@ namespace GameOfGoose
             SpecialPositions currentPosition = (SpecialPositions)position;
             switch (currentPosition)
             {
-                case SpecialPositions.NotSpecialPosition:
-                    return true;
-
                 case SpecialPositions.Inn:
                     if (Players[playerId].ToSkipTurns == 0) return true;
                     Players[playerId].ToSkipTurns--;
@@ -130,23 +217,26 @@ namespace GameOfGoose
                     Players[playerId].ToSkipTurns--;
                     return false;
 
+                case SpecialPositions.NotSpecialPosition:
                 default:
-                    MessageBox.Show("fatal exception");
-                    return false;
+                    return true;
             }
         }
 
         private void Move(int playerId, int[] diceRoll)
         {
             Player player = Players[playerId];
-            _direction = 1;
+            //  _direction = 1;
             player.Move(diceRoll, _direction);
             CheckIfReversed(playerId, diceRoll);
-            SquarePathList[player.Position].Move(player); //polymorphism
             if (IsPlayerOnGoose(player))
             {
                 Move(playerId, diceRoll);
             }
+            SquarePathList[player.Position].Move(player); //polymorphism
+
+            MoveTo(CurrentPlayer, Locations[player.Position].X, Locations[player.Position].Y);
+            Throw.Text += $" and should be on position {player.Position} ({Locations[player.Position].X},{Locations[player.Position].Y})";
         }
 
         private void CheckIfReversed(int playerId, int[] diceRoll)
