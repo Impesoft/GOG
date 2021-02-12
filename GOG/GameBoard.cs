@@ -1,5 +1,6 @@
 ﻿using GameOfGoose.Squares;
 using System.Collections.Generic;
+using System.Diagnostics.SymbolStore;
 using System.Linq;
 using System.Windows;
 
@@ -102,7 +103,7 @@ namespace GameOfGoose
             int[] diceRoll = _dice.Roll();
             if (IsFirstThrow())
             {
-                if (FirsThrowExceptionCheck(playerId, diceRoll)) { return; }
+                if (FirsThrowExceptionCheck(playerId, diceRoll)) return;
             }
             Move(playerId, diceRoll);
         }
