@@ -98,15 +98,13 @@ namespace GameOfGoose
 
         private void PlayerTurn(int playerId)
         {
-            while (CanPlay(playerId))
+            if (!CanPlay(playerId)) return;
+            int[] diceRoll = _dice.Roll();
+            if (IsFirstThrow())
             {
-                int[] diceRoll = _dice.Roll();
-                if (IsFirstThrow())
-                {
-                    if (FirsThrowExceptionCheck(playerId, diceRoll)) { return; }
-                }
-                Move(playerId, diceRoll);
+                if (FirsThrowExceptionCheck(playerId, diceRoll)) { return; }
             }
+            Move(playerId, diceRoll);
         }
 
         private bool CanPlay(int playerId)
@@ -158,14 +156,6 @@ namespace GameOfGoose
             Move(playerId, diceRoll);
         }
 
-        private void OnGoose(int playerId, int[] diceRoll)
-        {
-            while (IsPlayerOnGoose(Players[playerId]))
-            {
-                Players[playerId].Move(diceRoll, _direction);
-            }
-        }
-
         private bool FirsThrowExceptionCheck(int playerId, int[] diceRoll)
         {
             if (diceRoll.Contains(5) && diceRoll.Contains(4))
@@ -190,7 +180,7 @@ namespace GameOfGoose
         {
             var winner = Players.SingleOrDefault(player => player.Position == 63);
 
-            return winner != null;
+            return winner is not null;
         }
     }
 }
