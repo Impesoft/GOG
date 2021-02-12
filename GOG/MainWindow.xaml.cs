@@ -37,7 +37,7 @@ namespace GameOfGoose
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             IAmHere++;
-            IAmHere %= 63;
+            IAmHere %= 64;
             double x = GameBoard.Locations[IAmHere].X - Player1.Width / 2;
             double y = GameBoard.Locations[IAmHere].Y - Player1.Height;
             Canvas.SetLeft(Player1, x);
