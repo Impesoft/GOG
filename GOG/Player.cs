@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows;
 
 namespace GameOfGoose
 {
@@ -11,6 +12,8 @@ namespace GameOfGoose
         public Player()
         {
         }
+
+        public Location PlayerLocation { get; set; } = new Location { Id = 0, X = 0, Y = 0 };
 
         public void Move(int[] dice, int direction)
         {

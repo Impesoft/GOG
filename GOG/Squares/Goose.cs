@@ -13,7 +13,7 @@ namespace GameOfGoose.Squares
         {
             //fatal error!
             MessageBox.Show("You can't Stop here!");
-            player.Position = 0;
+            // player.Position = 0;
         }
     }
 }
