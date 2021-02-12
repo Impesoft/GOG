@@ -66,7 +66,6 @@ namespace GameOfGoose
             new Location {Id = 55, X = 340, Y = 150},
             new Location {Id = 56, X = 280, Y = 150},
             new Location {Id = 57, X = 230, Y = 150},
-
             new Location {Id = 58, X = 170, Y = 200},
             new Location {Id = 59, X = 150, Y = 300},
             new Location {Id = 60, X = 150, Y = 360},
