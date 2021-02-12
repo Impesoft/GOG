@@ -12,15 +12,16 @@ namespace GameOfGoose
         public List<int> Geese = new List<int> { 5, 9, 12, 14, 18, 23, 27, 32, 36, 41, 45, 50, 54, 59 };
         private Settings _settings;
         private readonly Dice _dice;
-        private Player _wellPlayer;
         private int _direction = 1;
         public List<Location> Locations;
+        private Well _well;
 
         public GameBoard()
         {
             _settings = new Settings();
             Locations = _settings.GetLocations();
             _dice = new Dice();
+            _well = new Well();
 
             Players = _settings.GetPlayers();
             // GameStep();            // GameStep will be triggered by front end buttons
@@ -123,7 +124,7 @@ namespace GameOfGoose
                     return false;
 
                 case SpecialPositions.Well:
-                    return _wellPlayer != Players[playerId];
+                    return _well.WellPlayer != Players[playerId];
 
                 case SpecialPositions.Prison:
                     if (Players[playerId].ToSkipTurns == 0) return true;
@@ -138,97 +139,23 @@ namespace GameOfGoose
 
         private void Move(int playerId, int[] diceRoll)
         {
+            Player player = Players[playerId];
             _direction = 1;
-            Players[playerId].Move(diceRoll, _direction);
-
-            if (IsPlayerOnGoose(Players[playerId]))
+            player.Move(diceRoll, _direction);
+            CheckIfReversed(playerId, diceRoll);
+            SquarePathList[player.Position].Move(player); //polymorphism
+            if (IsPlayerOnGoose(player))
             {
                 Move(playerId, diceRoll);
             }
-
-            //OnGoose(playerId, diceRoll);
-            SpecialPositionsMoves(playerId);
-
-            CheckIfReversed(playerId, diceRoll);
         }
 
         private void CheckIfReversed(int playerId, int[] diceRoll)
         {
-            if (Players[playerId].Position > 63)
-            {
-                Players[playerId].Position = 63 - (Players[playerId].Position % 63);
-                _direction = -1;
-                OnGoose(playerId, diceRoll);
-            }
-        }
-
-        private void SpecialPositionsMoves(int playerId)
-        {
-            int position = Players[playerId].Position;
-            SpecialPositions currentPosition = (SpecialPositions)position;
-            switch (currentPosition)
-            {
-                case SpecialPositions.NotSpecialPosition:
-                    break;
-
-                case SpecialPositions.Bridge:
-                    OnBridge(playerId);
-                    break;
-
-                case SpecialPositions.Inn:
-                    InInn(playerId);
-                    break;
-
-                case SpecialPositions.Well:
-                    InWell(playerId);
-                    break;
-
-                case SpecialPositions.Maze:
-                    IsMaze(playerId);
-                    break;
-
-                case SpecialPositions.Prison:
-                    InPrison(playerId);
-                    break;
-
-                case SpecialPositions.Death:
-                    IsDead(playerId);
-                    break;
-
-                case SpecialPositions.End:
-                    //Winner method when frontend exists
-                    break;
-            }
-        }
-
-        private void OnBridge(int playerId)
-        {
-            Players[playerId].Position = 12;
-        }
-
-        private void IsMaze(int playerId)
-        {
-            Players[playerId].Position = 39;
-        }
-
-        private void IsDead(int playerId)
-        {
-            Players[playerId].Position = 0;
-        }
-
-        private void InPrison(int playerId)
-        {
-            Players[playerId].ToSkipTurns = 3;
-        }
-
-        private void InWell(int playerId)
-        {
-            _wellPlayer = Players[playerId];
-        }
-
-        private void InInn(int playerId)
-        {
-            Players[playerId].ToSkipTurns = 1;
+            if (Players[playerId].Position <= 63) return;
+            Players[playerId].Position = 63 - (Players[playerId].Position % 63);
+            _direction = -1;
+            Move(playerId, diceRoll);
         }
 
         private void OnGoose(int playerId, int[] diceRoll)

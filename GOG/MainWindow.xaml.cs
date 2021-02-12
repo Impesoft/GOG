@@ -31,8 +31,9 @@ namespace GameOfGoose
             GameBoard.GetSquares();
             double x = GameBoard.Locations[IAmHere].X - Player1.Width;
             double y = GameBoard.Locations[IAmHere].Y - Player1.Height;
-            Canvas.SetLeft(Player1, x);
-            Canvas.SetTop(Player1, y);
+            //Canvas.SetLeft(Player1, x);
+            //Canvas.SetTop(Player1, y);
+            MoveTo(Player1, x, y);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -41,9 +42,9 @@ namespace GameOfGoose
             IAmHere %= 64;
             double x = GameBoard.Locations[IAmHere].X - Player1.Width / 2;
             double y = GameBoard.Locations[IAmHere].Y - Player1.Height;
+            MoveTo(Player1, x, y);
             //Canvas.SetLeft(Player1, x);
             //Canvas.SetTop(Player1, y);
-            MoveTo(Player1, x, y);
         }
 
         public static void MoveTo(Image target, double newX, double newY)
@@ -55,8 +56,10 @@ namespace GameOfGoose
             target.RenderTransform = trans;
             DoubleAnimation anim1 = new DoubleAnimation(0, newY - top, TimeSpan.FromSeconds(1));
             DoubleAnimation anim2 = new DoubleAnimation(0, newX - left, TimeSpan.FromSeconds(1));
-            trans.BeginAnimation(TranslateTransform.YProperty, anim1);
             trans.BeginAnimation(TranslateTransform.XProperty, anim2);
+            trans.BeginAnimation(TranslateTransform.YProperty, anim1);
+            //Canvas.SetLeft(target, newX);
+            //Canvas.SetTop(target, newY);
         }
     }
 }
