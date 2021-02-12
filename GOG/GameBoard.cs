@@ -14,10 +14,12 @@ namespace GameOfGoose
         private readonly Dice _dice;
         private Player _wellPlayer;
         private int _direction = 1;
+        private List<Location> _locations;
 
         public GameBoard()
         {
             _settings = new Settings();
+            _locations = _settings.GetLocations();
             _dice = new Dice();
 
             Players = _settings.GetPlayers();

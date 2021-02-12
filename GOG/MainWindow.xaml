@@ -32,15 +32,18 @@
                         HorizontalAlignment="Right" />
             </StackPanel>
         </StackPanel>
-        <Grid HorizontalAlignment="Stretch"
-              VerticalAlignment="Stretch">
-            <Grid.Background>
+        <Canvas HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch">
+            <Canvas.Background>
                 <ImageBrush ImageSource="/Images/Ganzenbord.png"
                             Stretch="Fill" />
-            </Grid.Background>
-            <Path Stroke="Black"
-                  Fill="Transparent"
-                  Data="M 10,600 C 750,600 600,600 600,600 C 600,600 850,600 825,300 C 825,300 825,50 550,50  C 550,50 150,0 100,150 C 50,250 0,500 250,500 C 500,500 750,550 750,350 C 750,300 750,150 600,150 C 600,150 750,150 300,150 C 250,150 150,150 150,250 C 150,500 450,400 450,400 " />
-        </Grid>
+            </Canvas.Background>
+            <Image Source="/Images/Pawn1.png"
+                   Name="Image"
+                   Height="43"
+                   Width="50"
+                   Canvas.Left="100"
+                   Canvas.Top="575" />
+        </Canvas>
     </DockPanel>
 </Window>

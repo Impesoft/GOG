@@ -8,10 +8,14 @@
 
   <ItemGroup>
     <None Remove="Images\GanzenBord.png" />
+    <None Remove="Images\Pawn1.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Images\GanzenBord.png" />
+    <Resource Include="Images\Pawn1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>
