@@ -13,7 +13,12 @@ namespace GameOfGoose.Squares
         {
             // Skip 1 Turn
             player.ToSkipTurns = 1;
-            MessageBox.Show("skip " + player.ToSkipTurns + " turns");
+            //MessageBox.Show("skip " + player.ToSkipTurns + " turns");
+        }
+
+        public override string ToString()
+        {
+            return "\nWelcome have a drink and skip a turn";
         }
     }
 }

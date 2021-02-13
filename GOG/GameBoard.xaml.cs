@@ -47,6 +47,8 @@ namespace GameOfGoose
             _enterPlayers.ShowDialog();
             _dice = new Dice();
             _well = new Well();
+            _well.WellPlayer = new Player();
+            _well.WellPlayer.Name = "not set";
             GetSquares();
             // MoveTo(Players[0], Locations[Players[0].Position].X, Locations[Players[0].Position].X);
             var Player = Player1;
@@ -170,7 +172,6 @@ namespace GameOfGoose
             {
                 case 0:
                     CurrentPlayer = Player1;
-
                     break;
 
                 case 1:
@@ -185,7 +186,7 @@ namespace GameOfGoose
                     CurrentPlayer = Player4;
                     break;
             }
-            if (!CanPlay(playerId)) return;
+            if (!CanPlay()) return;
             int[] diceRoll = _dice.Roll();
             dice1 = diceRoll[0];
             dice2 = diceRoll[1];
@@ -201,7 +202,7 @@ namespace GameOfGoose
             Move(playerId, diceRoll);
         }
 
-        private bool CanPlay(int playerId)
+        private bool CanPlay()
         {
             if (ActivePlayer.ToSkipTurns > 0)
             {
@@ -209,7 +210,8 @@ namespace GameOfGoose
                 return false;
             }
 
-            return _well.WellPlayer != Players[playerId];
+            Throw.Text += $"\n{_well.WellPlayer.Name}=?{ActivePlayer.Name}";
+            return _well.WellPlayer != ActivePlayer;
         }
 
         private void Move(int playerId, int[] diceRoll)
@@ -223,9 +225,9 @@ namespace GameOfGoose
                 Move(playerId, diceRoll);
             }
             SquarePathList[player.Position].Move(player); //polymorphism
-
+            Throw.Text += SquarePathList[player.Position].ToString();
             MoveTo(CurrentPlayer, Locations[player.Position].X - ActivePlayer.OffsetX, Locations[player.Position].Y - ActivePlayer.OffsetY);
-            Throw.Text += $"and should now be on position {player.Position} ({Locations[player.Position].X},{Locations[player.Position].Y})";
+            Throw.Text += $"\nand should now be on position {player.Position} ({Locations[player.Position].X},{Locations[player.Position].Y})";
         }
 
         private void CheckIfReversed(int playerId, int[] diceRoll)

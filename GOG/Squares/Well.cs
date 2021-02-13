@@ -15,7 +15,11 @@ namespace GameOfGoose.Squares
         {
             // wait to be saved
             WellPlayer = player;
-            MessageBox.Show("Well.... that shocks, gotta wait for someone to rescue you now...");
+        }
+
+        public override string ToString()
+        {
+            return $"\nWell... that shocks, gotta wait for someone to rescue you now...";
         }
     }
 }

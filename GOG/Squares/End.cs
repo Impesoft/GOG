@@ -13,8 +13,13 @@ namespace GameOfGoose.Squares
         public override void Move(Player player)
         {
             //we have a winner
-            string displayText = $"We have a Winner!!\nCongratulation {player.Name}!";
-            MessageBox.Show(displayText);
+            //    string displayText = $"We have a Winner!!\nCongratulation {player.Name}!";
+            //   MessageBox.Show(displayText);
+        }
+
+        public override string ToString()
+        {
+            return "\nCongratulations You've Won!";
         }
     }
 }
