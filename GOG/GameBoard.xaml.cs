@@ -1,6 +1,7 @@
 ﻿using GameOfGoose.Squares;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -79,16 +80,16 @@ namespace GameOfGoose
             _well.WellPlayer = new Player { Name = "not set" };
             var Player = Player1;
             Players = _settings.GetPlayers();
-            PawnList = new List<Image>()
-            {
-                Player1,
-                Player2,
-                Player3,
-                Player4,
-            };
+            //PawnList = new List<Image>()
+            //{
+            //    Player1,
+            //    Player2,
+            //    Player3,
+            //    Player4,
+            //};
             foreach (Player player in Players)
             {
-                player.Pawn = PawnList[Players.IndexOf(player)];
+                player.Pawn = (Image)MyCanvas.Children[Players.IndexOf(player)];
                 player.Pawn.ToolTip = player.Name;
             }
         }
@@ -99,10 +100,10 @@ namespace GameOfGoose
             StartOrContinueGame();
         }
 
-        public static void MoveTo(Image target, double newX, double newY)
+        public void MoveTo(Image target, double newX, double newY)
         {
-            Canvas.SetLeft(target, newX - target.Width / 2);
-            Canvas.SetTop(target, newY - target.Height / 2);
+            Canvas.SetLeft(target, (MyCanvas.ActualWidth / 884) * newX - target.Width / 2);
+            Canvas.SetTop(target, (MyCanvas.ActualHeight / 658.5) * newY - target.Height / 2);
         }
 
         public void InitializeSquares()
@@ -196,16 +197,16 @@ namespace GameOfGoose
                 return false;
             }
 
-            Throw.Text += $"\nin Well {_well.WellPlayer.Name}";
+            //Throw.Text += $"\nin Well {_well.WellPlayer.Name}";
             return _well.WellPlayer != ActivePlayer;
         }
 
         private void Move(int playerId, int[] diceRoll)
         {
             Player player = Players[playerId];
-            //  _direction = 1;
             player.Move(diceRoll, _direction);
             CheckIfReversed(playerId, diceRoll);
+            //reflection
             if (IsPlayerOnGoose(player))
             {
                 Move(playerId, diceRoll);
