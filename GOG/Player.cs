@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Mime;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace GameOfGoose
 {
     public class Player : IPlayer
     {
-        public int Position { get; set; }
+        public int Position { get; set; } = 0;
         public string Name { get; set; }
+        public Image Pawn;
         public int OffsetX { get; set; }
         public int OffsetY { get; set; }
 

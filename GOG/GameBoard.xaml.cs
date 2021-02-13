@@ -18,74 +18,91 @@ using GameOfGoose.Squares;
 namespace GameOfGoose
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for GameBoard.xaml
     /// </summary>
     public partial class GameBoard : Window
     {
-        public int IAmHere = 0;
         public List<Player> Players;
-        private EnterPlayers _enterPlayers = new EnterPlayers();
+        public List<Image> PawnList;
         public List<Square> SquarePathList { get; private set; } = new List<Square>();
         public List<int> Geese = new List<int> { 5, 9, 12, 14, 18, 23, 27, 32, 36, 41, 45, 50, 54, 59 };
         private Settings _settings;
-        private readonly Dice _dice;
+        private Dice _dice;
         private int _direction = 1;
-        public List<Location> Locations;
+
         private Well _well;
         public int dice1, dice2;
-        public Image CurrentPlayer;
+        public Image ActivePawn;
+        public bool GameIsRunning;
         public Player ActivePlayer;
-
-        //  public GameBoard GameBoard;
 
         public GameBoard()
         {
             InitializeComponent();
 
-            _settings = new Settings();
-            Locations = _settings.GetLocations();
-            _enterPlayers.ShowDialog();
+            StartOrContinueGame();
+        }
+
+        private void StartOrContinueGame()
+        {
+            if (!GameIsRunning)
+            {
+                InitializeVariables();
+                GameIsRunning = true;
+            }
+            int activePlayerId = _settings.Turn % Players.Count;
+            ActivePlayer = Players[activePlayerId];
+            ActivePawn = ActivePlayer.Pawn;
+            double x = Locations.List[ActivePlayer.Position].X - ActivePawn.Width;
+            double y = Locations.List[ActivePlayer.Position].Y - ActivePawn.Height;
+            Canvas.SetLeft(ActivePawn, x / 900 * Width);
+            Canvas.SetTop(ActivePawn, y / 600 * Height);
+            PlayerTurn(activePlayerId);
+            _settings.Turn++;
+            if (!WeHaveAWinner()) return;
+            MessageBox.Show($"Congratulations { Players.SingleOrDefault(player => player.Position == 63)?.Name}\nYou Won!");
+            GameIsRunning = false;
+            // Application.Current.Shutdown(); // or whatever we do to stop the game
+
+            //   GameStep();
+        }
+
+        private void InitializeVariables()
+        {
+            GameIsRunning = false;
             InitializeSquares();
+            _settings = new Settings();
+            EnterPlayers _enterPlayers = new EnterPlayers();
+
+            _enterPlayers.ShowDialog();
             _dice = new Dice();
             _well.WellPlayer = new Player { Name = "not set" };
-
             var Player = Player1;
             Players = _settings.GetPlayers();
-            double x = Locations[0].X - Player1.Width;
-            double y = Locations[0].Y - Player1.Height;
-            Canvas.SetLeft(Player1, x);
-            Canvas.SetTop(Player1, y);
+            PawnList = new List<Image>()
+            {
+                Player1,
+                Player2,
+                Player3,
+                Player4,
+            };
+            foreach (Player player in Players)
+            {
+                player.Pawn = PawnList[Players.IndexOf(player)];
+                player.Pawn.ToolTip = player.Name;
+            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            GameStep();
-            //IAmHere++;
-            //IAmHere %= 64;
-            //double x = GameBoard.Locations[IAmHere].X - Player1.Width / 2;
-            //double y = GameBoard.Locations[IAmHere].Y - Player1.Height;
-            //Canvas.SetLeft(Player1, x);
-            //Canvas.SetTop(Player1, y);
-            //  MoveTo(Player1, x, y);
+            //GameStep();
+            StartOrContinueGame();
         }
 
         public static void MoveTo(Image target, double newX, double newY)
         {
             Canvas.SetLeft(target, newX - target.Width / 2);
             Canvas.SetTop(target, newY - target.Height / 2);
-            //// Return the offset vector for the TextBlock object.
-            //Vector vector = VisualTreeHelper.GetOffset(target);
-
-            //// Convert the vector to a x y values.
-            //double x = vector.X;
-            //double y = vector.Y;
-
-            //TranslateTransform translation = new TranslateTransform();
-            //target.RenderTransform = translation;
-            //DoubleAnimation anim2 = new DoubleAnimation(450 - target.Width / 2, newX - target.Width / 2, TimeSpan.FromSeconds(1));
-            //DoubleAnimation anim1 = new DoubleAnimation(300, newY, TimeSpan.FromSeconds(1));
-            //translation.BeginAnimation(TranslateTransform.XProperty, anim2);
-            //translation.BeginAnimation(TranslateTransform.YProperty, anim1);
         }
 
         public void InitializeSquares()
@@ -150,36 +167,11 @@ namespace GameOfGoose
 
         public void GameStep()
         {
-            int activePlayerId = _settings.Turn % Players.Count;
-            ActivePlayer = Players[activePlayerId];
-            PlayerTurn(activePlayerId);
-            _settings.Turn++;
-
-            if (!WeHaveAWinner()) return;
-            MessageBox.Show($"Congratulations ({ Players.SingleOrDefault(player => player.Position == 63)?.Name})\nYou Won!");
-            Application.Current.Shutdown(); // or whatever we do to stop the game
         }
 
         private void PlayerTurn(int playerId)
         {
-            switch (playerId)
-            {
-                case 0:
-                    CurrentPlayer = Player1;
-                    break;
-
-                case 1:
-                    CurrentPlayer = Player2;
-                    break;
-
-                case 2:
-                    CurrentPlayer = Player3;
-                    break;
-
-                case 3:
-                    CurrentPlayer = Player4;
-                    break;
-            }
+            ActivePawn = ActivePlayer.Pawn;
             if (!CanPlay()) return;
             int[] diceRoll = _dice.Roll();
             dice1 = diceRoll[0];
@@ -204,7 +196,7 @@ namespace GameOfGoose
                 return false;
             }
 
-            Throw.Text += $"\n{_well.WellPlayer.Name}=?{ActivePlayer.Name}";
+            Throw.Text += $"\nin Well {_well.WellPlayer.Name}";
             return _well.WellPlayer != ActivePlayer;
         }
 
@@ -220,8 +212,8 @@ namespace GameOfGoose
             }
             SquarePathList[player.Position].Move(player); //polymorphism
             Throw.Text += SquarePathList[player.Position].ToString();
-            MoveTo(CurrentPlayer, Locations[player.Position].X - ActivePlayer.OffsetX, Locations[player.Position].Y - ActivePlayer.OffsetY);
-            Throw.Text += $"\nand should now be on position {player.Position} ({Locations[player.Position].X},{Locations[player.Position].Y})";
+            MoveTo(ActivePawn, Locations.List[player.Position].X - ActivePlayer.OffsetX, Locations.List[player.Position].Y - ActivePlayer.OffsetY);
+            //  Throw.Text += $"\nand should now be on position {player.Position} ({Locations.List[player.Position].X},{Locations.List[player.Position].Y})";
         }
 
         private void CheckIfReversed(int playerId, int[] diceRoll)

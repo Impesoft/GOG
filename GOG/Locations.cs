@@ -4,9 +4,9 @@ using System.Text;
 
 namespace GameOfGoose
 {
-    public class Locations
+    public static class Locations
     {
-        private List<Location> _locations = new List<Location>()
+        public static List<Location> List = new List<Location>()
         {
             new Location {Id = 0, X = 100, Y = 600},
             new Location {Id = 1, X = 243, Y = 600},
@@ -72,11 +72,6 @@ namespace GameOfGoose
             new Location {Id = 61, X = 200, Y = 390},
             new Location {Id = 62, X = 250, Y = 420},
             new Location {Id = 63, X = 450, Y = 300},
-                    };
-
-        public List<Location> GetLocations()
-        {
-            return _locations;
-        }
+        };
     }
 }
