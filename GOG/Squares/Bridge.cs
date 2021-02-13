@@ -13,6 +13,7 @@ namespace GameOfGoose.Squares
         {
             //move to 12
             player.Position = 12;
+            MessageBox.Show("bridge");
         }
     }
 }

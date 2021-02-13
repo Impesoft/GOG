@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows;
 
 namespace GameOfGoose.Squares
 {
@@ -12,6 +13,7 @@ namespace GameOfGoose.Squares
         {
             // Skip 3 Turns
             player.ToSkipTurns = 3;
+            MessageBox.Show("Got Caught! You're in prison now (skip 3 turns)");
         }
     }
 }

@@ -34,6 +34,7 @@ namespace GameOfGoose
         private Well _well;
         public int dice1, dice2;
         public Image CurrentPlayer;
+        public Player ActivePlayer;
 
         //  public GameBoard GameBoard;
 
@@ -153,8 +154,9 @@ namespace GameOfGoose
 
         public void GameStep()
         {
-            PlayerTurn(_settings.Turn % Players.Count);
-
+            int activePlayerId = _settings.Turn % Players.Count;
+            ActivePlayer = Players[activePlayerId];
+            PlayerTurn(activePlayerId);
             _settings.Turn++;
 
             if (!WeHaveAWinner()) return;
@@ -168,6 +170,7 @@ namespace GameOfGoose
             {
                 case 0:
                     CurrentPlayer = Player1;
+
                     break;
 
                 case 1:
@@ -187,7 +190,7 @@ namespace GameOfGoose
             dice1 = diceRoll[0];
             dice2 = diceRoll[1];
             // Dice1 Dice2
-            Throw.Text = $"{dice1},{dice2} ";
+            Throw.Text = $"player{playerId} threw {dice1},{dice2}\n";
 
             if (IsFirstThrow())
             {
@@ -200,27 +203,13 @@ namespace GameOfGoose
 
         private bool CanPlay(int playerId)
         {
-            int position = Players[playerId].Position;
-            SpecialPositions currentPosition = (SpecialPositions)position;
-            switch (currentPosition)
+            if (ActivePlayer.ToSkipTurns > 0)
             {
-                case SpecialPositions.Inn:
-                    if (Players[playerId].ToSkipTurns == 0) return true;
-                    Players[playerId].ToSkipTurns--;
-                    return false;
-
-                case SpecialPositions.Well:
-                    return _well.WellPlayer != Players[playerId];
-
-                case SpecialPositions.Prison:
-                    if (Players[playerId].ToSkipTurns == 0) return true;
-                    Players[playerId].ToSkipTurns--;
-                    return false;
-
-                case SpecialPositions.NotSpecialPosition:
-                default:
-                    return true;
+                ActivePlayer.ToSkipTurns--;
+                return false;
             }
+
+            return _well.WellPlayer != Players[playerId];
         }
 
         private void Move(int playerId, int[] diceRoll)
@@ -236,7 +225,7 @@ namespace GameOfGoose
             SquarePathList[player.Position].Move(player); //polymorphism
 
             MoveTo(CurrentPlayer, Locations[player.Position].X, Locations[player.Position].Y);
-            Throw.Text += $" and should be on position {player.Position} ({Locations[player.Position].X},{Locations[player.Position].Y})";
+            Throw.Text += $"and should now be on position {player.Position} ({Locations[player.Position].X},{Locations[player.Position].Y})";
         }
 
         private void CheckIfReversed(int playerId, int[] diceRoll)

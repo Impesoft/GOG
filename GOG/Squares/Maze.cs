@@ -13,6 +13,7 @@ namespace GameOfGoose.Squares
         {
             //move to start
             player.Position = 39;
+            MessageBox.Show("You got lost in the maze go back to 39");
         }
     }
 }
