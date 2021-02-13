@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows;
 
 namespace GameOfGoose.Squares
 {
@@ -12,8 +13,9 @@ namespace GameOfGoose.Squares
 
         public override void Move(Player player)
         {
-            // Skip 1 Turn
+            // wait to be saved
             WellPlayer = player;
+            MessageBox.Show("Well.... that shocks, gotta wait for someone to rescue you now...");
         }
     }
 }
