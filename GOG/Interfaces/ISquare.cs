@@ -6,5 +6,7 @@
         string Name { get; set; }
 
         void Move(Player player);
+
+        string ToString();
     }
 }

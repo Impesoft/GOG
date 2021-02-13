@@ -15,5 +15,10 @@ namespace GameOfGoose.Squares
             //dont move
             player.Position = player.Position;
         }
+
+        public override string ToString()
+        {
+            return $"";
+        }
     }
 }

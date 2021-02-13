@@ -9,13 +9,22 @@ namespace GameOfGoose.Squares
     {
         public Player WellPlayer;
 
-        public string Name { get; set; } = "Well";
+        public override string Name { get; set; } = "Well";
 
         public override void Move(Player player)
         {
             // wait to be saved
             WellPlayer = player;
-            MessageBox.Show("Well.... that shocks, gotta wait for someone to rescue you now...");
+        }
+
+        public override string ToString()
+        {
+            return $"\nWell... that bites, gotta wait for someone to rescue you now...";
+        }
+
+        public Well()
+        {
+            WellPlayer = new Player();
         }
     }
 }

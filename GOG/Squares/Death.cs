@@ -13,7 +13,12 @@ namespace GameOfGoose.Squares
         {
             //move to start
             player.Position = 0;
-            MessageBox.Show("dead");
+            //      MessageBox.Show("dead");
+        }
+
+        public override string ToString()
+        {
+            return "\nAw... You're Dead...";
         }
     }
 }
