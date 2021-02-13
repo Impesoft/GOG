@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:GameOfGoose"
         mc:Ignorable="d"
         Title="GameBoard"
-        Height="750"
+        Height="900"
         Width="900"
         ResizeMode="NoResize"
         Background="White">
@@ -22,19 +22,15 @@
                    FontSize="32"
                    Foreground="White" />
             <StackPanel Orientation="Horizontal"
-                        Margin="100 0 0 0"
-                        HorizontalAlignment="Right">
+                        Height="150"
+                        Margin="50 0 0 0">
                 <Button x:Name="Players1"
                         Content="Players1"
                         HorizontalContentAlignment="Left"
-                        HorizontalAlignment="Right"
                         Click="Button_Click" />
-                <Button Content="Players2"
-                        HorizontalAlignment="Right" />
-                <Button Content="Players3"
-                        HorizontalAlignment="Right" />
-                <Button Content="Players4"
-                        HorizontalAlignment="Right" />
+                <!--<Button Content="Players2" />
+                <Button Content="Players3" />
+                <Button Content="Players4" />-->
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Label Foreground="AntiqueWhite"

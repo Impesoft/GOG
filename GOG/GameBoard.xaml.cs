@@ -45,23 +45,16 @@ namespace GameOfGoose
             _settings = new Settings();
             Locations = _settings.GetLocations();
             _enterPlayers.ShowDialog();
+            InitializeSquares();
             _dice = new Dice();
-            _well = new Well();
-            _well.WellPlayer = new Player();
-            _well.WellPlayer.Name = "not set";
-            GetSquares();
-            // MoveTo(Players[0], Locations[Players[0].Position].X, Locations[Players[0].Position].X);
+            _well.WellPlayer = new Player { Name = "not set" };
+
             var Player = Player1;
             Players = _settings.GetPlayers();
             double x = Locations[0].X - Player1.Width;
             double y = Locations[0].Y - Player1.Height;
             Canvas.SetLeft(Player1, x);
             Canvas.SetTop(Player1, y);
-
-            //double x = Locations[IAmHere].X - Player1.Width;
-            //double y = Locations[IAmHere].Y - Player1.Height;
-
-            //MoveTo(Player1, x, y);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -95,7 +88,7 @@ namespace GameOfGoose
             //translation.BeginAnimation(TranslateTransform.YProperty, anim1);
         }
 
-        public void GetSquares()
+        public void InitializeSquares()
         {
             for (int i = 0; i <= 63; i++)
             {
@@ -127,6 +120,7 @@ namespace GameOfGoose
 
                         case SpecialPositions.Maze:
                             SquarePathList.Add(new Maze());
+                            _well = (Well)SquarePathList.FirstOrDefault(square => square.Name == "Well");
                             break;
 
                         case SpecialPositions.Prison:
@@ -191,7 +185,7 @@ namespace GameOfGoose
             dice1 = diceRoll[0];
             dice2 = diceRoll[1];
             // Dice1 Dice2
-            Throw.Text = $"player{playerId} threw {dice1},{dice2}\n";
+            Throw.Text = $"{ActivePlayer.Name} threw {dice1},{dice2}\n";
 
             if (IsFirstThrow())
             {

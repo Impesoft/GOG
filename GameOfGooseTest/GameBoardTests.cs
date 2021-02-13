@@ -31,7 +31,7 @@ namespace GameOfGooseTest
         public void Check_IfSquaresAreAddedToSquarePathList()
         {
             // Arrange
-            _gameBoard.GetSquares();
+            _gameBoard.InitializeSquares();
             int expectedResult = 64;
             // Act
             int numberOfSquares = _gameBoard.SquarePathList.Count;

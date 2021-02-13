@@ -9,7 +9,7 @@ namespace GameOfGoose.Squares
     {
         public Player WellPlayer;
 
-        public string Name { get; set; } = "Well";
+        public override string Name { get; set; } = "Well";
 
         public override void Move(Player player)
         {
@@ -19,7 +19,12 @@ namespace GameOfGoose.Squares
 
         public override string ToString()
         {
-            return $"\nWell... that shocks, gotta wait for someone to rescue you now...";
+            return $"\nWell... that bites, gotta wait for someone to rescue you now...";
+        }
+
+        public Well()
+        {
+            WellPlayer = new Player();
         }
     }
 }

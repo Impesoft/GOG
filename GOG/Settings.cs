@@ -20,18 +20,21 @@ namespace GameOfGoose
 
         public List<Player> GetPlayers()
         {
-            Players = new List<Player>
+            List<string> names = new List<string>() { "Dries", "Nick", "Ward", "Someone's Els" };
+            Players = new List<Player>();
+            //{
+            //    new Player(){Name= "Dries"},
+            //    new Player(){Name= "Nick"},
+            //    new Player(){Name= "Ward"},
+            //    new Player(){Name= "SomeOne's Els"},
+            //};
+            NumberOfPlayers = 4;
+            for (int i = 0; i < NumberOfPlayers; i++)
             {
-                new Player(),
-                new Player(),
-                new Player(),
-                new Player(),
-            };
-            for (int i = 0; i < Players.Count; i++)
-            {
-                Players[i].Name = $"Player {i} name";
-                Players[i].OffsetX = (int)(5 * i - Players.Count * 2.5);
-                Players[i].OffsetY = (int)(5 * i - Players.Count * 2.5);
+                Players.Add(new Player() { Name = names[i], OffsetX = (int)(5 * i - NumberOfPlayers * 2.5), OffsetY = (int)(5 * i - NumberOfPlayers * 2.5) });
+                //Players[i].Name = $"Player {i} name";
+                //Players[i].OffsetX = (int)(5 * i - Players.Count * 2.5);
+                //Players[i].OffsetY = (int)(5 * i - Players.Count * 2.5);
             }
 
             return Players;
