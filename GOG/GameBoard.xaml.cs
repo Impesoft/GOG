@@ -1,19 +1,8 @@
-﻿using System;
+﻿using GameOfGoose.Squares;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using GameOfGoose.Squares;
 
 namespace GameOfGoose
 {
@@ -39,8 +28,18 @@ namespace GameOfGoose
         public GameBoard()
         {
             InitializeComponent();
-
+            CenterWindowOnScreen();
             StartOrContinueGame();
+        }
+
+        private void CenterWindowOnScreen()
+        {
+            double screenWidth = System.Windows.SystemParameters.PrimaryScreenWidth;
+            double screenHeight = System.Windows.SystemParameters.PrimaryScreenHeight;
+            double windowWidth = this.Width;
+            double windowHeight = this.Height;
+            this.Left = (screenWidth / 2) - (windowWidth / 2);
+            this.Top = (screenHeight / 2) - (windowHeight / 2);
         }
 
         private void StartOrContinueGame()
@@ -50,21 +49,22 @@ namespace GameOfGoose
                 InitializeVariables();
                 GameIsRunning = true;
             }
-            int activePlayerId = _settings.Turn % Players.Count;
-            ActivePlayer = Players[activePlayerId];
-            ActivePawn = ActivePlayer.Pawn;
-            double x = Locations.List[ActivePlayer.Position].X - ActivePawn.Width;
-            double y = Locations.List[ActivePlayer.Position].Y - ActivePawn.Height;
-            Canvas.SetLeft(ActivePawn, x / 900 * Width);
-            Canvas.SetTop(ActivePawn, y / 600 * Height);
-            PlayerTurn(activePlayerId);
-            _settings.Turn++;
-            if (!WeHaveAWinner()) return;
-            MessageBox.Show($"Congratulations { Players.SingleOrDefault(player => player.Position == 63)?.Name}\nYou Won!");
-            GameIsRunning = false;
-            // Application.Current.Shutdown(); // or whatever we do to stop the game
+            else
+            {
+                int activePlayerId = _settings.Turn % Players.Count;
+                ActivePlayer = Players[activePlayerId];
+                ActivePawn = ActivePlayer.Pawn;
+                double x = Locations.List[ActivePlayer.Position].X - ActivePawn.Width;
+                double y = Locations.List[ActivePlayer.Position].Y - ActivePawn.Height;
+                Canvas.SetLeft(ActivePawn, x / 900 * Width);
+                Canvas.SetTop(ActivePawn, y / 600 * Height);
+                PlayerTurn(activePlayerId);
+                _settings.Turn++;
+                if (!WeHaveAWinner()) return;
 
-            //   GameStep();
+                MessageBox.Show($"Congratulations { Players.SingleOrDefault(player => player.Position == 63)?.Name}\nYou Won!");
+                GameIsRunning = false;
+            }
         }
 
         private void InitializeVariables()
