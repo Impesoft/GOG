@@ -224,7 +224,7 @@ namespace GameOfGoose
             }
             SquarePathList[player.Position].Move(player); //polymorphism
 
-            MoveTo(CurrentPlayer, Locations[player.Position].X, Locations[player.Position].Y);
+            MoveTo(CurrentPlayer, Locations[player.Position].X - ActivePlayer.OffsetX, Locations[player.Position].Y - ActivePlayer.OffsetY);
             Throw.Text += $"and should now be on position {player.Position} ({Locations[player.Position].X},{Locations[player.Position].Y})";
         }
 

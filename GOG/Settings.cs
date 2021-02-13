@@ -27,6 +27,11 @@ namespace GameOfGoose
                 new Player(),
                 new Player(),
             };
+            for (int i = 0; i < Players.Count; i++)
+            {
+                Players[i].OffsetX = (int)(5 * i - Players.Count * 2.5);
+                Players[i].OffsetY = (int)(5 * i - Players.Count * 2.5);
+            }
 
             return Players;
         }
