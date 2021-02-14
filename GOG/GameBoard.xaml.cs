@@ -64,11 +64,7 @@ namespace GameOfGoose
                 int activePlayerId = _settings.Turn % Players.Count;
                 ActivePlayer = Players[activePlayerId];
                 ActivePawn = ActivePlayer.Pawn;
-                //double x = Locations.List[ActivePlayer.Position].X;
-                //double y = Locations.List[ActivePlayer.Position].Y;
 
-                //Canvas.SetLeft(ActivePawn, x / 900 * Width);
-                //Canvas.SetTop(ActivePawn, y / 600 * Height);
                 PlayerTurn(activePlayerId);
                 _settings.Turn++;
                 if (!WeHaveAWinner()) return;
@@ -106,26 +102,24 @@ namespace GameOfGoose
 
         public void MoveTo(Image target, double newX, double newY)
         {
-            Canvas.SetLeft(target, newX - target.Width / 2); //(MyCanvas.ActualWidth / 884) *
-            Canvas.SetTop(target, newY - target.Height); // (MyCanvas.ActualHeight / 658.5) *
-            //double x = Canvas.GetLeft(target);
-            //double y = Canvas.GetTop(target);
+            //  Canvas.SetLeft(target, newX - target.Width / 2); //(MyCanvas.ActualWidth / 884) *
+            //  Canvas.SetTop(target, newY - target.Height); // (MyCanvas.ActualHeight / 658.5) *
+            if (ActivePlayer == null) ActivePlayer = Players.FirstOrDefault(player => player.Pawn == target);
+            double oldX = ActivePlayer.PlayerLocation.X;
+            double oldY = ActivePlayer.PlayerLocation.Y;
 
-            //target.SetValue(Canvas.LeftProperty, 300);
-            //target.SetValue(Canvas.TopProperty, 400);
+            double offsetX = newX - oldX - target.Width / 2;
+            double offsetY = newY - oldY - target.Height;
 
-            //double duration = 1.0 ;
-            //double delay = 0 ;
+            TranslateTransform offsetTransform = new TranslateTransform();
 
-            //TranslateTransform offsetTransform = new TranslateTransform();
+            DoubleAnimation offsetXAnimation = new DoubleAnimation(oldX, offsetX, new Duration(TimeSpan.FromSeconds(1)));
+            DoubleAnimation offsetYAnimation = new DoubleAnimation(oldY, offsetY, new Duration(TimeSpan.FromSeconds(1)));
 
-            //DoubleAnimation offsetXAnimation = new DoubleAnimation(0.0, -256.0, new Duration(TimeSpan.FromSeconds(duration)));
-            //offsetXAnimation.RepeatBehavior = RepeatBehavior.Forever;
-            //offsetXAnimation.BeginTime = TimeSpan.FromSeconds(delay);
-            //offsetTransform.BeginAnimation(TranslateTransform.XProperty, offsetXAnimation);
-            //offsetTransform.BeginAnimation(TranslateTransform.YProperty, offsetXAnimation);
+            offsetTransform.BeginAnimation(TranslateTransform.XProperty, offsetXAnimation);
+            offsetTransform.BeginAnimation(TranslateTransform.YProperty, offsetYAnimation);
 
-            //target.RenderTransform = offsetTransform;
+            target.RenderTransform = offsetTransform;
         }
 
         public void InitializeSquares()
@@ -245,7 +239,6 @@ namespace GameOfGoose
             double x = Locations.List[player.Position].X * (MyCanvas.ActualWidth / 884) - ActivePlayer.OffsetX;
             double y = Locations.List[player.Position].Y * (MyCanvas.ActualHeight / 658.5) - ActivePlayer.OffsetY;
             MoveTo(ActivePawn, x, y);
-            //  Throw.Text += $"\nand should now be on position {player.Position} ({Locations.List[player.Position].X},{Locations.List[player.Position].Y})";
         }
 
         private void CheckIfReversed(int playerId, int[] diceRoll)

@@ -22,6 +22,7 @@ namespace GameOfGoose
             for (int i = 0; i < NumberOfPlayers; i++)
             {
                 Players.Add(new Player() { Name = names[i], OffsetX = (int)(5 * i - NumberOfPlayers * 2.5), OffsetY = (int)(5 * i - NumberOfPlayers * 2.5), Pawn = new Image() });
+                Players[i].PlayerLocation = new Location() { X = (i + 1) * 10, Y = 10 };
             }
 
             return Players;
