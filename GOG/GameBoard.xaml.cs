@@ -102,24 +102,34 @@ namespace GameOfGoose
 
         public void MoveTo(Image target, double newX, double newY)
         {
-            //  Canvas.SetLeft(target, newX - target.Width / 2); //(MyCanvas.ActualWidth / 884) *
-            //  Canvas.SetTop(target, newY - target.Height); // (MyCanvas.ActualHeight / 658.5) *
-            if (ActivePlayer == null) ActivePlayer = Players.FirstOrDefault(player => player.Pawn == target);
-            double oldX = ActivePlayer.PlayerLocation.X;
-            double oldY = ActivePlayer.PlayerLocation.Y;
+            Canvas.SetLeft(target, newX - target.Width / 2); //(MyCanvas.ActualWidth / 884) *
+            Canvas.SetTop(target, newY - target.Height); // (MyCanvas.ActualHeight / 658.5) *
 
-            double offsetX = newX - oldX - target.Width / 2;
-            double offsetY = newY - oldY - target.Height;
+            // this should work but it doesn't...
+            ////if (ActivePlayer == null)
+            ////{
+            ////    ActivePlayer = Players.FirstOrDefault(player => player.Pawn == target);
+            ////}
 
-            TranslateTransform offsetTransform = new TranslateTransform();
+            ////Location oldLocation = new Location() { X = ActivePlayer.PlayerLocation.X, Y = ActivePlayer.PlayerLocation.Y };
 
-            DoubleAnimation offsetXAnimation = new DoubleAnimation(oldX, offsetX, new Duration(TimeSpan.FromSeconds(1)));
-            DoubleAnimation offsetYAnimation = new DoubleAnimation(oldY, offsetY, new Duration(TimeSpan.FromSeconds(1)));
+            ////double oldX = oldLocation.X;
+            ////double oldY = oldLocation.Y;
+            ////ActivePlayer.PlayerLocation.X = newX;
+            ////ActivePlayer.PlayerLocation.Y = newY;
 
-            offsetTransform.BeginAnimation(TranslateTransform.XProperty, offsetXAnimation);
-            offsetTransform.BeginAnimation(TranslateTransform.YProperty, offsetYAnimation);
+            ////double offsetX = newX - oldX - target.Width / 2;
+            ////double offsetY = newY - oldY - target.Height;
 
-            target.RenderTransform = offsetTransform;
+            ////TranslateTransform offsetTransform = new TranslateTransform();
+
+            ////DoubleAnimation offsetXAnimation = new DoubleAnimation(oldX, offsetX, new Duration(TimeSpan.FromSeconds(1)));
+            ////DoubleAnimation offsetYAnimation = new DoubleAnimation(oldY, offsetY, new Duration(TimeSpan.FromSeconds(1)));
+
+            ////offsetTransform.BeginAnimation(TranslateTransform.XProperty, offsetXAnimation);
+            ////offsetTransform.BeginAnimation(TranslateTransform.YProperty, offsetYAnimation);
+
+            ////target.RenderTransform = offsetTransform;
         }
 
         public void InitializeSquares()
