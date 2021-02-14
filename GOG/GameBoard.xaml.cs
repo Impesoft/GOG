@@ -1,9 +1,12 @@
 ﻿using GameOfGoose.Squares;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
 
 namespace GameOfGoose
 {
@@ -30,7 +33,7 @@ namespace GameOfGoose
         {
             InitializeComponent();
             CenterWindowOnScreen();
-            StartOrContinueGame();
+            //        StartOrContinueGame();
         }
 
         private void CenterWindowOnScreen()
@@ -49,16 +52,23 @@ namespace GameOfGoose
             {
                 InitializeVariables();
                 GameIsRunning = true;
+                foreach (var player in Players)
+                {
+                    double x = Locations.List[0].X * (MyCanvas.ActualWidth / 884) - player.OffsetX;
+                    double y = Locations.List[0].Y * (MyCanvas.ActualHeight / 658.5) - player.OffsetY;
+                    MoveTo(player.Pawn, x, y);
+                }
             }
             else
             {
                 int activePlayerId = _settings.Turn % Players.Count;
                 ActivePlayer = Players[activePlayerId];
                 ActivePawn = ActivePlayer.Pawn;
-                double x = Locations.List[ActivePlayer.Position].X - ActivePawn.Width;
-                double y = Locations.List[ActivePlayer.Position].Y - ActivePawn.Height;
-                Canvas.SetLeft(ActivePawn, x / 900 * Width);
-                Canvas.SetTop(ActivePawn, y / 600 * Height);
+                //double x = Locations.List[ActivePlayer.Position].X;
+                //double y = Locations.List[ActivePlayer.Position].Y;
+
+                //Canvas.SetLeft(ActivePawn, x / 900 * Width);
+                //Canvas.SetTop(ActivePawn, y / 600 * Height);
                 PlayerTurn(activePlayerId);
                 _settings.Turn++;
                 if (!WeHaveAWinner()) return;
@@ -77,16 +87,10 @@ namespace GameOfGoose
 
             _enterPlayers.ShowDialog();
             _dice = new Dice();
-            _well.WellPlayer = new Player { Name = "not set" };
+
             var Player = Player1;
             Players = _settings.GetPlayers();
-            //PawnList = new List<Image>()
-            //{
-            //    Player1,
-            //    Player2,
-            //    Player3,
-            //    Player4,
-            //};
+
             foreach (Player player in Players)
             {
                 player.Pawn = (Image)MyCanvas.Children[Players.IndexOf(player)];
@@ -102,8 +106,26 @@ namespace GameOfGoose
 
         public void MoveTo(Image target, double newX, double newY)
         {
-            Canvas.SetLeft(target, (MyCanvas.ActualWidth / 884) * newX - target.Width / 2);
-            Canvas.SetTop(target, (MyCanvas.ActualHeight / 658.5) * newY - target.Height / 2);
+            Canvas.SetLeft(target, newX - target.Width / 2); //(MyCanvas.ActualWidth / 884) *
+            Canvas.SetTop(target, newY - target.Height); // (MyCanvas.ActualHeight / 658.5) *
+            //double x = Canvas.GetLeft(target);
+            //double y = Canvas.GetTop(target);
+
+            //target.SetValue(Canvas.LeftProperty, 300);
+            //target.SetValue(Canvas.TopProperty, 400);
+
+            //double duration = 1.0 ;
+            //double delay = 0 ;
+
+            //TranslateTransform offsetTransform = new TranslateTransform();
+
+            //DoubleAnimation offsetXAnimation = new DoubleAnimation(0.0, -256.0, new Duration(TimeSpan.FromSeconds(duration)));
+            //offsetXAnimation.RepeatBehavior = RepeatBehavior.Forever;
+            //offsetXAnimation.BeginTime = TimeSpan.FromSeconds(delay);
+            //offsetTransform.BeginAnimation(TranslateTransform.XProperty, offsetXAnimation);
+            //offsetTransform.BeginAnimation(TranslateTransform.YProperty, offsetXAnimation);
+
+            //target.RenderTransform = offsetTransform;
         }
 
         public void InitializeSquares()
@@ -166,19 +188,14 @@ namespace GameOfGoose
             return Geese.Contains(player.Position);
         }
 
-        public void GameStep()
-        {
-        }
-
         private void PlayerTurn(int playerId)
         {
             ActivePawn = ActivePlayer.Pawn;
             if (!CanPlay()) return;
+
             int[] diceRoll = _dice.Roll();
-            dice1 = diceRoll[0];
-            dice2 = diceRoll[1];
             // Dice1 Dice2
-            Throw.Text = $"{ActivePlayer.Name} threw {dice1},{dice2}\n";
+            Throw.Text = $"{ActivePlayer.Name} threw {diceRoll[0]},{ diceRoll[1]}\n";
 
             if (IsFirstThrow())
             {
@@ -193,11 +210,23 @@ namespace GameOfGoose
         {
             if (ActivePlayer.ToSkipTurns > 0)
             {
+                Throw.Text = $"{ActivePlayer.Name} Can't play right now still had to skip {ActivePlayer.ToSkipTurns}";
+
                 ActivePlayer.ToSkipTurns--;
+
+                if (ActivePlayer.ToSkipTurns > 0) { Throw.Text += $"/{ActivePlayer.ToSkipTurns} remaining"; }
                 return false;
             }
 
-            //Throw.Text += $"\nin Well {_well.WellPlayer.Name}";
+            if (_well.WellPlayer == ActivePlayer)
+            {
+                Throw.Text += $"{ActivePlayer.Name}, You're in the Well!\n{_well.WellPlayer.Name} needs rescuing!";
+            }
+            else
+            {
+                if (_well.WellPlayer != null) Throw.Text += $"\nin Well {_well.WellPlayer.Name}";
+            }
+
             return _well.WellPlayer != ActivePlayer;
         }
 
@@ -213,7 +242,9 @@ namespace GameOfGoose
             }
             SquarePathList[player.Position].Move(player); //polymorphism
             Throw.Text += SquarePathList[player.Position].ToString();
-            MoveTo(ActivePawn, Locations.List[player.Position].X - ActivePlayer.OffsetX, Locations.List[player.Position].Y - ActivePlayer.OffsetY);
+            double x = Locations.List[player.Position].X * (MyCanvas.ActualWidth / 884) - ActivePlayer.OffsetX;
+            double y = Locations.List[player.Position].Y * (MyCanvas.ActualHeight / 658.5) - ActivePlayer.OffsetY;
+            MoveTo(ActivePawn, x, y);
             //  Throw.Text += $"\nand should now be on position {player.Position} ({Locations.List[player.Position].X},{Locations.List[player.Position].Y})";
         }
 

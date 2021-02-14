@@ -7,7 +7,7 @@ namespace GameOfGoose.Squares
 {
     internal class Well : Square
     {
-        public Player WellPlayer;
+        public Player WellPlayer { get; set; }
 
         public override string Name { get; set; } = "Well";
 
@@ -22,9 +22,9 @@ namespace GameOfGoose.Squares
             return $"\nWell... that bites, gotta wait for someone to rescue you now...";
         }
 
-        public Well()
-        {
-            WellPlayer = new Player();
-        }
+        //public Well()
+        //{
+        //    WellPlayer = new Player();
+        //}
     }
 }
