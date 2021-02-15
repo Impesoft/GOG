@@ -1,6 +1,7 @@
 ﻿using GameOfGoose.Squares;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -15,14 +16,16 @@ namespace GameOfGoose
     /// </summary>
     public partial class GameBoard : Window
     {
-        public List<Player> Players;
+        public ObservableCollection<Player> Players = Settings.Players;
 
         // public List<Image> PawnList;
         public List<Square> SquarePathList { get; private set; } = new List<Square>();
 
         public List<int> Geese = new List<int> { 5, 9, 12, 14, 18, 23, 27, 32, 36, 41, 45, 50, 54, 59 };
-        private Settings _settings;
+
+        //private Settings Settings;
         private Dice _dice;
+
         private int _direction = 1;
 
         private Well _well;
@@ -68,12 +71,12 @@ namespace GameOfGoose
             }
             else
             {
-                int activePlayerId = _settings.Turn % Players.Count;
+                int activePlayerId = Settings.Turn % Players.Count;
                 ActivePlayer = Players[activePlayerId];
                 ActivePawn = ActivePlayer.Pawn;
 
                 PlayerTurn();
-                _settings.Turn++;
+                Settings.Turn++;
                 AnimatePawn(ActivePawn, ActivePlayer.Position);
                 if (!WeHaveAWinner()) return;
 
@@ -86,12 +89,9 @@ namespace GameOfGoose
         {
             GameIsRunning = false;
             InitializeSquares();
-            _settings = new Settings();
             EnterPlayers _enterPlayers = new EnterPlayers();
             _enterPlayers.ShowDialog();
             _dice = new Dice();
-
-            Players = _settings.GetPlayers();
 
             foreach (Player player in Players)
             {
@@ -203,7 +203,7 @@ namespace GameOfGoose
 
         private bool IsFirstThrow()
         {
-            int round = _settings.Turn / Players.Count;
+            int round = Settings.Turn / Players.Count;
 
             return round == 0;
         }
@@ -255,7 +255,7 @@ namespace GameOfGoose
 
         public void AnimatePawn(Image pawn, int endPosition)
         {
-            ActivePlayer = Players.Find(player => player.Pawn == pawn);
+            ActivePlayer = Players.ToList().Find(player => player.Pawn == pawn);
             Canvas.SetLeft(pawn, Locations.List[endPosition].X + ActivePlayer.OffsetX);
             Canvas.SetTop(pawn, Locations.List[endPosition].Y + ActivePlayer.OffsetY - pawn.Height);
             ActivePlayer.Position = endPosition;

@@ -7,57 +7,68 @@
         xmlns:local="clr-namespace:GameOfGoose"
         mc:Ignorable="d"
         Title="Enter Players"
-        Width="291"
+        Width="176"
         WindowStyle="SingleBorderWindow"
         Height="240">
-    <DockPanel>
-        <StackPanel DockPanel.Dock="Top"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Stretch">
-            <Label HorizontalAlignment="Stretch">Enter Number of Players 2-4:</Label>
-            <TextBox x:Name="NumberOfPLayers"
-                     PreviewTextInput="NumberValidationTextBox"
-                     Text="{Binding NumberOfPlayers}"
-                     TextWrapping="Wrap"
-                     Height="Auto"
-                     MinWidth="14"
-                     MaxLength="1">
-                <TextBox.DataContext>
-                    <local:PlayerData />
-                </TextBox.DataContext>
-            </TextBox>
+    <Grid VerticalAlignment="Stretch"
+          HorizontalAlignment="Stretch">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="70" />
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Label Grid.Column="0"
+               Grid.Row="0"
+               Grid.ColumnSpan="2"
+               HorizontalAlignment="Stretch">Add Players 2-4:</Label>
+        <StackPanel Grid.Row="1"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Bottom">
+
+            <Label Content="Player Name"></Label>
+            <TextBox  x:Name="PlayerName"
+                      ToolTip="Enter Name Of Player To Add" />
+            <Button x:Name="AddPlayer"
+                    Content="Add Player"
+                    Click="Add_Click" />
+            <!--Text="{Binding}"-->
         </StackPanel>
 
-            <StackPanel Orientation="Horizontal"
-                        x:Name="Player1Input">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <Label Grid.Row="0"
-                           Grid.Column="0"
-                           Content="Player Name"></Label>
-                    <TextBox Grid.Row="0"
-                             Grid.Column="1"
-                             x:Name="Player1"
-                             HorizontalAlignment="Stretch"
-                             Text="{Binding}"></TextBox>
-                </Grid>
-            </StackPanel>
+        <StackPanel Grid.ColumnSpan="2"
+                    Grid.Column="0"
+                    Grid.Row="2"
+                    Orientation="Vertical"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch">
+            <ListView  x:Name="PlayerList"
+                       Height="100">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Images/Pawn1.png"
+                                   Height="15" />
+                            <Label Content="{Binding Name}"></Label>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackPanel>
 
-<StackPanel  DockPanel.Dock="Bottom">
-
-            <Button x:Name="button"
-                    Content="Start"
-                    Height="36"
-                    Width="225"
-                    Click="button_Click"
+        <Button Grid.Row="3"
+                Grid.ColumnSpan="2"
+                x:Name="StartButton"
+                Content="Start"
+                Height="36"
+                Click="button_Click"
                 VerticalAlignment="Bottom"
-                Margin="0,0,0,10" />
-</StackPanel>
-    </DockPanel>
+                HorizontalAlignment="Stretch"
+                IsEnabled="False" />
+    </Grid>
 </Window>
