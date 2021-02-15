@@ -7,41 +7,57 @@
         xmlns:local="clr-namespace:GameOfGoose"
         mc:Ignorable="d"
         Title="Enter Players"
-        Height="346"
         Width="291"
-        WindowStyle="None">
+        WindowStyle="SingleBorderWindow"
+        Height="240">
     <DockPanel>
-        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Stretch">
+        <StackPanel DockPanel.Dock="Top"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Stretch">
             <Label HorizontalAlignment="Stretch">Enter Number of Players 2-4:</Label>
-            <TextBox x:Name="textBox"
-                     Text="TextBox"
+            <TextBox x:Name="NumberOfPLayers"
+                     PreviewTextInput="NumberValidationTextBox"
+                     Text="{Binding NumberOfPlayers}"
                      TextWrapping="Wrap"
-                     Width="121" />
+                     Height="Auto"
+                     MinWidth="14"
+                     MaxLength="1">
+                <TextBox.DataContext>
+                    <local:PlayerData />
+                </TextBox.DataContext>
+            </TextBox>
         </StackPanel>
-        <StackPanel Orientation="Vertical"
-                    Height="301">
-            <StackPanel Orientation="Horizontal">
-                <Label Content="Player1"></Label><TextBox x:Name="Player1"
-                         Width="235"></TextBox>
+
+            <StackPanel Orientation="Horizontal"
+                        x:Name="Player1Input">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Label Grid.Row="0"
+                           Grid.Column="0"
+                           Content="Player Name"></Label>
+                    <TextBox Grid.Row="0"
+                             Grid.Column="1"
+                             x:Name="Player1"
+                             HorizontalAlignment="Stretch"
+                             Text="{Binding}"></TextBox>
+                </Grid>
             </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Label Content="Player2"></Label><TextBox x:Name="Player2"
-                         Width="235"></TextBox>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Label Content="Player3"></Label><TextBox x:Name="Player3"
-                         Width="235"></TextBox>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Label Content="Player4"></Label><TextBox x:Name="Player4"
-                         Width="235"></TextBox>
-            </StackPanel>
+
+<StackPanel  DockPanel.Dock="Bottom">
+
             <Button x:Name="button"
-                    Margin="25"
                     Content="Start"
-                    Height="154"
+                    Height="36"
                     Width="225"
-                    Click="button_Click" />
-        </StackPanel>
+                    Click="button_Click"
+                VerticalAlignment="Bottom"
+                Margin="0,0,0,10" />
+</StackPanel>
     </DockPanel>
 </Window>

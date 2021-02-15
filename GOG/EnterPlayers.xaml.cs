@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -17,6 +19,8 @@ namespace GameOfGoose
     /// </summary>
     public partial class EnterPlayers : Window
     {
+        public PlayerData Players { }
+
         public EnterPlayers()
         {
             InitializeComponent();
@@ -31,6 +35,12 @@ namespace GameOfGoose
             double windowHeight = this.Height;
             this.Left = (screenWidth / 2) - (windowWidth / 2);
             this.Top = (screenHeight / 2) - (windowHeight / 2);
+        }
+
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^2-4]+");
+            e.Handled = regex.IsMatch(e.Text);
         }
 
         private void button_Click(object sender, RoutedEventArgs e)
