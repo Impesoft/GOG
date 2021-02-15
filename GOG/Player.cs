@@ -10,7 +10,7 @@ namespace GameOfGoose
     {
         public int Position { get; set; } = 0;
         public string Name { get; set; }
-        public Image Pawn;
+        public Image Pawn { get; set; }
         public int OffsetX { get; set; }
         public int OffsetY { get; set; }
 

@@ -7,11 +7,10 @@
         xmlns:local="clr-namespace:GameOfGoose"
         mc:Ignorable="d"
         Title="Enter Players"
+        Height="300"
         Width="176"
-        WindowStyle="SingleBorderWindow"
-        Height="240">
-    <Grid VerticalAlignment="Stretch"
-          HorizontalAlignment="Stretch">
+        WindowStyle="SingleBorderWindow">
+    <Grid HorizontalAlignment="Stretch">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
@@ -47,12 +46,11 @@
                     Orientation="Vertical"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
-            <ListView  x:Name="PlayerList"
-                       Height="100">
+            <ListView  x:Name="PlayerList">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Images/Pawn1.png"
+                            <Image Source="{Binding Pawn.Source}"
                                    Height="15" />
                             <Label Content="{Binding Name}"></Label>
                         </StackPanel>

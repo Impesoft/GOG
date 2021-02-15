@@ -18,7 +18,6 @@ namespace GameOfGoose
     {
         public ObservableCollection<Player> Players = Settings.Players;
 
-        // public List<Image> PawnList;
         public List<Square> SquarePathList { get; private set; } = new List<Square>();
 
         public List<int> Geese = new List<int> { 5, 9, 12, 14, 18, 23, 27, 32, 36, 41, 45, 50, 54, 59 };
@@ -39,6 +38,10 @@ namespace GameOfGoose
         public GameBoard()
         {
             InitializeComponent();
+            foreach (Image pawn in MyCanvas.Children)
+            {
+                Settings.PawnList.Add(pawn);
+            }
             CenterWindowOnScreen();
             //        StartOrContinueGame();
         }
@@ -256,7 +259,7 @@ namespace GameOfGoose
         public void AnimatePawn(Image pawn, int endPosition)
         {
             ActivePlayer = Players.ToList().Find(player => player.Pawn == pawn);
-            Canvas.SetLeft(pawn, Locations.List[endPosition].X + ActivePlayer.OffsetX);
+            Canvas.SetLeft(pawn, Locations.List[endPosition].X + ActivePlayer.OffsetX - pawn.Width);
             Canvas.SetTop(pawn, Locations.List[endPosition].Y + ActivePlayer.OffsetY - pawn.Height);
             ActivePlayer.Position = endPosition;
             //double offsetX = Locations.List[endPosition].X - (Players.Find(player => player.Pawn == pawn).PlayerLocation.X); // (MyCanvas.ActualWidth / 884) *
