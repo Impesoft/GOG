@@ -18,7 +18,7 @@ namespace GameOfGoose.Squares
 
         public override string ToString()
         {
-            return $"";
+            return $"on a normal field...";
         }
     }
 }

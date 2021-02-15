@@ -24,10 +24,13 @@ namespace GameOfGoose
         private int _direction = 1;
 
         private Well _well;
-        public int dice1, dice2;
+
+        //  public int dice1, dice2;
         public Image ActivePawn;
+
         public bool GameIsRunning;
         public Player ActivePlayer;
+        private int[] StartPosition { get; set; } = { 0, 1, 2, 3 };
 
         public GameBoard()
         {
@@ -54,18 +57,21 @@ namespace GameOfGoose
                 GameIsRunning = true;
                 foreach (var player in Players)
                 {
-                    double x = Locations.List[0].X * (MyCanvas.ActualWidth / 884) - player.OffsetX;
-                    double y = Locations.List[0].Y * (MyCanvas.ActualHeight / 658.5) - player.OffsetY;
-                    MoveTo(player.Pawn, x, y);
+                    AnimatePawn(player.Pawn, 0);
                 }
             }
             else
             {
+                foreach (var player in Players)
+                {
+                    Canvas.SetLeft(player.Pawn, player.PlayerLocation.X);
+                    Canvas.SetTop(player.Pawn, player.PlayerLocation.Y);
+                }
                 int activePlayerId = _settings.Turn % Players.Count;
                 ActivePlayer = Players[activePlayerId];
                 ActivePawn = ActivePlayer.Pawn;
 
-                PlayerTurn(activePlayerId);
+                PlayerTurn();
                 _settings.Turn++;
                 if (!WeHaveAWinner()) return;
 
@@ -80,7 +86,6 @@ namespace GameOfGoose
             InitializeSquares();
             _settings = new Settings();
             EnterPlayers _enterPlayers = new EnterPlayers();
-
             _enterPlayers.ShowDialog();
             _dice = new Dice();
 
@@ -91,45 +96,65 @@ namespace GameOfGoose
             {
                 player.Pawn = (Image)MyCanvas.Children[Players.IndexOf(player)];
                 player.Pawn.ToolTip = player.Name;
+
+                Canvas.SetLeft(player.Pawn, Locations.List[0].X + player.OffsetX - player.Pawn.Width / 2);
+                Canvas.SetTop(player.Pawn, Locations.List[0].Y + player.OffsetY - player.Pawn.Height);
+                player.PlayerLocation.X = Locations.List[0].X;
+                player.PlayerLocation.Y = Locations.List[0].Y;
+                AnimatePawn(player.Pawn, 0);
             }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            //GameStep();
             StartOrContinueGame();
         }
 
-        public void MoveTo(Image target, double newX, double newY)
+        //public void MoveTo(Image target, double newX, double newY)
+        //{
+        //    Canvas.SetLeft(target, newX - target.Width / 2); //(MyCanvas.ActualWidth / 884) *
+        //    Canvas.SetTop(target, newY - target.Height); // (MyCanvas.ActualHeight / 658.5) *
+        //}
+
+        public void AnimatePawn(Image pawn, int endPosition)
         {
-            Canvas.SetLeft(target, newX - target.Width / 2); //(MyCanvas.ActualWidth / 884) *
-            Canvas.SetTop(target, newY - target.Height); // (MyCanvas.ActualHeight / 658.5) *
+            double offsetX = Locations.List[endPosition].X - (Players.Find(player => player.Pawn == pawn).PlayerLocation.X); // (MyCanvas.ActualWidth / 884) *
+            double offsetY = Locations.List[endPosition].Y - (Players.Find(player => player.Pawn == pawn).PlayerLocation.Y); //(MyCanvas.ActualWidth / 884) *
+            Throw.Text += $"\ncurrent X,Y = {Players.Find(player => player.Pawn == pawn).PlayerLocation.X},{Players.Find(player => player.Pawn == pawn).PlayerLocation.Y}: relative move to {endPosition} = {offsetX},{offsetY} to {Locations.List[endPosition].X},{Locations.List[endPosition].Y}";
+            TranslateTransform offsetTransform = new TranslateTransform();
+            var translationName = "myTranslation" + offsetTransform.GetHashCode();
+            RegisterName(translationName, offsetTransform);
 
-            // this should work but it doesn't...
-            ////if (ActivePlayer == null)
-            ////{
-            ////    ActivePlayer = Players.FirstOrDefault(player => player.Pawn == target);
-            ////}
+            DoubleAnimation offsetXAnimation = new DoubleAnimation(offsetX, new Duration(TimeSpan.FromSeconds(1)))
+            {
+                EasingFunction = new PowerEase { EasingMode = EasingMode.EaseOut }
+            };
+            DoubleAnimation offsetYAnimation = new DoubleAnimation(offsetY, new Duration(TimeSpan.FromSeconds(1)))
+            {
+                EasingFunction = new PowerEase { EasingMode = EasingMode.EaseOut }
+            };
 
-            ////Location oldLocation = new Location() { X = ActivePlayer.PlayerLocation.X, Y = ActivePlayer.PlayerLocation.Y };
+            offsetTransform.BeginAnimation(TranslateTransform.XProperty, offsetXAnimation);
+            offsetTransform.BeginAnimation(TranslateTransform.YProperty, offsetYAnimation);
 
-            ////double oldX = oldLocation.X;
-            ////double oldY = oldLocation.Y;
-            ////ActivePlayer.PlayerLocation.X = newX;
-            ////ActivePlayer.PlayerLocation.Y = newY;
+            pawn.RenderTransform = offsetTransform;
+            var s = new Storyboard();
+            Storyboard.SetTargetName(s, "MoveToXY");
+            Storyboard.SetTargetProperty(s, new PropertyPath(TranslateTransform.YProperty));
+            var storyboardName = "s" + s.GetHashCode();
+            Resources.Add(storyboardName, s);
 
-            ////double offsetX = newX - oldX - target.Width / 2;
-            ////double offsetY = newY - oldY - target.Height;
-
-            ////TranslateTransform offsetTransform = new TranslateTransform();
-
-            ////DoubleAnimation offsetXAnimation = new DoubleAnimation(oldX, offsetX, new Duration(TimeSpan.FromSeconds(1)));
-            ////DoubleAnimation offsetYAnimation = new DoubleAnimation(oldY, offsetY, new Duration(TimeSpan.FromSeconds(1)));
-
-            ////offsetTransform.BeginAnimation(TranslateTransform.XProperty, offsetXAnimation);
-            ////offsetTransform.BeginAnimation(TranslateTransform.YProperty, offsetYAnimation);
-
-            ////target.RenderTransform = offsetTransform;
+            s.Completed +=
+                (sndr, evtArgs) =>
+                {
+                    Resources.Remove(storyboardName);
+                    UnregisterName(translationName);
+                    Players.Find(player => player.Pawn == pawn).PlayerLocation.X = Locations.List[endPosition].X;
+                    Players.Find(player => player.Pawn == pawn).PlayerLocation.Y = (Locations.List[endPosition].Y);
+                    //Canvas.SetLeft(pawn, Players.Find(player => player.Pawn == pawn).PlayerLocation.X);
+                    //Canvas.SetTop(pawn, Players.Find(player => player.Pawn == pawn).PlayerLocation.Y);
+                };
+            s.Begin();
         }
 
         public void InitializeSquares()
@@ -192,7 +217,7 @@ namespace GameOfGoose
             return Geese.Contains(player.Position);
         }
 
-        private void PlayerTurn(int playerId)
+        private void PlayerTurn()
         {
             ActivePawn = ActivePlayer.Pawn;
             if (!CanPlay()) return;
@@ -203,11 +228,12 @@ namespace GameOfGoose
 
             if (IsFirstThrow())
             {
-                if (FirsThrowExceptionCheck(playerId, diceRoll)) return;
+                if (FirsThrowIs9Exception_Move(diceRoll)) return;
             }
 
             _direction = 1;
-            Move(playerId, diceRoll);
+            StartPosition[Players.IndexOf(ActivePlayer)] = ActivePlayer.Position;
+            Move(diceRoll);
         }
 
         private bool CanPlay()
@@ -234,41 +260,43 @@ namespace GameOfGoose
             return _well.WellPlayer != ActivePlayer;
         }
 
-        private void Move(int playerId, int[] diceRoll)
+        private void Move(int[] diceRoll)
         {
-            Player player = Players[playerId];
-            player.Move(diceRoll, _direction);
-            CheckIfReversed(playerId, diceRoll);
+            ActivePlayer.Move(diceRoll, _direction);
+            CheckIfReversed(diceRoll);
             //reflection
-            if (IsPlayerOnGoose(player))
+            if (IsPlayerOnGoose(ActivePlayer))
             {
-                Move(playerId, diceRoll);
+                Move(diceRoll);
             }
-            SquarePathList[player.Position].Move(player); //polymorphism
-            Throw.Text += SquarePathList[player.Position].ToString();
-            double x = Locations.List[player.Position].X * (MyCanvas.ActualWidth / 884) - ActivePlayer.OffsetX;
-            double y = Locations.List[player.Position].Y * (MyCanvas.ActualHeight / 658.5) - ActivePlayer.OffsetY;
-            MoveTo(ActivePawn, x, y);
+            SquarePathList[ActivePlayer.Position].Move(ActivePlayer); //polymorphism
+            Throw.Text += SquarePathList[ActivePlayer.Position].ToString();
+            AnimatePawn(ActivePawn, ActivePlayer.Position);
         }
 
-        private void CheckIfReversed(int playerId, int[] diceRoll)
+        private void CheckIfReversed(int[] diceRoll)
         {
-            if (Players[playerId].Position <= 63) return;
-            Players[playerId].Position = 63 - (Players[playerId].Position % 63);
+            if (ActivePlayer.Position <= 63) return;
+            ActivePlayer.Position = 63 - (ActivePlayer.Position % 63);
             _direction = -1;
-            Move(playerId, diceRoll);
+            Move(diceRoll);
         }
 
-        private bool FirsThrowExceptionCheck(int playerId, int[] diceRoll)
+        private bool FirsThrowIs9Exception_Move(int[] diceRoll)
         {
             if (diceRoll.Contains(5) && diceRoll.Contains(4))
             {
-                Players[playerId].Position = 26;
+                ActivePlayer.Position = 26;
+                Throw.Text += "\nSpecial Throw! moving to 26";
+                AnimatePawn(ActivePlayer.Pawn, 26);
                 return true;
             }
 
             if (!diceRoll.Contains(6) || !diceRoll.Contains(3)) return false;
-            Players[playerId].Position = 53;
+            ActivePlayer.Position = 53;
+            Throw.Text += "\nAmazing Throw! moving to 53";
+            AnimatePawn(ActivePlayer.Pawn, 26);
+
             return true;
         }
 

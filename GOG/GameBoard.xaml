@@ -10,6 +10,12 @@
         Width="900"
         ResizeMode="NoResize"
         Background="White">
+    <!--<Window.Resources>
+        <UserControl.RenderTransform>
+            <TranslateTransform x:Name="panelTrans"
+                                Y="0"></TranslateTransform>
+        </UserControl.RenderTransform>
+    </Window.Resources>-->
     <DockPanel VerticalAlignment="Stretch"
                HorizontalAlignment="Stretch">
         <StackPanel DockPanel.Dock="Top"
@@ -40,9 +46,12 @@
                            Text="Press Hit Me to start" />
             </StackPanel>
         </StackPanel>
+
         <Canvas x:Name="MyCanvas"
                 HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch">
+                VerticalAlignment="Stretch"
+                Width="884"
+                Height="658.5">
             <Canvas.Background>
                 <ImageBrush ImageSource="/Images/Ganzenbord.png"
                             Stretch="Fill" />
@@ -50,27 +59,19 @@
             <Image Source="/Images/Pawn1.png"
                    Name="Player1"
                    Height="43"
-                   Width="50"
-                   Canvas.Left="10"
-                   Canvas.Top="10" />
+                   Width="50" />
             <Image Source="/Images/Pawn2.png"
                    Name="Player2"
                    Height="43"
-                   Width="50"
-                   Canvas.Left="20"
-                   Canvas.Top="10" />
+                   Width="50" />
             <Image Source="/Images/Pawn3.png"
                    Name="Player3"
                    Height="43"
-                   Width="50"
-                   Canvas.Left="30"
-                   Canvas.Top="10" />
+                   Width="50" />
             <Image Source="/Images/Pawn4.png"
                    Name="Player4"
                    Height="43"
-                   Width="50"
-                   Canvas.Left="40"
-                   Canvas.Top="10" />
+                   Width="50" />
         </Canvas>
     </DockPanel>
 </Window>

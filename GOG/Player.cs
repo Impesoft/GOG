@@ -20,7 +20,7 @@ namespace GameOfGoose
             OffsetY = 0;
         }
 
-        public Location PlayerLocation { get; set; } = new Location { Id = 0, X = 0, Y = 0 };
+        public Location PlayerLocation { get; set; } = new Location { X = 0, Y = 0 };
 
         public void Move(int[] dice, int direction)
         {

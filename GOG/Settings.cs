@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Mime;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Windows.Controls;
 
 namespace GameOfGoose
@@ -21,8 +17,10 @@ namespace GameOfGoose
             NumberOfPlayers = 4;
             for (int i = 0; i < NumberOfPlayers; i++)
             {
-                Players.Add(new Player() { Name = names[i], OffsetX = (int)(5 * i - NumberOfPlayers * 2.5), OffsetY = (int)(5 * i - NumberOfPlayers * 2.5), Pawn = new Image() });
-                Players[i].PlayerLocation = new Location() { X = (i + 1) * 10, Y = 10 };
+                //                 player.PlayerLocation.X = Locations.List[0].X;
+                //                player.PlayerLocation.Y = Locations.List[0].Y;
+
+                Players.Add(new Player() { Name = names[i], OffsetX = (int)(5 * i - NumberOfPlayers * 2.5), OffsetY = (int)(5 * i - NumberOfPlayers * 2.5), Pawn = new Image(), PlayerLocation = new Location() { X = Locations.List[0].X + 10 * i, Y = Locations.List[0].Y } });
             }
 
             return Players;
