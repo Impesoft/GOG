@@ -118,43 +118,45 @@ namespace GameOfGoose
 
         public void AnimatePawn(Image pawn, int endPosition)
         {
-            double offsetX = Locations.List[endPosition].X - (Players.Find(player => player.Pawn == pawn).PlayerLocation.X); // (MyCanvas.ActualWidth / 884) *
-            double offsetY = Locations.List[endPosition].Y - (Players.Find(player => player.Pawn == pawn).PlayerLocation.Y); //(MyCanvas.ActualWidth / 884) *
-            Throw.Text += $"\ncurrent X,Y = {Players.Find(player => player.Pawn == pawn).PlayerLocation.X},{Players.Find(player => player.Pawn == pawn).PlayerLocation.Y}: relative move to {endPosition} = {offsetX},{offsetY} to {Locations.List[endPosition].X},{Locations.List[endPosition].Y}";
-            TranslateTransform offsetTransform = new TranslateTransform();
-            var translationName = "myTranslation" + offsetTransform.GetHashCode();
-            RegisterName(translationName, offsetTransform);
+            Canvas.SetLeft(pawn, Locations.List[endPosition].X);
+            Canvas.SetTop(pawn, Locations.List[endPosition].X);
+            //double offsetX = Locations.List[endPosition].X - (Players.Find(player => player.Pawn == pawn).PlayerLocation.X); // (MyCanvas.ActualWidth / 884) *
+            //double offsetY = Locations.List[endPosition].Y - (Players.Find(player => player.Pawn == pawn).PlayerLocation.Y); //(MyCanvas.ActualWidth / 884) *
+            //Throw.Text += $"\ncurrent X,Y = {Players.Find(player => player.Pawn == pawn).PlayerLocation.X},{Players.Find(player => player.Pawn == pawn).PlayerLocation.Y}: relative move to {endPosition} = {offsetX},{offsetY} to {Locations.List[endPosition].X},{Locations.List[endPosition].Y}";
+            //TranslateTransform offsetTransform = new TranslateTransform();
+            //var translationName = "myTranslation" + offsetTransform.GetHashCode();
+            //RegisterName(translationName, offsetTransform);
 
-            DoubleAnimation offsetXAnimation = new DoubleAnimation(offsetX, new Duration(TimeSpan.FromSeconds(1)))
-            {
-                EasingFunction = new PowerEase { EasingMode = EasingMode.EaseOut }
-            };
-            DoubleAnimation offsetYAnimation = new DoubleAnimation(offsetY, new Duration(TimeSpan.FromSeconds(1)))
-            {
-                EasingFunction = new PowerEase { EasingMode = EasingMode.EaseOut }
-            };
+            //DoubleAnimation offsetXAnimation = new DoubleAnimation(offsetX, new Duration(TimeSpan.FromSeconds(1)))
+            //{
+            //    EasingFunction = new PowerEase { EasingMode = EasingMode.EaseOut }
+            //};
+            //DoubleAnimation offsetYAnimation = new DoubleAnimation(offsetY, new Duration(TimeSpan.FromSeconds(1)))
+            //{
+            //    EasingFunction = new PowerEase { EasingMode = EasingMode.EaseOut }
+            //};
 
-            offsetTransform.BeginAnimation(TranslateTransform.XProperty, offsetXAnimation);
-            offsetTransform.BeginAnimation(TranslateTransform.YProperty, offsetYAnimation);
+            //offsetTransform.BeginAnimation(TranslateTransform.XProperty, offsetXAnimation);
+            //offsetTransform.BeginAnimation(TranslateTransform.YProperty, offsetYAnimation);
 
-            pawn.RenderTransform = offsetTransform;
-            var s = new Storyboard();
-            Storyboard.SetTargetName(s, "MoveToXY");
-            Storyboard.SetTargetProperty(s, new PropertyPath(TranslateTransform.YProperty));
-            var storyboardName = "s" + s.GetHashCode();
-            Resources.Add(storyboardName, s);
+            //pawn.RenderTransform = offsetTransform;
+            //var s = new Storyboard();
+            //Storyboard.SetTargetName(s, "MoveToXY");
+            //Storyboard.SetTargetProperty(s, new PropertyPath(TranslateTransform.YProperty));
+            //var storyboardName = "s" + s.GetHashCode();
+            //Resources.Add(storyboardName, s);
 
-            s.Completed +=
-                (sndr, evtArgs) =>
-                {
-                    Resources.Remove(storyboardName);
-                    UnregisterName(translationName);
-                    Players.Find(player => player.Pawn == pawn).PlayerLocation.X = Locations.List[endPosition].X;
-                    Players.Find(player => player.Pawn == pawn).PlayerLocation.Y = (Locations.List[endPosition].Y);
-                    //Canvas.SetLeft(pawn, Players.Find(player => player.Pawn == pawn).PlayerLocation.X);
-                    //Canvas.SetTop(pawn, Players.Find(player => player.Pawn == pawn).PlayerLocation.Y);
-                };
-            s.Begin();
+            //s.Completed +=
+            //    (sndr, evtArgs) =>
+            //    {
+            //        Resources.Remove(storyboardName);
+            //        UnregisterName(translationName);
+            //        Players.Find(player => player.Pawn == pawn).PlayerLocation.X = Locations.List[endPosition].X;
+            //        Players.Find(player => player.Pawn == pawn).PlayerLocation.Y = (Locations.List[endPosition].Y);
+            //        //Canvas.SetLeft(pawn, Players.Find(player => player.Pawn == pawn).PlayerLocation.X);
+            //        //Canvas.SetTop(pawn, Players.Find(player => player.Pawn == pawn).PlayerLocation.Y);
+            //    };
+            //s.Begin();
         }
 
         public void InitializeSquares()
