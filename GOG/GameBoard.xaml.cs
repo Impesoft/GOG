@@ -62,17 +62,18 @@ namespace GameOfGoose
             }
             else
             {
-                foreach (var player in Players)
-                {
-                    Canvas.SetLeft(player.Pawn, player.PlayerLocation.X);
-                    Canvas.SetTop(player.Pawn, player.PlayerLocation.Y);
-                }
+                //foreach (var player in Players)
+                //{
+                //    Canvas.SetLeft(player.Pawn, player.PlayerLocation.X);
+                //    Canvas.SetTop(player.Pawn, player.PlayerLocation.Y);
+                //}
                 int activePlayerId = _settings.Turn % Players.Count;
                 ActivePlayer = Players[activePlayerId];
                 ActivePawn = ActivePlayer.Pawn;
 
                 PlayerTurn();
                 _settings.Turn++;
+                AnimatePawn(ActivePawn, ActivePlayer.Position);
                 if (!WeHaveAWinner()) return;
 
                 MessageBox.Show($"Congratulations { Players.SingleOrDefault(player => player.Position == 63)?.Name}\nYou Won!");
@@ -101,7 +102,7 @@ namespace GameOfGoose
                 Canvas.SetTop(player.Pawn, Locations.List[0].Y + player.OffsetY - player.Pawn.Height);
                 player.PlayerLocation.X = Locations.List[0].X;
                 player.PlayerLocation.Y = Locations.List[0].Y;
-                AnimatePawn(player.Pawn, 0);
+                //AnimatePawn(player.Pawn, 0);
             }
         }
 
@@ -118,8 +119,10 @@ namespace GameOfGoose
 
         public void AnimatePawn(Image pawn, int endPosition)
         {
-            Canvas.SetLeft(pawn, Locations.List[endPosition].X);
-            Canvas.SetTop(pawn, Locations.List[endPosition].Y);
+            ActivePlayer = Players.Find(player => player.Pawn == pawn);
+            Canvas.SetLeft(pawn, Locations.List[endPosition].X + ActivePlayer.OffsetX);
+            Canvas.SetTop(pawn, Locations.List[endPosition].Y + ActivePlayer.OffsetY - pawn.Height);
+            ActivePlayer.Position = endPosition;
             //double offsetX = Locations.List[endPosition].X - (Players.Find(player => player.Pawn == pawn).PlayerLocation.X); // (MyCanvas.ActualWidth / 884) *
             //double offsetY = Locations.List[endPosition].Y - (Players.Find(player => player.Pawn == pawn).PlayerLocation.Y); //(MyCanvas.ActualWidth / 884) *
             //Throw.Text += $"\ncurrent X,Y = {Players.Find(player => player.Pawn == pawn).PlayerLocation.X},{Players.Find(player => player.Pawn == pawn).PlayerLocation.Y}: relative move to {endPosition} = {offsetX},{offsetY} to {Locations.List[endPosition].X},{Locations.List[endPosition].Y}";
@@ -273,7 +276,7 @@ namespace GameOfGoose
             }
             SquarePathList[ActivePlayer.Position].Move(ActivePlayer); //polymorphism
             Throw.Text += SquarePathList[ActivePlayer.Position].ToString();
-            AnimatePawn(ActivePawn, ActivePlayer.Position);
+            //AnimatePawn(ActivePawn, ActivePlayer.Position);
         }
 
         private void CheckIfReversed(int[] diceRoll)
@@ -290,14 +293,14 @@ namespace GameOfGoose
             {
                 ActivePlayer.Position = 26;
                 Throw.Text += "\nSpecial Throw! moving to 26";
-                AnimatePawn(ActivePlayer.Pawn, 26);
+                // AnimatePawn(ActivePlayer.Pawn, 26);
                 return true;
             }
 
             if (!diceRoll.Contains(6) || !diceRoll.Contains(3)) return false;
             ActivePlayer.Position = 53;
             Throw.Text += "\nAmazing Throw! moving to 53";
-            AnimatePawn(ActivePlayer.Pawn, 26);
+            //   AnimatePawn(ActivePlayer.Pawn, 26);
 
             return true;
         }
