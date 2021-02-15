@@ -1,6 +1,7 @@
 ﻿using GameOfGoose.Squares;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -15,17 +16,20 @@ namespace GameOfGoose
     /// </summary>
     public partial class GameBoard : Window
     {
-        public List<Player> Players;
-        public List<Image> PawnList;
+        public ObservableCollection<Player> Players = Settings.Players;
+
+        // public List<Image> PawnList;
         public List<Square> SquarePathList { get; private set; } = new List<Square>();
+
         public List<int> Geese = new List<int> { 5, 9, 12, 14, 18, 23, 27, 32, 36, 41, 45, 50, 54, 59 };
-        private Settings _settings;
+
+        //private Settings Settings;
         private Dice _dice;
+
         private int _direction = 1;
 
         private Well _well;
 
-        //  public int dice1, dice2;
         public Image ActivePawn;
 
         public bool GameIsRunning;
@@ -49,6 +53,11 @@ namespace GameOfGoose
             this.Top = (screenHeight / 2) - (windowHeight / 2);
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            StartOrContinueGame();
+        }
+
         private void StartOrContinueGame()
         {
             if (!GameIsRunning)
@@ -62,17 +71,12 @@ namespace GameOfGoose
             }
             else
             {
-                //foreach (var player in Players)
-                //{
-                //    Canvas.SetLeft(player.Pawn, player.PlayerLocation.X);
-                //    Canvas.SetTop(player.Pawn, player.PlayerLocation.Y);
-                //}
-                int activePlayerId = _settings.Turn % Players.Count;
+                int activePlayerId = Settings.Turn % Players.Count;
                 ActivePlayer = Players[activePlayerId];
                 ActivePawn = ActivePlayer.Pawn;
 
                 PlayerTurn();
-                _settings.Turn++;
+                Settings.Turn++;
                 AnimatePawn(ActivePawn, ActivePlayer.Position);
                 if (!WeHaveAWinner()) return;
 
@@ -85,81 +89,18 @@ namespace GameOfGoose
         {
             GameIsRunning = false;
             InitializeSquares();
-            _settings = new Settings();
             EnterPlayers _enterPlayers = new EnterPlayers();
             _enterPlayers.ShowDialog();
             _dice = new Dice();
-
-            var Player = Player1;
-            Players = _settings.GetPlayers();
 
             foreach (Player player in Players)
             {
                 player.Pawn = (Image)MyCanvas.Children[Players.IndexOf(player)];
                 player.Pawn.ToolTip = player.Name;
 
-                Canvas.SetLeft(player.Pawn, Locations.List[0].X + player.OffsetX - player.Pawn.Width / 2);
-                Canvas.SetTop(player.Pawn, Locations.List[0].Y + player.OffsetY - player.Pawn.Height);
-                player.PlayerLocation.X = Locations.List[0].X;
-                player.PlayerLocation.Y = Locations.List[0].Y;
-                //AnimatePawn(player.Pawn, 0);
+                player.PlayerLocation.X = Locations.List[0].X + player.OffsetX - player.Pawn.Width / 2;
+                player.PlayerLocation.Y = Locations.List[0].Y + player.OffsetY - player.Pawn.Height;
             }
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            StartOrContinueGame();
-        }
-
-        //public void MoveTo(Image target, double newX, double newY)
-        //{
-        //    Canvas.SetLeft(target, newX - target.Width / 2); //(MyCanvas.ActualWidth / 884) *
-        //    Canvas.SetTop(target, newY - target.Height); // (MyCanvas.ActualHeight / 658.5) *
-        //}
-
-        public void AnimatePawn(Image pawn, int endPosition)
-        {
-            ActivePlayer = Players.Find(player => player.Pawn == pawn);
-            Canvas.SetLeft(pawn, Locations.List[endPosition].X + ActivePlayer.OffsetX);
-            Canvas.SetTop(pawn, Locations.List[endPosition].Y + ActivePlayer.OffsetY - pawn.Height);
-            ActivePlayer.Position = endPosition;
-            //double offsetX = Locations.List[endPosition].X - (Players.Find(player => player.Pawn == pawn).PlayerLocation.X); // (MyCanvas.ActualWidth / 884) *
-            //double offsetY = Locations.List[endPosition].Y - (Players.Find(player => player.Pawn == pawn).PlayerLocation.Y); //(MyCanvas.ActualWidth / 884) *
-            //Throw.Text += $"\ncurrent X,Y = {Players.Find(player => player.Pawn == pawn).PlayerLocation.X},{Players.Find(player => player.Pawn == pawn).PlayerLocation.Y}: relative move to {endPosition} = {offsetX},{offsetY} to {Locations.List[endPosition].X},{Locations.List[endPosition].Y}";
-            //TranslateTransform offsetTransform = new TranslateTransform();
-            //var translationName = "myTranslation" + offsetTransform.GetHashCode();
-            //RegisterName(translationName, offsetTransform);
-
-            //DoubleAnimation offsetXAnimation = new DoubleAnimation(offsetX, new Duration(TimeSpan.FromSeconds(1)))
-            //{
-            //    EasingFunction = new PowerEase { EasingMode = EasingMode.EaseOut }
-            //};
-            //DoubleAnimation offsetYAnimation = new DoubleAnimation(offsetY, new Duration(TimeSpan.FromSeconds(1)))
-            //{
-            //    EasingFunction = new PowerEase { EasingMode = EasingMode.EaseOut }
-            //};
-
-            //offsetTransform.BeginAnimation(TranslateTransform.XProperty, offsetXAnimation);
-            //offsetTransform.BeginAnimation(TranslateTransform.YProperty, offsetYAnimation);
-
-            //pawn.RenderTransform = offsetTransform;
-            //var s = new Storyboard();
-            //Storyboard.SetTargetName(s, "MoveToXY");
-            //Storyboard.SetTargetProperty(s, new PropertyPath(TranslateTransform.YProperty));
-            //var storyboardName = "s" + s.GetHashCode();
-            //Resources.Add(storyboardName, s);
-
-            //s.Completed +=
-            //    (sndr, evtArgs) =>
-            //    {
-            //        Resources.Remove(storyboardName);
-            //        UnregisterName(translationName);
-            //        Players.Find(player => player.Pawn == pawn).PlayerLocation.X = Locations.List[endPosition].X;
-            //        Players.Find(player => player.Pawn == pawn).PlayerLocation.Y = (Locations.List[endPosition].Y);
-            //        //Canvas.SetLeft(pawn, Players.Find(player => player.Pawn == pawn).PlayerLocation.X);
-            //        //Canvas.SetTop(pawn, Players.Find(player => player.Pawn == pawn).PlayerLocation.Y);
-            //    };
-            //s.Begin();
         }
 
         public void InitializeSquares()
@@ -217,11 +158,6 @@ namespace GameOfGoose
             }
         }
 
-        private bool IsPlayerOnGoose(Player player)
-        {
-            return Geese.Contains(player.Position);
-        }
-
         private void PlayerTurn()
         {
             ActivePawn = ActivePlayer.Pawn;
@@ -265,18 +201,11 @@ namespace GameOfGoose
             return _well.WellPlayer != ActivePlayer;
         }
 
-        private void Move(int[] diceRoll)
+        private bool IsFirstThrow()
         {
-            ActivePlayer.Move(diceRoll, _direction);
-            CheckIfReversed(diceRoll);
-            //reflection
-            if (IsPlayerOnGoose(ActivePlayer))
-            {
-                Move(diceRoll);
-            }
-            SquarePathList[ActivePlayer.Position].Move(ActivePlayer); //polymorphism
-            Throw.Text += SquarePathList[ActivePlayer.Position].ToString();
-            //AnimatePawn(ActivePawn, ActivePlayer.Position);
+            int round = Settings.Turn / Players.Count;
+
+            return round == 0;
         }
 
         private void CheckIfReversed(int[] diceRoll)
@@ -305,11 +234,68 @@ namespace GameOfGoose
             return true;
         }
 
-        private bool IsFirstThrow()
+        private void Move(int[] diceRoll)
         {
-            int round = _settings.Turn / Players.Count;
+            ActivePlayer.Move(diceRoll, _direction);
+            CheckIfReversed(diceRoll);
+            //reflection
+            if (IsPlayerOnGoose(ActivePlayer))
+            {
+                Move(diceRoll);
+            }
+            SquarePathList[ActivePlayer.Position].Move(ActivePlayer); //polymorphism
+            Throw.Text += SquarePathList[ActivePlayer.Position].ToString();
+            //AnimatePawn(ActivePawn, ActivePlayer.Position);
+        }
 
-            return round == 0;
+        private bool IsPlayerOnGoose(Player player)
+        {
+            return Geese.Contains(player.Position);
+        }
+
+        public void AnimatePawn(Image pawn, int endPosition)
+        {
+            ActivePlayer = Players.ToList().Find(player => player.Pawn == pawn);
+            Canvas.SetLeft(pawn, Locations.List[endPosition].X + ActivePlayer.OffsetX);
+            Canvas.SetTop(pawn, Locations.List[endPosition].Y + ActivePlayer.OffsetY - pawn.Height);
+            ActivePlayer.Position = endPosition;
+            //double offsetX = Locations.List[endPosition].X - (Players.Find(player => player.Pawn == pawn).PlayerLocation.X); // (MyCanvas.ActualWidth / 884) *
+            //double offsetY = Locations.List[endPosition].Y - (Players.Find(player => player.Pawn == pawn).PlayerLocation.Y); //(MyCanvas.ActualWidth / 884) *
+            //Throw.Text += $"\ncurrent X,Y = {Players.Find(player => player.Pawn == pawn).PlayerLocation.X},{Players.Find(player => player.Pawn == pawn).PlayerLocation.Y}: relative move to {endPosition} = {offsetX},{offsetY} to {Locations.List[endPosition].X},{Locations.List[endPosition].Y}";
+            //TranslateTransform offsetTransform = new TranslateTransform();
+            //var translationName = "myTranslation" + offsetTransform.GetHashCode();
+            //RegisterName(translationName, offsetTransform);
+
+            //DoubleAnimation offsetXAnimation = new DoubleAnimation(offsetX, new Duration(TimeSpan.FromSeconds(1)))
+            //{
+            //    EasingFunction = new PowerEase { EasingMode = EasingMode.EaseOut }
+            //};
+            //DoubleAnimation offsetYAnimation = new DoubleAnimation(offsetY, new Duration(TimeSpan.FromSeconds(1)))
+            //{
+            //    EasingFunction = new PowerEase { EasingMode = EasingMode.EaseOut }
+            //};
+
+            //offsetTransform.BeginAnimation(TranslateTransform.XProperty, offsetXAnimation);
+            //offsetTransform.BeginAnimation(TranslateTransform.YProperty, offsetYAnimation);
+
+            //pawn.RenderTransform = offsetTransform;
+            //var s = new Storyboard();
+            //Storyboard.SetTargetName(s, "MoveToXY");
+            //Storyboard.SetTargetProperty(s, new PropertyPath(TranslateTransform.YProperty));
+            //var storyboardName = "s" + s.GetHashCode();
+            //Resources.Add(storyboardName, s);
+
+            //s.Completed +=
+            //    (sndr, evtArgs) =>
+            //    {
+            //        Resources.Remove(storyboardName);
+            //        UnregisterName(translationName);
+            //        Players.Find(player => player.Pawn == pawn).PlayerLocation.X = Locations.List[endPosition].X;
+            //        Players.Find(player => player.Pawn == pawn).PlayerLocation.Y = (Locations.List[endPosition].Y);
+            //        //Canvas.SetLeft(pawn, Players.Find(player => player.Pawn == pawn).PlayerLocation.X);
+            //        //Canvas.SetTop(pawn, Players.Find(player => player.Pawn == pawn).PlayerLocation.Y);
+            //    };
+            //s.Begin();
         }
 
         private bool WeHaveAWinner()

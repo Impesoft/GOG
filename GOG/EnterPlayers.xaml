@@ -7,41 +7,68 @@
         xmlns:local="clr-namespace:GameOfGoose"
         mc:Ignorable="d"
         Title="Enter Players"
-        Height="346"
-        Width="291"
-        WindowStyle="None">
-    <DockPanel>
-        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Stretch">
-            <Label HorizontalAlignment="Stretch">Enter Number of Players 2-4:</Label>
-            <TextBox x:Name="textBox"
-                     Text="TextBox"
-                     TextWrapping="Wrap"
-                     Width="121" />
+        Width="176"
+        WindowStyle="SingleBorderWindow"
+        Height="240">
+    <Grid VerticalAlignment="Stretch"
+          HorizontalAlignment="Stretch">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="70" />
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Label Grid.Column="0"
+               Grid.Row="0"
+               Grid.ColumnSpan="2"
+               HorizontalAlignment="Stretch">Add Players 2-4:</Label>
+        <StackPanel Grid.Row="1"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Bottom">
+
+            <Label Content="Player Name"></Label>
+            <TextBox  x:Name="PlayerName"
+                      ToolTip="Enter Name Of Player To Add" />
+            <Button x:Name="AddPlayer"
+                    Content="Add Player"
+                    Click="Add_Click" />
+            <!--Text="{Binding}"-->
         </StackPanel>
-        <StackPanel Orientation="Vertical"
-                    Height="301">
-            <StackPanel Orientation="Horizontal">
-                <Label Content="Player1"></Label><TextBox x:Name="Player1"
-                         Width="235"></TextBox>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Label Content="Player2"></Label><TextBox x:Name="Player2"
-                         Width="235"></TextBox>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Label Content="Player3"></Label><TextBox x:Name="Player3"
-                         Width="235"></TextBox>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Label Content="Player4"></Label><TextBox x:Name="Player4"
-                         Width="235"></TextBox>
-            </StackPanel>
-            <Button x:Name="button"
-                    Margin="25"
-                    Content="Start"
-                    Height="154"
-                    Width="225"
-                    Click="button_Click" />
+
+        <StackPanel Grid.ColumnSpan="2"
+                    Grid.Column="0"
+                    Grid.Row="2"
+                    Orientation="Vertical"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch">
+            <ListView  x:Name="PlayerList"
+                       Height="100">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Images/Pawn1.png"
+                                   Height="15" />
+                            <Label Content="{Binding Name}"></Label>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </StackPanel>
-    </DockPanel>
+
+        <Button Grid.Row="3"
+                Grid.ColumnSpan="2"
+                x:Name="StartButton"
+                Content="Start"
+                Height="36"
+                Click="button_Click"
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Stretch"
+                IsEnabled="False" />
+    </Grid>
 </Window>
