@@ -119,7 +119,7 @@ namespace GameOfGoose
         public void AnimatePawn(Image pawn, int endPosition)
         {
             Canvas.SetLeft(pawn, Locations.List[endPosition].X);
-            Canvas.SetTop(pawn, Locations.List[endPosition].X);
+            Canvas.SetTop(pawn, Locations.List[endPosition].Y);
             //double offsetX = Locations.List[endPosition].X - (Players.Find(player => player.Pawn == pawn).PlayerLocation.X); // (MyCanvas.ActualWidth / 884) *
             //double offsetY = Locations.List[endPosition].Y - (Players.Find(player => player.Pawn == pawn).PlayerLocation.Y); //(MyCanvas.ActualWidth / 884) *
             //Throw.Text += $"\ncurrent X,Y = {Players.Find(player => player.Pawn == pawn).PlayerLocation.X},{Players.Find(player => player.Pawn == pawn).PlayerLocation.Y}: relative move to {endPosition} = {offsetX},{offsetY} to {Locations.List[endPosition].X},{Locations.List[endPosition].Y}";
