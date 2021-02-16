@@ -134,5 +134,17 @@ namespace GameOfGoose
                 StartButton.IsEnabled = false;
             }
         }
+
+        private void onClose(object sender, EventArgs e)
+        {
+            if (_players.Count > 1)
+            {
+                foreach (Player player in Settings.Players)
+                {
+                    Settings.PawnList.Add(player.PlayerPawn.PawnImage);
+                }
+                //   this.Close();
+            }
+        }
     }
 }
