@@ -12,7 +12,7 @@ namespace GameOfGoose.Squares
 
         public virtual void Move(Player player)
         {
-            //dont move
+            //don't move
             player.Position = player.Position;
         }
 
