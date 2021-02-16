@@ -2,10 +2,12 @@
 using NUnit.Framework;
 using System.Linq;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace GameOfGooseTest
 {
-    // STA PROBLEMS :(
+    [Apartment(ApartmentState.STA)]
+
     internal class GameBoardTests
     {
         private Player _player;
@@ -14,8 +16,11 @@ namespace GameOfGooseTest
         [SetUp]
         public void Setup()
         {
-            _player = new Player();
+            _player = new Player("Nick", 0);
             _gameBoard = new GameBoard();
+
+            _players = Settings.Players.ToList();
+
         }
 
         [Test]
@@ -52,7 +57,8 @@ namespace GameOfGooseTest
         {
             // Arrange
             var turn = Settings.Turn;
-            var playerCount = Settings.Players.Count;
+            var playerCount = _players.Count;
+
 
             // Act
             int round = turn / playerCount;

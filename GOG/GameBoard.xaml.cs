@@ -33,19 +33,11 @@ namespace GameOfGoose
 
         public bool GameIsRunning;
         public Player ActivePlayer;
-        private int[] StartPosition { get; set; } = { 0, 1, 2, 3 };
 
         public GameBoard()
         {
             InitializeComponent();
-
-            foreach (Image pawn in MyCanvas.Children)
-            {
-                //pawn.RenderTransform = ;
-                Settings.PawnList.Add(pawn);
-            }
             CenterWindowOnScreen();
-            //        StartOrContinueGame();
         }
 
         private void CenterWindowOnScreen()
@@ -67,45 +59,86 @@ namespace GameOfGoose
         {
             if (!GameIsRunning)
             {
-                InitializeVariables();
-                GameIsRunning = true;
-                foreach (var player in Players)
-                {
-                    player.PlayerPawn.Move(0);
-                }
+                ReInitializeGame();
             }
             else
             {
-                int activePlayerId = Settings.Turn % Players.Count;
-                ActivePlayer = Players[activePlayerId];
-                ActivePawn = ActivePlayer.PlayerPawn.Pawn;
+                ContinueGame();
+            }
+        }
 
-                PlayerTurn();
-                Settings.Turn++;
+        private void ContinueGame()
+        {
+            DefineActivePlayer();
 
-                ActivePlayer.PlayerPawn.Move(ActivePlayer.Position);
-                if (!WeHaveAWinner()) return;
+            PlayerTurn();
+            Settings.Turn++;
 
-                MessageBox.Show($"Congratulations { Players.SingleOrDefault(player => player.Position == 63)?.Name}\nYou Won!");
-                GameIsRunning = false;
+            ActivePlayer.PlayerPawn.Move(ActivePlayer.Position);
+            if (!WeHaveAWinner()) return;
+
+            DisplayWinnerAndStopGame();
+        }
+
+        private void DisplayWinnerAndStopGame()
+        {
+            MessageBox.Show($"Congratulations {Players.SingleOrDefault(player => player.Position == 63)?.Name}\nYou Won!");
+            GameIsRunning = false;
+        }
+
+        private void DefineActivePlayer()
+        {
+            int activePlayerId = Settings.Turn % Players.Count;
+            ActivePlayer = Players[activePlayerId];
+            ActivePawn = ActivePlayer.PlayerPawn.Pawn;
+        }
+
+        private void ReInitializeGame()
+        {
+            InitializeVariables();
+            GameIsRunning = true;
+            foreach (var player in Players)
+            {
+                player.PlayerPawn.Move(0);
             }
         }
 
         private void InitializeVariables()
         {
             GameIsRunning = false;
+            CreatePawnListFromCanvasPawns();
             InitializeSquares();
+            ShowInputWindow();
+            _dice = new Dice(); //Create Dice
+
+            CreatePlayersListOfPlayers();
+        }
+
+        private static void ShowInputWindow()
+        {
             EnterPlayers _enterPlayers = new EnterPlayers();
             _enterPlayers.ShowDialog();
-            _dice = new Dice();
+        }
 
+        private void CreatePlayersListOfPlayers()
+        {
             foreach (Player player in Players)
             {
                 player.PlayerPawn.Pawn = (Image)MyCanvas.Children[Players.IndexOf(player)];
                 player.PlayerPawn.Pawn.ToolTip = player.Name;
 
-                player.PlayerPawn.PlayerLocation.X = Locations.List[0].X + player.PlayerPawn.OffsetX - player.PlayerPawn.Pawn.Width / 2;
-                player.PlayerPawn.PlayerLocation.Y = Locations.List[0].Y + player.PlayerPawn.OffsetY - player.PlayerPawn.Pawn.Height;
+                player.PlayerPawn.PlayerLocation.X =
+                    Locations.List[0].X + player.PlayerPawn.OffsetX - player.PlayerPawn.Pawn.Width / 2;
+                player.PlayerPawn.PlayerLocation.Y =
+                    Locations.List[0].Y + player.PlayerPawn.OffsetY - player.PlayerPawn.Pawn.Height;
+            }
+        }
+
+        private void CreatePawnListFromCanvasPawns()
+        {
+            foreach (Image pawn in MyCanvas.Children)
+            {
+                Settings.PawnList.Add(pawn);
             }
         }
 
@@ -168,19 +201,21 @@ namespace GameOfGoose
         {
             ActivePawn = ActivePlayer.PlayerPawn.Pawn;
             if (!CanPlay()) return;
-
-            int[] diceRoll = _dice.Roll();
-
-            Throw.Text = $"{ActivePlayer.Name} threw {diceRoll[0]},{ diceRoll[1]}\n";
-
+            var diceRoll = RollDice();
             if (IsFirstThrow())
             {
                 if (FirsThrowIs9Exception_Move(diceRoll)) return;
             }
-            _direction = 1;
-            StartPosition[Players.IndexOf(ActivePlayer)] = ActivePlayer.Position;
+            _direction = 1; // set start direction forward
             Move(diceRoll);
             Throw.Text += $"\n{ActivePlayer.Name} is on field {ActivePlayer.Position}";
+        }
+
+        private int[] RollDice()
+        {
+            int[] diceRoll = _dice.Roll();
+            Throw.Text = $"{ActivePlayer.Name} threw {diceRoll[0]},{diceRoll[1]}\n";
+            return diceRoll;
         }
 
         private bool CanPlay()
