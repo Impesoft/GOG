@@ -7,9 +7,9 @@ using System.Threading;
 namespace GameOfGooseTest
 {
     [Apartment(ApartmentState.STA)]
+
     internal class GameBoardTests
     {
-        private List<Player> _players;
         private Player _player;
         private GameBoard _gameBoard;
 
@@ -18,7 +18,9 @@ namespace GameOfGooseTest
         {
             _player = new Player("Nick", 0);
             _gameBoard = new GameBoard();
+
             _players = Settings.Players.ToList();
+
         }
 
         [Test]
@@ -57,6 +59,7 @@ namespace GameOfGooseTest
             var turn = Settings.Turn;
             var playerCount = _players.Count;
 
+
             // Act
             int round = turn / playerCount;
             bool result = round == 0;
@@ -68,7 +71,7 @@ namespace GameOfGooseTest
         public void Check_WhenWinner_ReturnTrue()
         {
             // Arrange
-            _players[0].Position = 63;
+            Settings.Players[0].Position = 63;
             // Act
             var winner = Settings.Players.SingleOrDefault(player => player.Position == 63);
             // Assert
