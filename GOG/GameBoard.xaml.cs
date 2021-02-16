@@ -70,7 +70,7 @@ namespace GameOfGoose
                 pawn.Height = 43;
                 Settings.PawnList.Add(pawn);
                 MyCanvas.Children.Add(pawn);
-                Canvas.SetLeft(pawn, i * 5 - 10);
+                Canvas.SetLeft(pawn, i * 3 - 6);
             }
         }
     }
