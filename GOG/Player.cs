@@ -8,23 +8,19 @@ namespace GameOfGoose
 {
     public class Player : IPlayer
     {
-        public int Position { get; set; } = 0;
+        public int Position { get; set; }
         public string Name { get; set; }
-        public Image Pawn { get; set; }
-        public int OffsetX { get; set; }
-        public int OffsetY { get; set; }
+        public PlayerPawn PlayerPawn { get; set; }
 
-        public Player()
+        public Player(string name, int position)
         {
-            OffsetX = 0;
-            OffsetY = 0;
+            Name = name;
+            Position = position;
         }
 
-        public Location PlayerLocation { get; set; } = new Location { X = 0, Y = 0 };
-
-        public void Move(int[] dice, int direction)
+        public void Move(int direction)
         {
-            Position += direction * (dice[0] + dice[1]);
+            Position += direction;
         }
 
         public int ToSkipTurns { get; set; }

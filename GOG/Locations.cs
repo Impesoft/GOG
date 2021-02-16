@@ -28,7 +28,7 @@ namespace GameOfGoose
             new Location { X = 770, Y = 145},
             new Location { X = 720, Y = 95},
             new Location { X = 630, Y = 55},
-            new Location { X = 550, Y = 50},
+            new Location { X = 560, Y = 50},
             new Location { X = 510, Y = 50},
             new Location { X = 465, Y = 50},
             new Location { X = 390, Y = 50},

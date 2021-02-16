@@ -21,10 +21,5 @@ namespace GameOfGoose.Squares
         {
             return $"\nWell... that bites, gotta wait for someone to rescue you now...";
         }
-
-        //public Well()
-        //{
-        //    WellPlayer = new Player();
-        //}
     }
 }

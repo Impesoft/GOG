@@ -13,7 +13,6 @@ namespace GameOfGoose.Squares
         {
             //move to 12
             player.Position = 12;
-            //    MessageBox.Show("Over the bridge of troubled water");
         }
 
         public override string ToString()

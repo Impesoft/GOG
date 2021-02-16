@@ -60,16 +60,18 @@ namespace GameOfGoose
                 if (Players.ToList().Find(x => x.Name == PlayerName.Text) == null)
                 {
                     if (PlayerName.Text == "") return;
-                    Players.Add(new Player()
+                    Players.Add(new Player(PlayerName.Text, 0)
                     {
-                        Name = PlayerName.Text,
-                        OffsetX = (int)(5 * Players.ToList().Count - 5),
-                        OffsetY = (int)(5 * Players.ToList().Count - 5),
-                        Pawn = Settings.PawnList[Players.ToList().Count],
-                        PlayerLocation = new Location()
+                        PlayerPawn = new PlayerPawn(Settings.PawnList[Players.ToList().Count])
                         {
-                            X = Locations.List[0].X + 10 * Players.ToList().Count,
-                            Y = Locations.List[0].Y
+                            OffsetX = (int)(5 * Players.ToList().Count - 5),
+                            OffsetY = (int)(5 * Players.ToList().Count - 5),
+
+                            PlayerLocation = new Location()
+                            {
+                                X = Locations.List[0].X + 10 * Players.ToList().Count,
+                                Y = Locations.List[0].Y
+                            }
                         }
                     });
                     PlayerName.Text = "";

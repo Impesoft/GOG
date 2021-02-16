@@ -50,7 +50,7 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="{Binding Pawn.Source}"
+                            <Image Source="{Binding PlayerPawn.Pawn.Source}"
                                    Height="15" />
                             <Label Content="{Binding Name}"></Label>
                         </StackPanel>
