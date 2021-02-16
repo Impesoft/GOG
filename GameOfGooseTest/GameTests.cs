@@ -8,11 +8,13 @@ namespace GameOfGooseTest
     internal class GameTests
     {
         private Game _game;
+        private GameBoard _gameBoard;
 
         [SetUp]
         public void Setup()
         {
-            _game = new Game();
+            //_gameBoard = new GameBoard();
+            _game = new Game(null);
         }
 
         [Test]

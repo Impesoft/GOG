@@ -13,12 +13,16 @@
 
     <DockPanel VerticalAlignment="Stretch"
                HorizontalAlignment="Stretch">
-        <DockPanel.Resources>
-            <local:Game x:Key="infotext" />
+        <!--<DockPanel.Resources>
+            -->
+        <!--<local:Game x:Key="infotext" />-->
+        <!--
         </DockPanel.Resources>
         <DockPanel.DataContext>
-            <Binding Source="{StaticResource infotext}"></Binding>
-        </DockPanel.DataContext>
+            -->
+        <!--<Binding Source="{StaticResource infotext}"></Binding>-->
+        <!--
+        </DockPanel.DataContext>-->
         <StackPanel DockPanel.Dock="Top"
                     Margin="0,0"
                     Orientation="Horizontal"
@@ -40,7 +44,8 @@
                 <Button Content="Players3" />
                 <Button Content="Players4" />-->
             </StackPanel>
-            <StackPanel Orientation="Horizontal">
+            <StackPanel x:Name="MyStackPanel"
+                        Orientation="Horizontal">
                 <TextBlock Foreground="White"
                            VerticalAlignment="Top"
                            Width="400"

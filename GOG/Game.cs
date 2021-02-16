@@ -43,7 +43,11 @@ namespace GameOfGoose
         public Game(GameBoard gameBoard)
         {
             _gameBoard = gameBoard;
-            InfoText = _gameBoard.Throw.Text;
+            //  InfoText = _gameBoard.Throw.Text;
+        }
+
+        public Game()
+        {
         }
 
         public void StartOrContinueGame()
@@ -283,7 +287,7 @@ namespace GameOfGoose
 
         public void Move(int[] diceRoll)
         {
-            ActivePlayer.Move(_direction * (diceRoll[0] + diceRoll[1]));
+            ActivePlayer.Move(_direction * diceRoll.Sum());
             CheckIfReversed();
 
             //reflection

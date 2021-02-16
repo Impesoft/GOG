@@ -30,6 +30,7 @@ namespace GameOfGoose
             InitializeComponent();
             CenterWindowOnScreen();
             _game = new Game(this);
+            MyStackPanel.DataContext = _game;
         }
 
         public void CenterWindowOnScreen()
