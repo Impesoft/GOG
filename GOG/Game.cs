@@ -185,7 +185,7 @@ namespace GameOfGoose
         public int[] RollDice()
         {
             int[] diceRoll = _dice.Roll();
-            InfoText = $"{_activePlayer.Name} threw {diceRoll[0]},{diceRoll[1]}\n";
+            InfoText = $"{_activePlayer.Name} threw {diceRoll[0]},{diceRoll[1]}";
             return diceRoll;
         }
 
