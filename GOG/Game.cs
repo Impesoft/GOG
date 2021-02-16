@@ -1,19 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using GameOfGoose.Annotations;
+using GameOfGoose.Interface;
 using GameOfGoose.Squares;
 
 namespace GameOfGoose
 {
-    public class Game
+    public class Game : INotifyPropertyChanged
     {
         private GameBoard _gameBoard;
         public ObservableCollection<Player> Players = Settings.Players;
 
+        private string _infoText;
+
+        public string InfoText
+        {
+            get => _infoText;
+            set
+            {
+                if (_infoText == value) return;
+                _infoText = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public List<ISquare> SquarePathList { get; set; } = new List<ISquare>();
         public List<int> Geese = new List<int> { 5, 9, 12, 14, 18, 23, 27, 32, 36, 41, 45, 50, 54, 59 };
         public Dice _dice;
         public int _direction = 1;
@@ -25,9 +43,8 @@ namespace GameOfGoose
         public Game(GameBoard gameBoard)
         {
             _gameBoard = gameBoard;
+            InfoText = _gameBoard.Throw.Text;
         }
-
-        public List<Square> SquarePathList { get; set; } = new List<Square>();
 
         public void StartOrContinueGame()
         {
@@ -196,13 +213,13 @@ namespace GameOfGoose
             }
             _direction = 1; // set start direction forward
             Move(diceRoll);
-            Settings.InfoText += $"\n{ActivePlayer.Name} is on field {ActivePlayer.Position}";
+            InfoText += $"\n{ActivePlayer.Name} is on field {ActivePlayer.Position}";
         }
 
         public int[] RollDice()
         {
             int[] diceRoll = _dice.Roll();
-            Settings.InfoText = $"{ActivePlayer.Name} threw {diceRoll[0]},{diceRoll[1]}\n";
+            InfoText = $"{ActivePlayer.Name} threw {diceRoll[0]},{diceRoll[1]}\n";
             return diceRoll;
         }
 
@@ -210,24 +227,24 @@ namespace GameOfGoose
         {
             if (ActivePlayer.ToSkipTurns > 0)
             {
-                Settings.InfoText = $"{ActivePlayer.Name} Can't play right now still had to skip {ActivePlayer.ToSkipTurns}";
+                InfoText = $"{ActivePlayer.Name} Can't play right now still had to skip {ActivePlayer.ToSkipTurns}";
 
                 ActivePlayer.ToSkipTurns--;
 
                 if (ActivePlayer.ToSkipTurns > 0)
                 {
-                    Settings.InfoText += $"/{ActivePlayer.ToSkipTurns} remaining";
+                    InfoText += $"/{ActivePlayer.ToSkipTurns} remaining";
                 }
                 return false;
             }
 
             if (_well.WellPlayer == ActivePlayer)
             {
-                Settings.InfoText += $"{ActivePlayer.Name}, You're in the Well!\n{_well.WellPlayer.Name} needs rescuing!";
+                InfoText += $"{ActivePlayer.Name}, You're in the Well!\n{_well.WellPlayer.Name} needs rescuing!";
             }
             else
             {
-                if (_well.WellPlayer != null) Settings.InfoText += $"\nin Well {_well.WellPlayer.Name}";
+                if (_well.WellPlayer != null) InfoText += $"\nin Well {_well.WellPlayer.Name}";
             }
 
             return _well.WellPlayer != ActivePlayer;
@@ -253,13 +270,13 @@ namespace GameOfGoose
             if (diceRoll.Contains(5) && diceRoll.Contains(4))
             {
                 ActivePlayer.Position = 26;
-                Settings.InfoText += "\nSpecial Throw! moving to 26";
+                InfoText += "\nSpecial Throw! moving to 26";
                 return true;
             }
 
             if (!diceRoll.Contains(6) || !diceRoll.Contains(3)) return false;
             ActivePlayer.Position = 53;
-            Settings.InfoText += "\nAmazing Throw! moving to 53";
+            InfoText += "\nAmazing Throw! moving to 53";
 
             return true;
         }
@@ -275,7 +292,7 @@ namespace GameOfGoose
                 Move(diceRoll);
             }
             SquarePathList[ActivePlayer.Position].Move(ActivePlayer); //polymorphism activate 'current square positions'.move
-            Settings.InfoText += SquarePathList[ActivePlayer.Position].ToString();
+            InfoText += SquarePathList[ActivePlayer.Position].ToString();
         }
 
         public bool IsPlayerOnGoose(Player player)
@@ -288,6 +305,14 @@ namespace GameOfGoose
             var winner = Players.SingleOrDefault(player => player.Position == 63);
 
             return winner is not null;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
