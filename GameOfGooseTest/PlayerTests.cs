@@ -1,20 +1,20 @@
+using System.Threading;
 using GameOfGoose;
 using NUnit.Framework;
 
 namespace GameOfGooseTest
 {
+    [Apartment(ApartmentState.STA)]
     internal class PlayerTests
     {
         private Player _player;
         private Dice _dice;
-        private GameBoard _gameBoard;
 
         [SetUp]
         public void Setup()
         {
-            _player = new Player();
+            _player = new Player("Nick", 0);
             _dice = new Dice();
-            _gameBoard = new GameBoard();
         }
 
         [Test]
@@ -28,11 +28,12 @@ namespace GameOfGooseTest
         {
             // Arrange
             int[] dice = { 5, 3 };
+            int direction = 1;
             _player.Position = 7;
             int expectedResult = _player.Position + dice[0] + dice[1];
 
             // Act
-            _player.Move(dice, 1);
+            _player.Move((dice[0] + dice[1]) * direction);
 
             //Assert
             Assert.AreEqual(expectedResult, _player.Position);

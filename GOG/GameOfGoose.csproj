@@ -18,9 +18,7 @@
 
   <ItemGroup>
     <Resource Include="Images\GanzenBord.png" />
-    <Resource Include="Images\Pawn1.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
+    <Resource Include="Images\Pawn1.png" />
     <Resource Include="Images\Pawn2.png" />
     <Resource Include="Images\Pawn3.png" />
     <Resource Include="Images\Pawn4.png" />
