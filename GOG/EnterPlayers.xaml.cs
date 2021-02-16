@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Configuration;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -22,13 +23,18 @@ namespace GameOfGoose
     /// </summary>
     public partial class EnterPlayers : Window
     {
-        public ObservableCollection<Player> Players = Settings.Players;
+        private ObservableCollection<Player> _players = Settings.Players;
+        private List<Image> _localPawnList = new List<Image>();
 
         public EnterPlayers()
         {
             InitializeComponent();
-            PlayerList.ItemsSource = Players;
-
+            PlayerList.ItemsSource = _players;
+            PlayerName.Focus();
+            if (PlayerList.Items.Count > 1)
+            {
+                StartButton.IsEnabled = true;
+            }
             CenterWindowOnScreen();
         }
 
@@ -50,36 +56,50 @@ namespace GameOfGoose
 
         private void button_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            PlayerName.Focus();
+            if (_players.Count > 1)
+            {
+                foreach (Player player in Settings.Players)
+                {
+                    Settings.PawnList.Add(player.PlayerPawn.PawnImage);
+                }
+                this.Close();
+            }
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)
         {
-            if (Players.Count <= 4)
+            _localPawnList = Settings.PawnList;
+            if (_players.Count <= 4)
             {
-                if (Players.ToList().Find(x => x.Name == PlayerName.Text) == null)
+                StartButton.IsDefault = false;
+                AddPlayer.IsDefault = true;
+                PlayerName.Focus();
+
+                if (_players.ToList().Find(x => x.Name == PlayerName.Text) == null)
                 {
                     if (PlayerName.Text == "") return;
-                    Players.Add(new Player(PlayerName.Text, 0)
+                    _players.Add(new Player(PlayerName.Text, 0)
                     {
-                        PlayerPawn = new PlayerPawn(Settings.PawnList[Players.ToList().Count])
+                        PlayerPawn = new PlayerPawn(_localPawnList[0])
                         {
-                            OffsetX = (int)(5 * Players.ToList().Count - 5),
-                            OffsetY = (int)(5 * Players.ToList().Count - 5),
+                            OffsetX = (int)(2 * _players.ToList().Count),
+                            OffsetY = (int)(2 * _players.ToList().Count - 15),
 
                             PlayerLocation = new Location()
                             {
-                                X = Locations.List[0].X + 10 * Players.ToList().Count,
+                                X = Locations.List[0].X + 3 * _players.ToList().Count,
                                 Y = Locations.List[0].Y
                             }
                         }
                     });
+                    _localPawnList.RemoveAt(0);
                     PlayerName.Text = "";
-                    if (Players.Count == 4)
+                    if (_players.Count == 4)
                     {
                         AddPlayer.IsEnabled = false;
                     }
-                    if (Players.Count > 1)
+                    if (_players.Count > 1)
                     {
                         StartButton.IsEnabled = true;
                     }
@@ -87,7 +107,31 @@ namespace GameOfGoose
                 else
                 {
                     MessageBox.Show("Duplicate PlayerName");
+                    PlayerName.Focus();
                 }
+            }
+            else
+            {
+                StartButton.IsDefault = true;
+                AddPlayer.IsDefault = false;
+            }
+        }
+
+        private void Remove_Click(object sender, RoutedEventArgs e)
+        {
+            PlayerName.Focus();
+            if (PlayerList.SelectedIndex != -1)
+            {
+                _localPawnList.Add(_players[PlayerList.SelectedIndex].PlayerPawn.PawnImage);
+                _players.RemoveAt(PlayerList.SelectedIndex);
+            }
+            if (_players.Count < 4)
+            {
+                AddPlayer.IsEnabled = true;
+            }
+            if (_players.Count < 1)
+            {
+                StartButton.IsEnabled = false;
             }
         }
     }

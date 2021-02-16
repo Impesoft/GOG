@@ -10,14 +10,19 @@
         Width="900"
         ResizeMode="NoResize"
         Background="White">
-    <!--<Window.Resources>
-        <UserControl.RenderTransform>
-            <TranslateTransform x:Name="panelTrans"
-                                Y="0"></TranslateTransform>
-        </UserControl.RenderTransform>
-    </Window.Resources>-->
+
     <DockPanel VerticalAlignment="Stretch"
                HorizontalAlignment="Stretch">
+        <!--<DockPanel.Resources>
+            -->
+        <!--<local:Game x:Key="infotext" />-->
+        <!--
+        </DockPanel.Resources>
+        <DockPanel.DataContext>
+            -->
+        <!--<Binding Source="{StaticResource infotext}"></Binding>-->
+        <!--
+        </DockPanel.DataContext>-->
         <StackPanel DockPanel.Dock="Top"
                     Margin="0,0"
                     Orientation="Horizontal"
@@ -39,11 +44,14 @@
                 <Button Content="Players3" />
                 <Button Content="Players4" />-->
             </StackPanel>
-            <StackPanel Orientation="Horizontal">
+            <StackPanel x:Name="MyStackPanel"
+                        Orientation="Horizontal">
                 <TextBlock Foreground="White"
                            VerticalAlignment="Top"
+                           Width="400"
+                           Height="150"
                            x:Name="Throw"
-                           Text="Press Hit Me to start" />
+                           Text="{Binding InfoText, Mode=OneWay}" />
             </StackPanel>
         </StackPanel>
 
@@ -56,22 +64,6 @@
                 <ImageBrush ImageSource="/Images/Ganzenbord.png"
                             Stretch="Fill" />
             </Canvas.Background>
-            <Image Source="/Images/Pawn1.png"
-                   Name="Player1"
-                   Height="43"
-                   Width="50" />
-            <Image Source="/Images/Pawn2.png"
-                   Name="Player2"
-                   Height="43"
-                   Width="50" />
-            <Image Source="/Images/Pawn3.png"
-                   Name="Player3"
-                   Height="43"
-                   Width="50" />
-            <Image Source="/Images/Pawn4.png"
-                   Name="Player4"
-                   Height="43"
-                   Width="50" />
         </Canvas>
     </DockPanel>
 </Window>

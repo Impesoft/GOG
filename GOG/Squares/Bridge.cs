@@ -17,7 +17,7 @@ namespace GameOfGoose.Squares
 
         public override string ToString()
         {
-            return "\nOver the bridge of troubled water";
+            return "\nThe bridge over troubled water";
         }
     }
 }

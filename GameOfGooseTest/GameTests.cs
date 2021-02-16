@@ -1,42 +1,46 @@
-﻿using GameOfGoose;
-using NUnit.Framework;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Collections.Generic;
 using System.Threading;
+using GameOfGoose;
+using GameOfGoose.Interface;
+using NUnit.Framework;
 
 namespace GameOfGooseTest
 {
     [Apartment(ApartmentState.STA)]
-
-    internal class GameBoardTests
+    internal class GameTests
     {
+        private Game _game;
         private Player _player;
-        private GameBoard _gameBoard;
+        private List<Player> Players = Settings.Players.ToList();
+
+        private List<ISquare> SquarePathList { get; set; } = new List<ISquare>();
+        private List<int> _geese = new List<int> { 5, 9, 12, 14, 18, 23, 27, 32, 36, 41, 45, 50, 54, 59 };
 
         [SetUp]
         public void Setup()
         {
+            _game = new Game();
             _player = new Player("Nick", 0);
-            _gameBoard = new GameBoard();
-
-            _players = Settings.Players.ToList();
-
+            Players.Add(_player);
+            _player = new Player("Ward", 0);
+            Players.Add(_player);
         }
 
         [Test]
-        public void CanInstantiateGameBoardClass()
+        public void CanInstantiateGameClass()
         {
-            Assert.IsNotNull(_gameBoard);
+            Assert.IsNotNull(_game);
         }
 
         [Test]
         public void Check_IfSquaresAreAddedToSquarePathList()
         {
             // Arrange
-            _gameBoard.InitializeSquares();
+            SquarePathList = _game.InitializeSquares();
             int expectedResult = 64;
             // Act
-            int numberOfSquares = _gameBoard.SquarePathList.Count;
+            int numberOfSquares = SquarePathList.Count;
             //Assert
             Assert.AreEqual(expectedResult, numberOfSquares);
         }
@@ -47,7 +51,7 @@ namespace GameOfGooseTest
             // Arrange
             _player.Position = 9;
             // Act
-            bool result = _gameBoard.Geese.Contains(_player.Position);
+            bool result = _geese.Contains(_player.Position);
             // Assert
             Assert.AreEqual(true, result);
         }
@@ -56,9 +60,8 @@ namespace GameOfGooseTest
         public void Check_IsFirstThrow_ReturnTrue()
         {
             // Arrange
-            var turn = Settings.Turn;
-            var playerCount = _players.Count;
-
+            var turn = 3;
+            var playerCount = 4;
 
             // Act
             int round = turn / playerCount;
@@ -71,9 +74,9 @@ namespace GameOfGooseTest
         public void Check_WhenWinner_ReturnTrue()
         {
             // Arrange
-            Settings.Players[0].Position = 63;
+            Players[1].Position = 63;
             // Act
-            var winner = Settings.Players.SingleOrDefault(player => player.Position == 63);
+            var winner = Players.SingleOrDefault(player => player.Position == 63);
             // Assert
             Assert.IsNotNull(winner);
         }

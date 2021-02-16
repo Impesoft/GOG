@@ -5,7 +5,7 @@ using System.Windows;
 
 namespace GameOfGoose.Squares
 {
-    internal class Well : Square
+    public class Well : Square
     {
         public Player WellPlayer { get; set; }
 

@@ -8,8 +8,7 @@
         mc:Ignorable="d"
         Title="Enter Players"
         Height="300"
-        Width="176"
-        WindowStyle="SingleBorderWindow">
+        Width="176">
     <Grid HorizontalAlignment="Stretch">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -31,13 +30,22 @@
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Bottom">
 
-            <Label Content="Player Name"></Label>
+            <Label Content="Player Name" />
+
             <TextBox  x:Name="PlayerName"
                       ToolTip="Enter Name Of Player To Add" />
-            <Button x:Name="AddPlayer"
-                    Content="Add Player"
-                    Click="Add_Click" />
-            <!--Text="{Binding}"-->
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <Button x:Name="AddPlayer"
+                        Content="Add Player"
+                        Click="Add_Click"
+                        IsDefault="True"
+                        Margin="0 0 10 0" />
+                <Button x:Name="RemovePlayer"
+                        Content="Remove Player"
+                        Click="Remove_Click"
+                        Margin="10 0 0 0" />
+            </StackPanel>
         </StackPanel>
 
         <StackPanel Grid.ColumnSpan="2"
@@ -50,7 +58,7 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="{Binding PlayerPawn.Pawn.Source}"
+                            <Image Source="{Binding PlayerPawn.PawnImage.Source}"
                                    Height="15" />
                             <Label Content="{Binding Name}"></Label>
                         </StackPanel>
