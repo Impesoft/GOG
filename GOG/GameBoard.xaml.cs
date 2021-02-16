@@ -49,7 +49,6 @@ namespace GameOfGoose
             if (!Game.GameIsRunning)
             {
                 CreatePawnListFromCanvasPawns();
-
                 Game.ReInitializeGame();
             }
             else
@@ -63,7 +62,6 @@ namespace GameOfGoose
         {
             for (int i = 0; i < 4; i++)
             {
-                //BitmapImage bmi = new BitmapImage(new Uri("pack://application:,,,/Images/Ted.jpg"));
                 Image pawn = new Image();
                 BitmapImage bmi = new BitmapImage(new Uri($"pack://application:,,,/Images/Pawn{i + 1}.png"));
 

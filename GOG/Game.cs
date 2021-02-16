@@ -6,8 +6,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.Imaging;
-using GameOfGoose.Annotations;
 using GameOfGoose.Interface;
 using GameOfGoose.Squares;
 
@@ -66,13 +64,13 @@ namespace GameOfGoose
         {
             int activePlayerId = Settings.Turn % Players.Count;
             _activePlayer = Players[activePlayerId];
-            _activePawn = _activePlayer.PlayerPawn.Pawn;
+            _activePawn = _activePlayer.PlayerPawn.PawnImage;
         }
 
         public void ReInitializeGame()
         {
+            SquarePathList = InitializeSquares();
             InitializeVariables();
-            GameIsRunning = true;
             foreach (var player in Players)
             {
                 player.PlayerPawn.Move(0);
@@ -82,11 +80,13 @@ namespace GameOfGoose
         public void InitializeVariables()
         {
             GameIsRunning = false;
-            SquarePathList = InitializeSquares();
             ShowInputWindow();
-            _dice = new Dice(); //Create Dice
-
-            Players = CreatePlayersListOfPlayers();
+            if (Players.Count > 1)
+            {
+                _dice = new Dice(); //Create Dice
+                Players = CreatePlayersListOfPlayers();
+                GameIsRunning = true;
+            }
         }
 
         public static void ShowInputWindow()
@@ -99,22 +99,17 @@ namespace GameOfGoose
         {
             foreach (Player player in Players)
             {
-                player.PlayerPawn.Pawn = Settings.PawnList[Players.IndexOf(player)];
-                player.PlayerPawn.Pawn.ToolTip = player.Name;
+                player.PlayerPawn.PawnImage = Settings.PawnList[Players.IndexOf(player)];
+                player.PlayerPawn.PawnImage.ToolTip = player.Name;
 
                 player.PlayerPawn.PlayerLocation.X =
                     Locations.List[0].X + player.PlayerPawn.OffsetX;
                 player.PlayerPawn.PlayerLocation.Y =
-                    Locations.List[0].Y + player.PlayerPawn.OffsetY - 43;
+                    Locations.List[0].Y + player.PlayerPawn.OffsetY;
             }
 
             return Players;
         }
-
-        //foreach (Image pawn in _gameBoard.MyCanvas.Children)
-        //{
-        //    Settings.PawnList.Add(pawn);
-        //}
 
         public List<ISquare> InitializeSquares()
         {
@@ -175,7 +170,7 @@ namespace GameOfGoose
 
         public void PlayerTurn()
         {
-            _activePawn = _activePlayer.PlayerPawn.Pawn;
+            _activePawn = _activePlayer.PlayerPawn.PawnImage;
             if (!CanPlay()) return;
             var diceRoll = RollDice();
             if (IsFirstThrow())
@@ -233,6 +228,7 @@ namespace GameOfGoose
             if (_activePlayer.Position <= 63) return;
             _activePlayer.Position = 63 - (_activePlayer.Position % 63);
             _direction = -1;
+            InfoText += "\nturning back";
             _activePlayer.PlayerPawn.Move(_activePlayer.Position);
         }
 
@@ -260,10 +256,11 @@ namespace GameOfGoose
             //reflection
             if (IsPlayerOnGoose(_activePlayer))
             {
+                InfoText += "\na Goose just took you further";
                 Move(diceRoll);
             }
-            SquarePathList[_activePlayer.Position].Move(_activePlayer); //polymorphism activate 'current square positions'.move
             InfoText += SquarePathList[_activePlayer.Position].ToString();
+            SquarePathList[_activePlayer.Position].Move(_activePlayer); //polymorphism activate 'current square positions'.move
         }
 
         public bool IsPlayerOnGoose(Player player)
@@ -280,7 +277,6 @@ namespace GameOfGoose
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

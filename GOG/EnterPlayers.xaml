@@ -8,8 +8,7 @@
         mc:Ignorable="d"
         Title="Enter Players"
         Height="300"
-        Width="176"
-        WindowStyle="SingleBorderWindow">
+        Width="176">
     <Grid HorizontalAlignment="Stretch">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -59,7 +58,7 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="{Binding PlayerPawn.Pawn.Source}"
+                            <Image Source="{Binding PlayerPawn.PawnImage.Source}"
                                    Height="15" />
                             <Label Content="{Binding Name}"></Label>
                         </StackPanel>

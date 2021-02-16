@@ -7,7 +7,7 @@ namespace GameOfGoose.Squares
 {
     internal class Goose : Square
     {
-        public override string Name { get; set; } = "a Goose just took you further";
+        public override string Name { get; set; }
 
         public override void Move(Player player)
         {
@@ -18,7 +18,7 @@ namespace GameOfGoose.Squares
 
         public override string ToString()
         {
-            return "\na Goose just took you further";
+            return "";
         }
     }
 }

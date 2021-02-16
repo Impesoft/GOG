@@ -30,6 +30,7 @@ namespace GameOfGoose
         {
             InitializeComponent();
             PlayerList.ItemsSource = _players;
+            PlayerName.Focus();
             if (PlayerList.Items.Count > 1)
             {
                 StartButton.IsEnabled = true;
@@ -60,7 +61,7 @@ namespace GameOfGoose
             {
                 foreach (Player player in Settings.Players)
                 {
-                    Settings.PawnList.Add(player.PlayerPawn.Pawn);
+                    Settings.PawnList.Add(player.PlayerPawn.PawnImage);
                 }
                 this.Close();
             }
@@ -82,12 +83,12 @@ namespace GameOfGoose
                     {
                         PlayerPawn = new PlayerPawn(_localPawnList[0])
                         {
-                            OffsetX = (int)(5 * _players.ToList().Count - 5),
-                            OffsetY = (int)(5 * _players.ToList().Count - 5),
+                            OffsetX = (int)(2 * _players.ToList().Count),
+                            OffsetY = (int)(2 * _players.ToList().Count - 15),
 
                             PlayerLocation = new Location()
                             {
-                                X = Locations.List[0].X + 10 * _players.ToList().Count,
+                                X = Locations.List[0].X + 3 * _players.ToList().Count,
                                 Y = Locations.List[0].Y
                             }
                         }
@@ -121,7 +122,7 @@ namespace GameOfGoose
             PlayerName.Focus();
             if (PlayerList.SelectedIndex != -1)
             {
-                _localPawnList.Add(_players[PlayerList.SelectedIndex].PlayerPawn.Pawn);
+                _localPawnList.Add(_players[PlayerList.SelectedIndex].PlayerPawn.PawnImage);
                 _players.RemoveAt(PlayerList.SelectedIndex);
             }
             if (_players.Count < 4)
