@@ -15,5 +15,10 @@ namespace GameOfGoose.Squares
             MessageBox.Show("You can't Stop here!");
             // player.Position = 0;
         }
+
+        public override string ToString()
+        {
+            return "\na Goose just took you further";
+        }
     }
 }

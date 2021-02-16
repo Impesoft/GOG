@@ -15,7 +15,6 @@ namespace GameOfGoose
 {
     public class Game : INotifyPropertyChanged
     {
-        private GameBoard _gameBoard;
         public ObservableCollection<Player> Players = Settings.Players;
 
         private string _infoText;
@@ -31,35 +30,17 @@ namespace GameOfGoose
             }
         }
 
-        public List<ISquare> SquarePathList { get; set; } = new List<ISquare>();
-        public List<int> Geese = new List<int> { 5, 9, 12, 14, 18, 23, 27, 32, 36, 41, 45, 50, 54, 59 };
-        public Dice _dice;
-        public int _direction = 1;
-        public Well _well;
-        public Image ActivePawn;
+        private List<ISquare> SquarePathList { get; set; } = new List<ISquare>();
+        private List<int> _geese = new List<int> { 5, 9, 12, 14, 18, 23, 27, 32, 36, 41, 45, 50, 54, 59 };
+        private Dice _dice;
+        private int _direction = 1;
+        private Well _well;
+        private Image _activePawn;
         public bool GameIsRunning;
-        public Player ActivePlayer;
-
-        public Game(GameBoard gameBoard)
-        {
-            _gameBoard = gameBoard;
-            //  InfoText = _gameBoard.Throw.Text;
-        }
+        private Player _activePlayer;
 
         public Game()
         {
-        }
-
-        public void StartOrContinueGame()
-        {
-            if (!GameIsRunning)
-            {
-                ReInitializeGame();
-            }
-            else
-            {
-                ContinueGame();
-            }
         }
 
         public void ContinueGame()
@@ -69,7 +50,7 @@ namespace GameOfGoose
             PlayerTurn();
             Settings.Turn++;
 
-            ActivePlayer.PlayerPawn.Move(ActivePlayer.Position);
+            _activePlayer.PlayerPawn.Move(_activePlayer.Position);
             if (!WeHaveAWinner()) return;
 
             DisplayWinnerAndStopGame();
@@ -84,8 +65,8 @@ namespace GameOfGoose
         public void DefineActivePlayer()
         {
             int activePlayerId = Settings.Turn % Players.Count;
-            ActivePlayer = Players[activePlayerId];
-            ActivePawn = ActivePlayer.PlayerPawn.Pawn;
+            _activePlayer = Players[activePlayerId];
+            _activePawn = _activePlayer.PlayerPawn.Pawn;
         }
 
         public void ReInitializeGame()
@@ -101,21 +82,20 @@ namespace GameOfGoose
         public void InitializeVariables()
         {
             GameIsRunning = false;
-            CreatePawnListFromCanvasPawns();
-            InitializeSquares();
+            SquarePathList = InitializeSquares();
             ShowInputWindow();
             _dice = new Dice(); //Create Dice
 
-            CreatePlayersListOfPlayers();
+            Players = CreatePlayersListOfPlayers();
         }
 
         public static void ShowInputWindow()
         {
-            EnterPlayers _enterPlayers = new EnterPlayers();
-            _enterPlayers.ShowDialog();
+            EnterPlayers enterPlayers = new EnterPlayers();
+            enterPlayers.ShowDialog();
         }
 
-        public void CreatePlayersListOfPlayers()
+        public ObservableCollection<Player> CreatePlayersListOfPlayers()
         {
             foreach (Player player in Players)
             {
@@ -123,39 +103,24 @@ namespace GameOfGoose
                 player.PlayerPawn.Pawn.ToolTip = player.Name;
 
                 player.PlayerPawn.PlayerLocation.X =
-                    Locations.List[0].X + player.PlayerPawn.OffsetX - 25;
+                    Locations.List[0].X + player.PlayerPawn.OffsetX;
                 player.PlayerPawn.PlayerLocation.Y =
                     Locations.List[0].Y + player.PlayerPawn.OffsetY - 43;
             }
+
+            return Players;
         }
 
-        public void CreatePawnListFromCanvasPawns()
-        {
-            for (int i = 0; i < 4; i++)
-            {
-                //BitmapImage bmi = new BitmapImage(new Uri("pack://application:,,,/Images/Ted.jpg"));
-                Image pawn = new Image();
-                BitmapImage bmi = new BitmapImage(new Uri($"pack://application:,,,/Images/Pawn{i + 1}.png"));
+        //foreach (Image pawn in _gameBoard.MyCanvas.Children)
+        //{
+        //    Settings.PawnList.Add(pawn);
+        //}
 
-                pawn.Source = bmi;
-                pawn.Width = 50;
-                pawn.Height = 43;
-                Settings.PawnList.Add(pawn);
-                _gameBoard.MyCanvas.Children.Add(pawn);
-                Canvas.SetLeft(pawn, i * 10 - 20);
-            }
-
-            //foreach (Image pawn in _gameBoard.MyCanvas.Children)
-            //{
-            //    Settings.PawnList.Add(pawn);
-            //}
-        }
-
-        public void InitializeSquares()
+        public List<ISquare> InitializeSquares()
         {
             for (int i = 0; i <= 63; i++)
             {
-                if (Geese.Contains(i))
+                if (_geese.Contains(i))
                 {
                     SquarePathList.Add(new Goose());
                 }
@@ -204,11 +169,13 @@ namespace GameOfGoose
                     }
                 }
             }
+
+            return SquarePathList;
         }
 
         public void PlayerTurn()
         {
-            ActivePawn = ActivePlayer.PlayerPawn.Pawn;
+            _activePawn = _activePlayer.PlayerPawn.Pawn;
             if (!CanPlay()) return;
             var diceRoll = RollDice();
             if (IsFirstThrow())
@@ -217,41 +184,41 @@ namespace GameOfGoose
             }
             _direction = 1; // set start direction forward
             Move(diceRoll);
-            InfoText += $"\n{ActivePlayer.Name} is on field {ActivePlayer.Position}";
+            InfoText += $"\n{_activePlayer.Name} is on field {_activePlayer.Position}";
         }
 
         public int[] RollDice()
         {
             int[] diceRoll = _dice.Roll();
-            InfoText = $"{ActivePlayer.Name} threw {diceRoll[0]},{diceRoll[1]}\n";
+            InfoText = $"{_activePlayer.Name} threw {diceRoll[0]},{diceRoll[1]}\n";
             return diceRoll;
         }
 
         public bool CanPlay()
         {
-            if (ActivePlayer.ToSkipTurns > 0)
+            if (_activePlayer.ToSkipTurns > 0)
             {
-                InfoText = $"{ActivePlayer.Name} Can't play right now still had to skip {ActivePlayer.ToSkipTurns}";
+                InfoText = $"{_activePlayer.Name} Can't play right now still had to skip {_activePlayer.ToSkipTurns}";
 
-                ActivePlayer.ToSkipTurns--;
+                _activePlayer.ToSkipTurns--;
 
-                if (ActivePlayer.ToSkipTurns > 0)
+                if (_activePlayer.ToSkipTurns > 0)
                 {
-                    InfoText += $"/{ActivePlayer.ToSkipTurns} remaining";
+                    InfoText += $"/{_activePlayer.ToSkipTurns} remaining";
                 }
                 return false;
             }
 
-            if (_well.WellPlayer == ActivePlayer)
+            if (_well.WellPlayer == _activePlayer)
             {
-                InfoText += $"{ActivePlayer.Name}, You're in the Well!\n{_well.WellPlayer.Name} needs rescuing!";
+                InfoText += $"{_activePlayer.Name}, You're in the Well!\n{_well.WellPlayer.Name} needs rescuing!";
             }
             else
             {
                 if (_well.WellPlayer != null) InfoText += $"\nin Well {_well.WellPlayer.Name}";
             }
 
-            return _well.WellPlayer != ActivePlayer;
+            return _well.WellPlayer != _activePlayer;
         }
 
         public bool IsFirstThrow()
@@ -263,23 +230,23 @@ namespace GameOfGoose
 
         public void CheckIfReversed()
         {
-            if (ActivePlayer.Position <= 63) return;
-            ActivePlayer.Position = 63 - (ActivePlayer.Position % 63);
+            if (_activePlayer.Position <= 63) return;
+            _activePlayer.Position = 63 - (_activePlayer.Position % 63);
             _direction = -1;
-            ActivePlayer.PlayerPawn.Move(ActivePlayer.Position);
+            _activePlayer.PlayerPawn.Move(_activePlayer.Position);
         }
 
         public bool FirsThrowIs9Exception_Move(int[] diceRoll)
         {
             if (diceRoll.Contains(5) && diceRoll.Contains(4))
             {
-                ActivePlayer.Position = 26;
+                _activePlayer.Position = 26;
                 InfoText += "\nSpecial Throw! moving to 26";
                 return true;
             }
 
             if (!diceRoll.Contains(6) || !diceRoll.Contains(3)) return false;
-            ActivePlayer.Position = 53;
+            _activePlayer.Position = 53;
             InfoText += "\nAmazing Throw! moving to 53";
 
             return true;
@@ -287,21 +254,21 @@ namespace GameOfGoose
 
         public void Move(int[] diceRoll)
         {
-            ActivePlayer.Move(_direction * diceRoll.Sum());
+            _activePlayer.Move(_direction * diceRoll.Sum());
             CheckIfReversed();
 
             //reflection
-            if (IsPlayerOnGoose(ActivePlayer))
+            if (IsPlayerOnGoose(_activePlayer))
             {
                 Move(diceRoll);
             }
-            SquarePathList[ActivePlayer.Position].Move(ActivePlayer); //polymorphism activate 'current square positions'.move
-            InfoText += SquarePathList[ActivePlayer.Position].ToString();
+            SquarePathList[_activePlayer.Position].Move(_activePlayer); //polymorphism activate 'current square positions'.move
+            InfoText += SquarePathList[_activePlayer.Position].ToString();
         }
 
         public bool IsPlayerOnGoose(Player player)
         {
-            return Geese.Contains(player.Position);
+            return _geese.Contains(player.Position);
         }
 
         public bool WeHaveAWinner()

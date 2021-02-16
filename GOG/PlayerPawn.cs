@@ -32,7 +32,7 @@ namespace GameOfGoose
             // ends up at the clicked point.
             var targetPoint = new Point
             {
-                X = Locations.List[endPosition].X - 25,
+                X = Locations.List[endPosition].X,
                 Y = Locations.List[endPosition].Y + OffsetY - 43
             };
             // Animate to the target point.

@@ -35,11 +35,18 @@
 
             <TextBox  x:Name="PlayerName"
                       ToolTip="Enter Name Of Player To Add" />
-            <Button x:Name="AddPlayer"
-                    Content="Add Player"
-                    Click="Add_Click"
-                    IsDefault="True" />
-            <!--Text="{Binding}"-->
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <Button x:Name="AddPlayer"
+                        Content="Add Player"
+                        Click="Add_Click"
+                        IsDefault="True"
+                        Margin="0 0 10 0" />
+                <Button x:Name="RemovePlayer"
+                        Content="Remove Player"
+                        Click="Remove_Click"
+                        Margin="10 0 0 0" />
+            </StackPanel>
         </StackPanel>
 
         <StackPanel Grid.ColumnSpan="2"
