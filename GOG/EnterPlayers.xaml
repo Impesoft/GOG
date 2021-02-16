@@ -31,12 +31,14 @@
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Bottom">
 
-            <Label Content="Player Name"></Label>
+            <Label Content="Player Name" />
+
             <TextBox  x:Name="PlayerName"
                       ToolTip="Enter Name Of Player To Add" />
             <Button x:Name="AddPlayer"
                     Content="Add Player"
-                    Click="Add_Click" />
+                    Click="Add_Click"
+                    IsDefault="True" />
             <!--Text="{Binding}"-->
         </StackPanel>
 

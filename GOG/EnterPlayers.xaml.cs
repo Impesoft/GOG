@@ -75,6 +75,7 @@ namespace GameOfGoose
                         }
                     });
                     PlayerName.Text = "";
+                    PlayerName.Focus();
                     if (Players.Count == 4)
                     {
                         AddPlayer.IsEnabled = false;
@@ -87,6 +88,7 @@ namespace GameOfGoose
                 else
                 {
                     MessageBox.Show("Duplicate PlayerName");
+                    PlayerName.Focus();
                 }
             }
         }

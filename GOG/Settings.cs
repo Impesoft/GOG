@@ -6,6 +6,7 @@ namespace GameOfGoose
 {
     public static class Settings
     {
+        public static string InfoText = "";
         public static int Turn { get; set; } = 0;
         public static int NumberOfPlayers { get; set; }
         public static ObservableCollection<Player> Players = new ObservableCollection<Player>();

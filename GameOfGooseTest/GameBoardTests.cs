@@ -7,9 +7,9 @@ using System.Threading;
 namespace GameOfGooseTest
 {
     [Apartment(ApartmentState.STA)]
-
     internal class GameBoardTests
     {
+        private List<Player> _players;
         private Player _player;
         private GameBoard _gameBoard;
 
@@ -20,7 +20,6 @@ namespace GameOfGooseTest
             _gameBoard = new GameBoard();
 
             _players = Settings.Players.ToList();
-
         }
 
         [Test]
@@ -33,10 +32,10 @@ namespace GameOfGooseTest
         public void Check_IfSquaresAreAddedToSquarePathList()
         {
             // Arrange
-            _gameBoard.InitializeSquares();
+            _gameBoard.Game.InitializeSquares();
             int expectedResult = 64;
             // Act
-            int numberOfSquares = _gameBoard.SquarePathList.Count;
+            int numberOfSquares = _gameBoard.Game.SquarePathList.Count;
             //Assert
             Assert.AreEqual(expectedResult, numberOfSquares);
         }
@@ -47,7 +46,7 @@ namespace GameOfGooseTest
             // Arrange
             _player.Position = 9;
             // Act
-            bool result = _gameBoard.Geese.Contains(_player.Position);
+            bool result = _gameBoard.Game.Geese.Contains(_player.Position);
             // Assert
             Assert.AreEqual(true, result);
         }
@@ -58,7 +57,6 @@ namespace GameOfGooseTest
             // Arrange
             var turn = Settings.Turn;
             var playerCount = _players.Count;
-
 
             // Act
             int round = turn / playerCount;

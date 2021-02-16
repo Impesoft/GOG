@@ -56,22 +56,6 @@
                 <ImageBrush ImageSource="/Images/Ganzenbord.png"
                             Stretch="Fill" />
             </Canvas.Background>
-            <Image Source="/Images/Pawn1.png"
-                   Name="Player1"
-                   Height="43"
-                   Width="50" />
-            <Image Source="/Images/Pawn2.png"
-                   Name="Player2"
-                   Height="43"
-                   Width="50" />
-            <Image Source="/Images/Pawn3.png"
-                   Name="Player3"
-                   Height="43"
-                   Width="50" />
-            <Image Source="/Images/Pawn4.png"
-                   Name="Player4"
-                   Height="43"
-                   Width="50" />
         </Canvas>
     </DockPanel>
 </Window>
