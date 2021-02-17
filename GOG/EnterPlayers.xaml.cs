@@ -23,14 +23,14 @@ namespace GameOfGoose
     /// </summary>
     public partial class EnterPlayers : Window
     {
-        private ObservableCollection<Player> _players = Settings.Players;
+        private ObservableCollection<IPlayer> _players = Settings.Players;
         private List<Image> _localPawnList = new List<Image>();
 
         public EnterPlayers()
         {
             InitializeComponent();
             PlayerList.ItemsSource = _players;
-            foreach (Player player in _players)
+            foreach (IPlayer player in _players)
             {
                 player.PlayerPawn.PlayerLocation = Locations.List[0];
                 player.Position = 0;
@@ -56,7 +56,7 @@ namespace GameOfGoose
             PlayerName.Focus();
             if (_players.Count > 1)
             {
-                foreach (Player player in Settings.Players)
+                foreach (IPlayer player in Settings.Players)
                 {
                     Settings.PawnList.Add(player.PlayerPawn.PawnImage);
                 }
@@ -138,7 +138,7 @@ namespace GameOfGoose
         {
             if (_players.Count > 1)
             {
-                foreach (Player player in Settings.Players)
+                foreach (IPlayer player in Settings.Players)
                 {
                     Settings.PawnList.Add(player.PlayerPawn.PawnImage);
                 }

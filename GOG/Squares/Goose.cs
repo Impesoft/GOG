@@ -7,9 +7,12 @@ namespace GameOfGoose.Squares
 {
     internal class Goose : Square
     {
-        public override string Name { get; set; }
+        public Goose()
+        {
+            Name = "Goose";
+        }
 
-        public override void Move(Player player)
+        public override void Move(IPlayer player)
         {
             //fatal error!
             MessageBox.Show("You can't Stop here!");

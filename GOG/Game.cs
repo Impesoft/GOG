@@ -13,7 +13,7 @@ namespace GameOfGoose
 {
     public class Game : INotifyPropertyChanged
     {
-        public ObservableCollection<Player> Players = Settings.Players;
+        public ObservableCollection<IPlayer> Players = Settings.Players;
 
         private string _infoText;
 
@@ -35,7 +35,7 @@ namespace GameOfGoose
         private Well _well;
         private Image _activePawn;
         public bool GameIsRunning;
-        private Player _activePlayer;
+        private IPlayer _activePlayer;
         public Image Dice1 = new Image();
         public Image Dice2 = new Image();
 
@@ -59,7 +59,7 @@ namespace GameOfGoose
         public void DisplayWinnerAndStopGame()
         {
             MessageBox.Show($"Congratulations {Players.SingleOrDefault(player => player.Position == 63)?.Name}\nYou Won!");
-            foreach (Player player in Players)
+            foreach (IPlayer player in Players)
             {
                 player.PlayerPawn.Move(0);
                 player.Position = 0;
@@ -80,7 +80,7 @@ namespace GameOfGoose
             SquarePathList = InitializeSquares();
             if (Players.Count > 0)
             {
-                foreach (Player player in Players)
+                foreach (IPlayer player in Players)
                 {
                     player.PlayerPawn.Move(0);
                 }
@@ -110,9 +110,9 @@ namespace GameOfGoose
             enterPlayers.ShowDialog();
         }
 
-        public ObservableCollection<Player> CreatePlayersListOfPlayers()
+        public ObservableCollection<IPlayer> CreatePlayersListOfPlayers()
         {
-            foreach (Player player in Players)
+            foreach (IPlayer player in Players)
             {
                 player.PlayerPawn.PawnImage = Settings.PawnList[Players.IndexOf(player)];
                 player.PlayerPawn.PawnImage.ToolTip = player.Name;
@@ -284,7 +284,7 @@ namespace GameOfGoose
             SquarePathList[_activePlayer.Position].Move(_activePlayer); //polymorphism activate 'current square positions'.move
         }
 
-        public bool IsPlayerOnGoose(Player player)
+        public bool IsPlayerOnGoose(IPlayer player)
         {
             return _geese.Contains(player.Position);
         }

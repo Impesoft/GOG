@@ -8,9 +8,14 @@ namespace GameOfGoose.Squares
 {
     internal class End : Square
     {
-        public override string Name { get; set; } = "End";
+        public string Name { get; set; }
 
-        public override void Move(Player player)
+        public End()
+        {
+            Name = "End";
+        }
+
+        public override void Move(IPlayer player)
         {
             //we have a winner
         }

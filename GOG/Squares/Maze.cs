@@ -7,9 +7,14 @@ namespace GameOfGoose.Squares
 {
     internal class Maze : Square
     {
-        public override string Name { get; set; } = "Maze";
+        public string Name { get; set; }
 
-        public override void Move(Player player)
+        public Maze()
+        {
+            Name = "Maze";
+        }
+
+        public override void Move(IPlayer player)
         {
             //move to start
             player.Position = 39;

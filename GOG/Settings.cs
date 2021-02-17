@@ -11,7 +11,7 @@ namespace GameOfGoose
         public static int NumberOfPlayers { get; set; }
         public static List<Image> DiceFaces = new List<Image>();
 
-        public static ObservableCollection<Player> Players = new ObservableCollection<Player>();
+        public static ObservableCollection<IPlayer> Players = new ObservableCollection<IPlayer>();
         public static List<Image> PawnList = new List<Image>();
     }
 }

@@ -9,7 +9,8 @@
         Title="Enter Players"
         Height="300"
         Width="176"
-        Closed="onClose">
+        Closed="onClose"
+        ResizeMode="NoResize">
     <Grid HorizontalAlignment="Stretch">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
