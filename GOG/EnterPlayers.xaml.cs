@@ -30,11 +30,14 @@ namespace GameOfGoose
         {
             InitializeComponent();
             PlayerList.ItemsSource = _players;
-            PlayerName.Focus();
-            if (PlayerList.Items.Count > 1)
+            foreach (Player player in _players)
             {
-                StartButton.IsEnabled = true;
+                player.PlayerPawn.PlayerLocation = Locations.List[0];
+                player.Position = 0;
+                player.PlayerPawn.Move(0);
             }
+            _players.Clear();
+            PlayerName.Focus();
             CenterWindowOnScreen();
         }
 
@@ -46,12 +49,6 @@ namespace GameOfGoose
             double windowHeight = this.Height;
             this.Left = (screenWidth / 2) - (windowWidth / 2);
             this.Top = (screenHeight / 2) - (windowHeight / 2);
-        }
-
-        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
-        {
-            Regex regex = new Regex("[^2-4]+");
-            e.Handled = regex.IsMatch(e.Text);
         }
 
         private void button_Click(object sender, RoutedEventArgs e)
@@ -84,7 +81,7 @@ namespace GameOfGoose
                         PlayerPawn = new PlayerPawn(_localPawnList[0])
                         {
                             OffsetX = (int)(2 * _players.ToList().Count),
-                            OffsetY = (int)(2 * _players.ToList().Count - 15),
+                            OffsetY = (int)(2 * _players.ToList().Count - 615),
 
                             PlayerLocation = new Location()
                             {
@@ -93,8 +90,10 @@ namespace GameOfGoose
                             }
                         }
                     });
+
                     _localPawnList.RemoveAt(0);
                     PlayerName.Text = "";
+
                     if (_players.Count == 4)
                     {
                         AddPlayer.IsEnabled = false;

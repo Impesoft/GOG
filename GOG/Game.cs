@@ -59,6 +59,12 @@ namespace GameOfGoose
         public void DisplayWinnerAndStopGame()
         {
             MessageBox.Show($"Congratulations {Players.SingleOrDefault(player => player.Position == 63)?.Name}\nYou Won!");
+            foreach (Player player in Players)
+            {
+                player.PlayerPawn.Move(0);
+                player.Position = 0;
+                player.PlayerPawn.PlayerLocation = Locations.List[0];
+            }
             GameIsRunning = false;
         }
 
@@ -72,6 +78,13 @@ namespace GameOfGoose
         public void ReInitializeGame()
         {
             SquarePathList = InitializeSquares();
+            if (Players.Count > 0)
+            {
+                foreach (Player player in Players)
+                {
+                    player.PlayerPawn.Move(0);
+                }
+            }
             InitializeVariables();
             foreach (var player in Players)
             {

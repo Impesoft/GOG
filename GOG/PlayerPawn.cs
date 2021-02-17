@@ -13,14 +13,14 @@ namespace GameOfGoose
         public Image PawnImage { get; set; } //= new Image();
         public int OffsetX { get; set; }
         public int OffsetY { get; set; }
-        public Location PlayerLocation { get; set; } = new Location { X = 0, Y = 0 };
+        public Location PlayerLocation { get; set; } = new Location { X = 100, Y = 600 };
         private readonly TranslateTransform _interactiveTranslateTransform;
 
         public PlayerPawn(Image pawnImage)
         {
             PawnImage = pawnImage;
             OffsetX = 0;
-            OffsetY = 0;
+            OffsetY = -600;
             _interactiveTranslateTransform = new TranslateTransform();
             PawnImage.RenderTransform =
                 _interactiveTranslateTransform;

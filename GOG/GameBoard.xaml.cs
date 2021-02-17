@@ -63,6 +63,7 @@ namespace GameOfGoose
 
         public void CreateCanvasPawns()
         {
+            if (MyCanvas.Children.Count > 0) return;
             for (int i = 0; i < 4; i++)
             {
                 Image pawn = new Image();
@@ -74,6 +75,7 @@ namespace GameOfGoose
                 Settings.PawnList.Add(pawn);
                 MyCanvas.Children.Add(pawn);
                 Canvas.SetLeft(pawn, i * 3 - 6);
+                Canvas.SetTop(pawn, 600);
             }
         }
 
