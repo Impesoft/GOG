@@ -28,7 +28,7 @@ namespace GameOfGoose
             }
         }
 
-        private List<ISquare> SquarePathList { get; set; } = new List<ISquare>();
+        private List<ISquare> SquarePathList { get; set; }
         private List<int> _geese = new List<int> { 5, 9, 12, 14, 18, 23, 27, 32, 36, 41, 45, 50, 54, 59 };
         private Dice _dice;
         private int _direction = 1;
@@ -128,15 +128,16 @@ namespace GameOfGoose
 
         public List<ISquare> InitializeSquares()
         {
+            List<ISquare> localList = new List<ISquare>();
             for (int i = 0; i <= 63; i++)
             {
                 if (_geese.Contains(i))
                 {
-                    SquarePathList.Add(new Goose());
+                    localList.Add(new Goose());
                 }
                 else if (((SpecialPositions)i == 0))
                 {
-                    SquarePathList.Add(new Square());
+                    localList.Add(new Square());
                 }
                 else
                 {
@@ -145,42 +146,42 @@ namespace GameOfGoose
                     {
                         case SpecialPositions.Bridge:
 
-                            SquarePathList.Add(new Bridge());
+                            localList.Add(new Bridge());
                             break;
 
                         case SpecialPositions.Inn:
-                            SquarePathList.Add(new Inn());
+                            localList.Add(new Inn());
                             break;
 
                         case SpecialPositions.Well:
-                            SquarePathList.Add(new Well());
+                            this._well = new Well();
+                            localList.Add(this._well);
                             break;
 
                         case SpecialPositions.Maze:
-                            SquarePathList.Add(new Maze());
-                            _well = (Well)SquarePathList.FirstOrDefault(square => square.Name == "Well");
+                            localList.Add(new Maze());
                             break;
 
                         case SpecialPositions.Prison:
-                            SquarePathList.Add(new Prison());
+                            localList.Add(new Prison());
                             break;
 
                         case SpecialPositions.Death:
-                            SquarePathList.Add(new Death());
+                            localList.Add(new Death());
                             break;
 
                         case SpecialPositions.End:
-                            SquarePathList.Add(new End());
+                            localList.Add(new End());
                             break;
 
                         default:
-                            SquarePathList.Add(new Square());
+                            localList.Add(new Square());
                             break;
                     }
                 }
             }
 
-            return SquarePathList;
+            return localList;
         }
 
         public void PlayerTurn()

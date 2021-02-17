@@ -14,6 +14,7 @@ namespace GameOfGoose.Squares
         public Well()
         {
             Name = "Well";
+            WellPlayer = new Player(Name = "WellPlayer", 31);
         }
 
         public override void Move(IPlayer player)
