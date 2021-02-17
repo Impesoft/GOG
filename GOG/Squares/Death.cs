@@ -7,9 +7,14 @@ namespace GameOfGoose.Squares
 {
     internal class Death : Square
     {
-        public override string Name { get; set; } = "Death";
+        public string Name { get; set; }
 
-        public override void Move(Player player)
+        public Death()
+        {
+            Name = "Death";
+        }
+
+        public override void Move(IPlayer player)
         {
             //move to start
             player.Position = 0;

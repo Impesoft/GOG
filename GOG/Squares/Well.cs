@@ -7,11 +7,17 @@ namespace GameOfGoose.Squares
 {
     public class Well : Square
     {
-        public Player WellPlayer { get; set; }
+        public IPlayer WellPlayer { get; set; }
 
-        public override string Name { get; set; } = "Well";
+        public string Name { get; set; }// to remove Name = 'name'
 
-        public override void Move(Player player)
+        public Well()
+        {
+            Name = "Well";
+            WellPlayer = new Player(Name = "WellPlayer", 31);
+        }
+
+        public override void Move(IPlayer player)
         {
             // wait to be saved
             WellPlayer = player;

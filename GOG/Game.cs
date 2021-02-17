@@ -13,7 +13,7 @@ namespace GameOfGoose
 {
     public class Game : INotifyPropertyChanged
     {
-        public ObservableCollection<Player> Players = Settings.Players;
+        public ObservableCollection<IPlayer> Players = Settings.Players;
 
         private string _infoText;
 
@@ -28,14 +28,16 @@ namespace GameOfGoose
             }
         }
 
-        private List<ISquare> SquarePathList { get; set; } = new List<ISquare>();
+        private List<ISquare> SquarePathList { get; set; }
         private List<int> _geese = new List<int> { 5, 9, 12, 14, 18, 23, 27, 32, 36, 41, 45, 50, 54, 59 };
         private Dice _dice;
         private int _direction = 1;
         private Well _well;
         private Image _activePawn;
         public bool GameIsRunning;
-        private Player _activePlayer;
+        private IPlayer _activePlayer;
+        public Image Dice1 = new Image();
+        public Image Dice2 = new Image();
 
         public Game()
         {
@@ -57,6 +59,12 @@ namespace GameOfGoose
         public void DisplayWinnerAndStopGame()
         {
             MessageBox.Show($"Congratulations {Players.SingleOrDefault(player => player.Position == 63)?.Name}\nYou Won!");
+            foreach (IPlayer player in Players)
+            {
+                player.PlayerPawn.Move(0);
+                player.Position = 0;
+                player.PlayerPawn.PlayerLocation = Locations.List[0];
+            }
             GameIsRunning = false;
         }
 
@@ -70,6 +78,13 @@ namespace GameOfGoose
         public void ReInitializeGame()
         {
             SquarePathList = InitializeSquares();
+            if (Players.Count > 0)
+            {
+                foreach (IPlayer player in Players)
+                {
+                    player.PlayerPawn.Move(0);
+                }
+            }
             InitializeVariables();
             foreach (var player in Players)
             {
@@ -95,9 +110,9 @@ namespace GameOfGoose
             enterPlayers.ShowDialog();
         }
 
-        public ObservableCollection<Player> CreatePlayersListOfPlayers()
+        public ObservableCollection<IPlayer> CreatePlayersListOfPlayers()
         {
-            foreach (Player player in Players)
+            foreach (IPlayer player in Players)
             {
                 player.PlayerPawn.PawnImage = Settings.PawnList[Players.IndexOf(player)];
                 player.PlayerPawn.PawnImage.ToolTip = player.Name;
@@ -113,15 +128,16 @@ namespace GameOfGoose
 
         public List<ISquare> InitializeSquares()
         {
+            List<ISquare> localList = new List<ISquare>();
             for (int i = 0; i <= 63; i++)
             {
                 if (_geese.Contains(i))
                 {
-                    SquarePathList.Add(new Goose());
+                    localList.Add(new Goose());
                 }
                 else if (((SpecialPositions)i == 0))
                 {
-                    SquarePathList.Add(new Square());
+                    localList.Add(new Square());
                 }
                 else
                 {
@@ -130,42 +146,42 @@ namespace GameOfGoose
                     {
                         case SpecialPositions.Bridge:
 
-                            SquarePathList.Add(new Bridge());
+                            localList.Add(new Bridge());
                             break;
 
                         case SpecialPositions.Inn:
-                            SquarePathList.Add(new Inn());
+                            localList.Add(new Inn());
                             break;
 
                         case SpecialPositions.Well:
-                            SquarePathList.Add(new Well());
+                            this._well = new Well();
+                            localList.Add(this._well);
                             break;
 
                         case SpecialPositions.Maze:
-                            SquarePathList.Add(new Maze());
-                            _well = (Well)SquarePathList.FirstOrDefault(square => square.Name == "Well");
+                            localList.Add(new Maze());
                             break;
 
                         case SpecialPositions.Prison:
-                            SquarePathList.Add(new Prison());
+                            localList.Add(new Prison());
                             break;
 
                         case SpecialPositions.Death:
-                            SquarePathList.Add(new Death());
+                            localList.Add(new Death());
                             break;
 
                         case SpecialPositions.End:
-                            SquarePathList.Add(new End());
+                            localList.Add(new End());
                             break;
 
                         default:
-                            SquarePathList.Add(new Square());
+                            localList.Add(new Square());
                             break;
                     }
                 }
             }
 
-            return SquarePathList;
+            return localList;
         }
 
         public void PlayerTurn()
@@ -185,7 +201,9 @@ namespace GameOfGoose
         public int[] RollDice()
         {
             int[] diceRoll = _dice.Roll();
-            InfoText = $"{_activePlayer.Name} threw {diceRoll[0]},{diceRoll[1]}";
+            Dice1.Source = Settings.DiceFaces[diceRoll[0] - 1].Source;
+            Dice2.Source = Settings.DiceFaces[diceRoll[1] - 1].Source;
+            InfoText = $"{_activePlayer.Name} threw {diceRoll[0] + diceRoll[1]}";
             return diceRoll;
         }
 
@@ -259,11 +277,15 @@ namespace GameOfGoose
                 InfoText += "\na Goose just took you further";
                 Move(diceRoll);
             }
-            InfoText += SquarePathList[_activePlayer.Position].ToString();
+
+            if (!InfoText.Contains(SquarePathList[_activePlayer.Position].ToString()))
+            {
+                InfoText += SquarePathList[_activePlayer.Position].ToString();
+            }
             SquarePathList[_activePlayer.Position].Move(_activePlayer); //polymorphism activate 'current square positions'.move
         }
 
-        public bool IsPlayerOnGoose(Player player)
+        public bool IsPlayerOnGoose(IPlayer player)
         {
             return _geese.Contains(player.Position);
         }

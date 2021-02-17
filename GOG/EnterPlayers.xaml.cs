@@ -23,18 +23,21 @@ namespace GameOfGoose
     /// </summary>
     public partial class EnterPlayers : Window
     {
-        private ObservableCollection<Player> _players = Settings.Players;
+        private ObservableCollection<IPlayer> _players = Settings.Players;
         private List<Image> _localPawnList = new List<Image>();
 
         public EnterPlayers()
         {
             InitializeComponent();
             PlayerList.ItemsSource = _players;
-            PlayerName.Focus();
-            if (PlayerList.Items.Count > 1)
+            foreach (IPlayer player in _players)
             {
-                StartButton.IsEnabled = true;
+                player.PlayerPawn.PlayerLocation = Locations.List[0];
+                player.Position = 0;
+                player.PlayerPawn.Move(0);
             }
+            _players.Clear();
+            PlayerName.Focus();
             CenterWindowOnScreen();
         }
 
@@ -48,18 +51,12 @@ namespace GameOfGoose
             this.Top = (screenHeight / 2) - (windowHeight / 2);
         }
 
-        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
-        {
-            Regex regex = new Regex("[^2-4]+");
-            e.Handled = regex.IsMatch(e.Text);
-        }
-
         private void button_Click(object sender, RoutedEventArgs e)
         {
             PlayerName.Focus();
             if (_players.Count > 1)
             {
-                foreach (Player player in Settings.Players)
+                foreach (IPlayer player in Settings.Players)
                 {
                     Settings.PawnList.Add(player.PlayerPawn.PawnImage);
                 }
@@ -84,7 +81,7 @@ namespace GameOfGoose
                         PlayerPawn = new PlayerPawn(_localPawnList[0])
                         {
                             OffsetX = (int)(2 * _players.ToList().Count),
-                            OffsetY = (int)(2 * _players.ToList().Count - 15),
+                            OffsetY = (int)(2 * _players.ToList().Count - 615),
 
                             PlayerLocation = new Location()
                             {
@@ -93,8 +90,10 @@ namespace GameOfGoose
                             }
                         }
                     });
+
                     _localPawnList.RemoveAt(0);
                     PlayerName.Text = "";
+
                     if (_players.Count == 4)
                     {
                         AddPlayer.IsEnabled = false;
@@ -139,7 +138,7 @@ namespace GameOfGoose
         {
             if (_players.Count > 1)
             {
-                foreach (Player player in Settings.Players)
+                foreach (IPlayer player in Settings.Players)
                 {
                     Settings.PawnList.Add(player.PlayerPawn.PawnImage);
                 }

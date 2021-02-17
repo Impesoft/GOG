@@ -7,9 +7,14 @@ namespace GameOfGoose.Squares
 {
     internal class Inn : Square
     {
-        public override string Name { get; set; } = "Inn";
+        public string Name { get; set; }
 
-        public override void Move(Player player)
+        public Inn()
+        {
+            Name = "Inn";
+        }
+
+        public override void Move(IPlayer player)
         {
             // Skip 1 Turn
             player.ToSkipTurns = 1;
