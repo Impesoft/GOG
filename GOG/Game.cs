@@ -36,6 +36,8 @@ namespace GameOfGoose
         private Image _activePawn;
         public bool GameIsRunning;
         private Player _activePlayer;
+        public Image Dice1 = new Image();
+        public Image Dice2 = new Image();
 
         public Game()
         {
@@ -185,6 +187,8 @@ namespace GameOfGoose
         public int[] RollDice()
         {
             int[] diceRoll = _dice.Roll();
+            Dice1.Source = Settings.DiceFaces[diceRoll[0] - 1].Source;
+            Dice2.Source = Settings.DiceFaces[diceRoll[1] - 1].Source;
             InfoText = $"{_activePlayer.Name} threw {diceRoll[0]},{diceRoll[1]}";
             return diceRoll;
         }

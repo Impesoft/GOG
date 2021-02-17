@@ -32,6 +32,8 @@ namespace GameOfGoose
             CenterWindowOnScreen();
             _game = new Game();
             MyStackPanel.DataContext = _game;
+            Dice1.DataContext = _game.Dice1;
+            Dice2.DataContext = _game.Dice2;
         }
 
         public void CenterWindowOnScreen()
@@ -48,7 +50,8 @@ namespace GameOfGoose
         {
             if (!Game.GameIsRunning)
             {
-                CreatePawnListFromCanvasPawns();
+                CreateCanvasPawns();
+                CreateCanvasDice();
                 Game.ReInitializeGame();
             }
             else
@@ -58,7 +61,7 @@ namespace GameOfGoose
             }
         }
 
-        public void CreatePawnListFromCanvasPawns()
+        public void CreateCanvasPawns()
         {
             for (int i = 0; i < 4; i++)
             {
@@ -71,6 +74,20 @@ namespace GameOfGoose
                 Settings.PawnList.Add(pawn);
                 MyCanvas.Children.Add(pawn);
                 Canvas.SetLeft(pawn, i * 3 - 6);
+            }
+        }
+
+        public void CreateCanvasDice()
+        {
+            for (int i = 1; i < 7; i++)
+            {
+                Image pawn = new Image();
+                BitmapImage bmi = new BitmapImage(new Uri($"pack://application:,,,/Images/{i}.png"));
+
+                pawn.Source = bmi;
+                pawn.Width = 50;
+                pawn.Height = 43;
+                Settings.DiceFaces.Add(pawn);
             }
         }
     }

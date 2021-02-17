@@ -13,17 +13,8 @@
 
     <DockPanel VerticalAlignment="Stretch"
                HorizontalAlignment="Stretch">
-        <!--<DockPanel.Resources>
-            -->
-        <!--<local:Game x:Key="infotext" />-->
-        <!--
-        </DockPanel.Resources>
-        <DockPanel.DataContext>
-            -->
-        <!--<Binding Source="{StaticResource infotext}"></Binding>-->
-        <!--
-        </DockPanel.DataContext>-->
-        <StackPanel DockPanel.Dock="Top"
+        <StackPanel Width="900"
+                    DockPanel.Dock="Top"
                     Margin="0,0"
                     Orientation="Horizontal"
                     Background="Black"
@@ -40,19 +31,33 @@
                         Margin="0 0 0 100"
                         HorizontalContentAlignment="Left"
                         Click="Button_Click" />
-                <!--<Button Content="Players2" />
-                <Button Content="Players3" />
-                <Button Content="Players4" />-->
             </StackPanel>
-            <StackPanel x:Name="MyStackPanel"
-                        Orientation="Horizontal">
-                <TextBlock Foreground="White"
-                           VerticalAlignment="Top"
-                           Width="400"
-                           Height="150"
-                           x:Name="Throw"
-                           Text="{Binding InfoText, Mode=OneWay}" />
-            </StackPanel>
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Left"
+                            x:Name="MyStackPanel"
+                            Orientation="Horizontal">
+
+                    <TextBlock Foreground="White"
+                               VerticalAlignment="Top"
+                               Width="400"
+                               Height="150"
+                               x:Name="Throw"
+                               Text="{Binding InfoText, Mode=OneWay}" />
+                </StackPanel>
+                <StackPanel Orientation="Vertical"
+                            HorizontalAlignment="Right">
+                    <Image  x:Name="Dice1"
+                            Width="50"
+                            Margin="0 15 0 10"
+                            Height="50"
+                            Source="{Binding Source, Mode=OneWay}"></Image>
+                    <Image  x:Name="Dice2"
+                            Width="50"
+                            Margin="0 10 0 15"
+                            Height="50"
+                            Source="{Binding Source, Mode=OneWay}"></Image>
+                </StackPanel>
+            </DockPanel>
         </StackPanel>
 
         <Canvas x:Name="MyCanvas"
