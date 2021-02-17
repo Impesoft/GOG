@@ -189,7 +189,7 @@ namespace GameOfGoose
             int[] diceRoll = _dice.Roll();
             Dice1.Source = Settings.DiceFaces[diceRoll[0] - 1].Source;
             Dice2.Source = Settings.DiceFaces[diceRoll[1] - 1].Source;
-            InfoText = $"{_activePlayer.Name} threw {diceRoll[0]},{diceRoll[1]}";
+            InfoText = $"{_activePlayer.Name} threw {diceRoll[0] + diceRoll[1]}";
             return diceRoll;
         }
 
@@ -263,7 +263,11 @@ namespace GameOfGoose
                 InfoText += "\na Goose just took you further";
                 Move(diceRoll);
             }
-            InfoText += SquarePathList[_activePlayer.Position].ToString();
+
+            if (!InfoText.Contains(SquarePathList[_activePlayer.Position].ToString()))
+            {
+                InfoText += SquarePathList[_activePlayer.Position].ToString();
+            }
             SquarePathList[_activePlayer.Position].Move(_activePlayer); //polymorphism activate 'current square positions'.move
         }
 
