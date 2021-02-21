@@ -33,9 +33,22 @@
                     VerticalAlignment="Bottom">
 
             <Label Content="Player Name" />
-
-            <TextBox  x:Name="PlayerName"
-                      ToolTip="Enter Name Of Player To Add" />
+            <StackPanel Orientation="Horizontal">
+                <TextBox Width="136px"
+                         x:Name="PlayerName"
+                         ToolTip="Enter Name Of Player To Add" />
+                <ComboBox Width="40px"
+                          x:Name="AvailablePawnsList"
+                          SelectionChanged="ChangeSelectedPawn">
+                    <ComboBox.ItemTemplate>
+                        <ItemContainerTemplate>
+                            <Image Height="20"
+                                   x:Name="UserPawn"
+                                   Source="{Binding PawnImage.Source}" />
+                        </ItemContainerTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Center">
                 <Button x:Name="AddPlayer"

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -24,19 +25,22 @@ namespace GameOfGoose
     public partial class EnterPlayers : Window
     {
         private ObservableCollection<IPlayer> _players = Settings.Players;
-        private List<Image> _localPawnList = new List<Image>();
+        private ObservableCollection<IPawn> LocalPawnList = Settings.AvailablePawnList;
+        private int SelectedPawn;
 
         public EnterPlayers()
         {
             InitializeComponent();
+            EnterPlayers1.DataContext = this;
             PlayerList.ItemsSource = _players;
+            AvailablePawnsList.ItemsSource = LocalPawnList;
             foreach (IPlayer player in _players)
             {
                 player.PlayerPawn.PlayerLocation = Locations.List[0];
                 player.Position = 0;
                 player.PlayerPawn.Move(0);
             }
-            _players.Clear();
+            //_players.Clear();
             PlayerName.Focus();
             CenterWindowOnScreen();
         }
@@ -58,7 +62,7 @@ namespace GameOfGoose
             {
                 foreach (IPlayer player in Settings.Players)
                 {
-                    Settings.PawnList.Add(player.PlayerPawn.PawnImage);
+                    Settings.AvailablePawnList.Add(new Pawn(player.PlayerPawn.PawnImage));
                 }
                 this.Close();
             }
@@ -66,19 +70,24 @@ namespace GameOfGoose
 
         private void Add_Click(object sender, RoutedEventArgs e)
         {
-            _localPawnList = Settings.PawnList;
+            LocalPawnList = Settings.AvailablePawnList;
+            //   MessageBox.Show(LocalPawnList.Count.ToString());
             if (_players.Count <= 4)
             {
                 StartButton.IsDefault = false;
                 AddPlayer.IsDefault = true;
                 PlayerName.Focus();
-
                 if (_players.ToList().Find(x => x.Name == PlayerName.Text) == null)
                 {
                     if (PlayerName.Text == "") return;
+                    if (SelectedPawn < 0)
+                    {
+                        SelectedPawn = 0;
+                    }
+
                     _players.Add(new Player(PlayerName.Text, 0)
                     {
-                        PlayerPawn = new PlayerPawn(_localPawnList[0])
+                        PlayerPawn = new PlayerPawn(LocalPawnList[SelectedPawn].PawnImage)
                         {
                             OffsetX = (int)(2 * _players.ToList().Count),
                             OffsetY = (int)(2 * _players.ToList().Count - 615),
@@ -90,8 +99,8 @@ namespace GameOfGoose
                             }
                         }
                     });
-
-                    _localPawnList.RemoveAt(0);
+                    //System.Windows.MessageBox.Show(LocalPawnList[0].PawnImage.Source.ToString());
+                    LocalPawnList.RemoveAt(SelectedPawn);
                     PlayerName.Text = "";
 
                     if (_players.Count == 4)
@@ -121,7 +130,7 @@ namespace GameOfGoose
             PlayerName.Focus();
             if (PlayerList.SelectedIndex != -1)
             {
-                _localPawnList.Add(_players[PlayerList.SelectedIndex].PlayerPawn.PawnImage);
+                LocalPawnList.Add(new Pawn(_players[PlayerList.SelectedIndex].PlayerPawn.PawnImage));
                 _players.RemoveAt(PlayerList.SelectedIndex);
             }
             if (_players.Count < 4)
@@ -144,6 +153,11 @@ namespace GameOfGoose
                 }
                 //   this.Close();
             }
+        }
+
+        private void ChangeSelectedPawn(object sender, SelectionChangedEventArgs e)
+        {
+            SelectedPawn = AvailablePawnsList.SelectedIndex;
         }
     }
 }

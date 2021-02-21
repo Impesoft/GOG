@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -63,18 +64,24 @@ namespace GameOfGoose
 
         public void CreateCanvasPawns()
         {
+            //var assembly = Assembly.GetExecutingAssembly();
+            //string[] _resources = assembly.GetManifestResourceNames();
+            //MessageBox.Show(string.Join(",", _resources[1]));
+
+            Settings.AvailablePawnList.Clear();
             if (MyCanvas.Children.Count > 0) return;
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 10; i++)
             {
                 Image pawn = new Image();
-                BitmapImage bmi = new BitmapImage(new Uri($"pack://application:,,,/Images/Pawn{i + 1}.png"));
+                BitmapImage bmi = new BitmapImage(new Uri($"pack://application:,,,/Images/Pawn{i}.png"));
 
                 pawn.Source = bmi;
                 pawn.Width = 50;
                 pawn.Height = 43;
                 Settings.PawnList.Add(pawn);
+                Settings.AvailablePawnList.Add(new Pawn(pawn));
                 MyCanvas.Children.Add(pawn);
-                Canvas.SetLeft(pawn, i * 3 - 6);
+                Canvas.SetLeft(pawn, i * 3 - 15);
                 Canvas.SetTop(pawn, 600);
             }
         }

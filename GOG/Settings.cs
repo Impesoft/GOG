@@ -13,5 +13,6 @@ namespace GameOfGoose
 
         public static ObservableCollection<IPlayer> Players = new ObservableCollection<IPlayer>();
         public static List<Image> PawnList = new List<Image>();
+        public static ObservableCollection<IPawn> AvailablePawnList = new ObservableCollection<IPawn>();
     }
 }

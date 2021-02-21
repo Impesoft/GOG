@@ -8,15 +8,14 @@ using System.Windows.Media.Animation;
 
 namespace GameOfGoose
 {
-    public class PlayerPawn
+    public class PlayerPawn : Pawn
     {
-        public Image PawnImage { get; set; } //= new Image();
         public int OffsetX { get; set; }
         public int OffsetY { get; set; }
         public Location PlayerLocation { get; set; } = new Location { X = 100, Y = 600 };
         private readonly TranslateTransform _interactiveTranslateTransform;
 
-        public PlayerPawn(Image pawnImage)
+        public PlayerPawn(Image pawnImage) : base(pawnImage: pawnImage)
         {
             PawnImage = pawnImage;
             OffsetX = 0;
