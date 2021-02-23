@@ -7,9 +7,8 @@
         xmlns:local="clr-namespace:GameOfGoose"
         mc:Ignorable="d"
         Title="Enter Players"
-        Height="300"
-        Width="176"
-        Closed="onClose"
+        Height="500"
+        Width="300"
         ResizeMode="NoResize">
     <Grid HorizontalAlignment="Stretch">
         <Grid.ColumnDefinitions>
@@ -17,32 +16,46 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="70" />
-            <RowDefinition Height="3*" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="150" />
+            <RowDefinition Height="7*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Label Grid.Column="0"
                Grid.Row="0"
                Grid.ColumnSpan="2"
-               HorizontalAlignment="Stretch">Add Players 2-4:</Label>
+               HorizontalAlignment="Stretch"
+               FontSize="24">Add Players 2-4:</Label>
         <StackPanel Grid.Row="1"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
                     HorizontalAlignment="Stretch"
-                    VerticalAlignment="Bottom">
+                    VerticalAlignment="Bottom"
+                    Margin="10,0,10,0">
 
-            <Label Content="Player Name" />
-            <StackPanel Orientation="Horizontal">
-                <TextBox Width="136px"
-                         x:Name="PlayerName"
-                         ToolTip="Enter Name Of Player To Add" />
-                <ComboBox Width="40px"
-                          x:Name="AvailablePawnsList"
-                          SelectionChanged="ChangeSelectedPawn">
+            <StackPanel Orientation="Horizontal"
+                        Height="80"
+                        Width="280">
+                <StackPanel Width="180">
+                    <Label Content="Player Name"
+                           Width="180"
+                           HorizontalAlignment="Left" />
+                    <TextBox Width="180"
+                             Height="25"
+                             x:Name="PlayerName"
+                             ToolTip="Enter Name Of Player To Add"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Stretch" />
+                </StackPanel>
+                <ComboBox x:Name="AvailablePawnsList"
+                          SelectionChanged="ChangeSelectedPawn"
+                          HorizontalAlignment="Stretch"
+                          Margin="20,0,0,0"
+                          Width="60"
+                          Height="50">
                     <ComboBox.ItemTemplate>
                         <ItemContainerTemplate>
-                            <Image Height="20"
+                            <Image Height="40px"
                                    x:Name="UserPawn"
                                    Source="{Binding PawnImage.Source}" />
                         </ItemContainerTemplate>
@@ -50,16 +63,20 @@
                 </ComboBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal"
-                        HorizontalAlignment="Center">
+                        HorizontalAlignment="Stretch"
+                        Height="40"
+                        Margin="0,10,0,10"
+                        Width="280">
                 <Button x:Name="AddPlayer"
                         Content="Add Player"
                         Click="Add_Click"
                         IsDefault="True"
-                        Margin="0 0 10 0" />
+                        Width="100" />
                 <Button x:Name="RemovePlayer"
                         Content="Remove Player"
                         Click="Remove_Click"
-                        Margin="10 0 0 0" />
+                        Width="100"
+                        Margin="60,0,10,0" />
             </StackPanel>
         </StackPanel>
 
@@ -87,7 +104,7 @@
                 x:Name="StartButton"
                 Content="Start"
                 Height="36"
-                Click="button_Click"
+                Click="StartClick"
                 VerticalAlignment="Bottom"
                 HorizontalAlignment="Stretch"
                 IsEnabled="False" />

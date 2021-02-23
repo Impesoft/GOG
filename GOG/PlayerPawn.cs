@@ -12,17 +12,18 @@ namespace GameOfGoose
     {
         public int OffsetX { get; set; }
         public int OffsetY { get; set; }
-        public Location PlayerLocation { get; set; } = new Location { X = 100, Y = 600 };
+
         private readonly TranslateTransform _interactiveTranslateTransform;
 
         public PlayerPawn(Image pawnImage) : base(pawnImage: pawnImage)
         {
             PawnImage = pawnImage;
             OffsetX = 0;
-            OffsetY = -600;
+            OffsetY = 0;
             _interactiveTranslateTransform = new TranslateTransform();
             PawnImage.RenderTransform =
                 _interactiveTranslateTransform;
+            Move(0);
         }
 
         public void Move(int endPosition)
@@ -31,8 +32,8 @@ namespace GameOfGoose
             // ends up at the clicked point.
             var targetPoint = new Point
             {
-                X = Locations.List[endPosition].X + OffsetX - 25,
-                Y = Locations.List[endPosition].Y + OffsetY - 43
+                X = Locations.List[endPosition].X - 25,
+                Y = Locations.List[endPosition].Y - 43 //-600?
             };
             // Animate to the target point.
             var xAnimation =

@@ -36,11 +36,9 @@ namespace GameOfGoose
             AvailablePawnsList.ItemsSource = LocalPawnList;
             foreach (IPlayer player in _players)
             {
-                player.PlayerPawn.PlayerLocation = Locations.List[0];
                 player.Position = 0;
                 player.PlayerPawn.Move(0);
             }
-            //_players.Clear();
             PlayerName.Focus();
             CenterWindowOnScreen();
         }
@@ -55,23 +53,15 @@ namespace GameOfGoose
             this.Top = (screenHeight / 2) - (windowHeight / 2);
         }
 
-        private void button_Click(object sender, RoutedEventArgs e)
+        private void StartClick(object sender, RoutedEventArgs e)
         {
             PlayerName.Focus();
-            if (_players.Count > 1)
-            {
-                foreach (IPlayer player in Settings.Players)
-                {
-                    Settings.AvailablePawnList.Add(new Pawn(player.PlayerPawn.PawnImage));
-                }
-                this.Close();
-            }
+            if (_players.Count > 1) { this.Close(); }
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)
         {
             LocalPawnList = Settings.AvailablePawnList;
-            //   MessageBox.Show(LocalPawnList.Count.ToString());
             if (_players.Count <= 4)
             {
                 StartButton.IsDefault = false;
@@ -91,15 +81,8 @@ namespace GameOfGoose
                         {
                             OffsetX = (int)(2 * _players.ToList().Count),
                             OffsetY = (int)(2 * _players.ToList().Count - 615),
-
-                            PlayerLocation = new Location()
-                            {
-                                X = Locations.List[0].X + 3 * _players.ToList().Count,
-                                Y = Locations.List[0].Y
-                            }
                         }
                     });
-                    //System.Windows.MessageBox.Show(LocalPawnList[0].PawnImage.Source.ToString());
                     LocalPawnList.RemoveAt(SelectedPawn);
                     PlayerName.Text = "";
 
@@ -140,18 +123,6 @@ namespace GameOfGoose
             if (_players.Count < 1)
             {
                 StartButton.IsEnabled = false;
-            }
-        }
-
-        private void onClose(object sender, EventArgs e)
-        {
-            if (_players.Count > 1)
-            {
-                foreach (IPlayer player in Settings.Players)
-                {
-                    Settings.PawnList.Add(player.PlayerPawn.PawnImage);
-                }
-                //   this.Close();
             }
         }
 

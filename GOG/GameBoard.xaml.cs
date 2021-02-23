@@ -68,8 +68,12 @@ namespace GameOfGoose
             //string[] _resources = assembly.GetManifestResourceNames();
             //MessageBox.Show(string.Join(",", _resources[1]));
 
-            Settings.AvailablePawnList.Clear();
-            if (MyCanvas.Children.Count > 0) return;
+            //  Settings.AvailablePawnList.Clear();
+            if (MyCanvas.Children.Count > 0)
+            {
+                ResetPawns();
+                return;
+            }
             for (int i = 0; i < 10; i++)
             {
                 Image pawn = new Image();
@@ -81,8 +85,19 @@ namespace GameOfGoose
                 Settings.PawnList.Add(pawn);
                 Settings.AvailablePawnList.Add(new Pawn(pawn));
                 MyCanvas.Children.Add(pawn);
-                Canvas.SetLeft(pawn, i * 3 - 15);
-                Canvas.SetTop(pawn, 600);
+                //   Canvas.SetLeft(pawn, i * 3 - 15);
+                //   Canvas.SetTop(pawn, 600);
+            }
+        }
+
+        public void ResetPawns()
+        {
+            MessageBox.Show(MyCanvas.Children.Count.ToString());
+            foreach (IPlayer player in Settings.Players)
+            {
+                player.PlayerPawn.Move(0);
+                //Canvas.SetLeft(pawn, MyCanvas.Children.IndexOf(pawn) * 3 - 15);
+                //Canvas.SetTop(pawn, 600);
             }
         }
 

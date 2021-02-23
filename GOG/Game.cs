@@ -63,7 +63,7 @@ namespace GameOfGoose
             {
                 player.PlayerPawn.Move(0);
                 player.Position = 0;
-                player.PlayerPawn.PlayerLocation = Locations.List[0];
+                //         player.PlayerPawn.PlayerLocation = Locations.List[0];
             }
             GameIsRunning = false;
         }
@@ -78,18 +78,18 @@ namespace GameOfGoose
         public void ReInitializeGame()
         {
             SquarePathList = InitializeSquares();
-            if (Players.Count > 0)
-            {
-                foreach (IPlayer player in Players)
-                {
-                    player.PlayerPawn.Move(0);
-                }
-            }
+            //if (Players.Count > 0)
+            //{
+            //    foreach (IPlayer player in Players)
+            //    {
+            //        player.PlayerPawn.Move(0);
+            //    }
+            //}
             InitializeVariables();
-            foreach (var player in Players)
-            {
-                player.PlayerPawn.Move(0);
-            }
+            //foreach (IPlayer player in Players)
+            //{
+            //    player.PlayerPawn.Move(0);
+            //}
         }
 
         public void InitializeVariables()
@@ -114,13 +114,13 @@ namespace GameOfGoose
         {
             foreach (IPlayer player in Players)
             {
-                player.PlayerPawn.PawnImage = Settings.PawnList[Players.IndexOf(player)];
+                //  player.PlayerPawn.PawnImage = Settings.PawnList[Players.IndexOf(player)];
                 player.PlayerPawn.PawnImage.ToolTip = player.Name;
 
-                player.PlayerPawn.PlayerLocation.X =
-                    Locations.List[0].X + player.PlayerPawn.OffsetX;
-                player.PlayerPawn.PlayerLocation.Y =
-                    Locations.List[0].Y + player.PlayerPawn.OffsetY;
+                //player.PlayerPawn.PlayerLocation.X =
+                //    Locations.List[0].X + player.PlayerPawn.OffsetX;
+                //player.PlayerPawn.PlayerLocation.Y =
+                //    Locations.List[0].Y + player.PlayerPawn.OffsetY;
             }
 
             return Players;
